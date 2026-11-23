@@ -139,13 +139,20 @@ class ControllerCommonHeader extends Controller {
 		$data['cart'] = $this->load->controller('common/cart');
 		$data['menu'] = $this->load->controller('common/menu');
 
-		// 顶部广告 / 顶部链接：仅在首页显示，各取第一个生效的模块
+		// header 菜单按钮下拉内容
+		$data['nav_links'] = $this->config->get('config_nav_links');
+
+		if (!is_array($data['nav_links'])) {
+			$data['nav_links'] = array();
+		}
+
+		// 顶部广告：仅首页显示；顶部链接：所有页面显示
 		$data['top_ad'] = '';
 		$data['top_links'] = '';
 
-		if ($route == 'common/home') {
-			$this->load->model('setting/module');
+		$this->load->model('setting/module');
 
+		if ($route == 'common/home') {
 			foreach ($this->model_setting_module->getModulesByCode('top_ad') as $top_ad_module) {
 				$top_ad_setting = $top_ad_module['setting'] ? json_decode($top_ad_module['setting'], true) : array();
 
@@ -156,16 +163,16 @@ class ControllerCommonHeader extends Controller {
 					break;
 				}
 			}
+		}
 
-			foreach ($this->model_setting_module->getModulesByCode('top_links') as $top_links_module) {
-				$top_links_setting = $top_links_module['setting'] ? json_decode($top_links_module['setting'], true) : array();
+		foreach ($this->model_setting_module->getModulesByCode('top_links') as $top_links_module) {
+			$top_links_setting = $top_links_module['setting'] ? json_decode($top_links_module['setting'], true) : array();
 
-				$top_links = $this->load->controller('extension/module/top_links', $top_links_setting);
+			$top_links = $this->load->controller('extension/module/top_links', $top_links_setting);
 
-				if ($top_links) {
-					$data['top_links'] = $top_links;
-					break;
-				}
+			if ($top_links) {
+				$data['top_links'] = $top_links;
+				break;
 			}
 		}
 

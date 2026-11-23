@@ -53,8 +53,8 @@
 <script src="catalog/view/javascript/jquery/jquery-2.1.1.min.js" type="text/javascript"></script>
 <script src="catalog/view/javascript/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
 <script src="catalog/view/javascript/layer/layer.js" type="text/javascript"></script>
-<link href="catalog/view/theme/default/stylesheet/stylesheet.css?v=asgd9a7jk21bxaiusc9" rel="stylesheet">
-<link href="catalog/view/theme/default/stylesheet/default.css?v=20261124icon18" rel="stylesheet">
+<link href="catalog/view/theme/default/stylesheet/stylesheet.css?v=20261124headerpad" rel="stylesheet">
+<link href="catalog/view/theme/default/stylesheet/default.css?v=20261124search380" rel="stylesheet">
 <link href="catalog/view/javascript/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 {% for style in styles %}
 <link href="{{ style.href }}" type="text/css" rel="{{ style.rel }}" media="{{ style.media }}" />
@@ -89,19 +89,46 @@
       {% endif %}
       {{ search }}
       <div class="actions">
-        <a class="act" href="{{ wishlist }}"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 8 0 4 4 0 0 1 6 0c0 5.5-7 10-7 10z"/></svg>{{ text_favorite }}</a>
         {% if logged %}
-        <a class="act" href="{{ account }}"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>{{ text_my_page }}</a>
-        <a class="act" href="{{ logout }}"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>{{ text_logout }}</a>
+        <a class="act act-account" href="{{ account }}"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg><span class="act-label">{{ text_my_page }}</span></a>
         {% else %}
-        <a class="act" href="{{ login }}"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>{{ text_login }}</a>
-        <a class="act" href="{{ register }}"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M16 11h6"/></svg>{{ text_new_register }}</a>
+        <a class="act act-account" href="{{ login }}"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg><span class="act-label">{{ text_login }}</span></a>
         {% endif %}
+        <a class="act" href="{{ wishlist }}"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 8 0 4 4 0 0 1 6 0c0 5.5-7 10-7 10z"/></svg><span class="act-label">{{ text_favorite }}</span></a>
         {{ cart }}
+        <button type="button" class="act act-menu" onclick="toggleMenuPanel(this)" aria-label="メニュー" aria-expanded="false"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span class="act-label">メニュー</span></button>
       </div>
     </div>
   </div>
+  <div class="menu-panel" id="menu-panel">
+    <ul>
+      {% for nav_link in nav_links %}
+      <li><a href="{{ nav_link.link }}">{{ nav_link.title }}</a></li>
+      {% endfor %}
+    </ul>
+  </div>
 </header>
+<script type="text/javascript">
+function toggleMenuPanel(btn) {
+	var panel = document.getElementById('menu-panel');
+
+	panel.classList.toggle('show');
+	btn.setAttribute('aria-expanded', panel.classList.contains('show') ? 'true' : 'false');
+}
+
+document.addEventListener('click', function (e) {
+	var panel = document.getElementById('menu-panel');
+
+	if (!panel || !panel.classList.contains('show')) {
+		return;
+	}
+
+	if (!e.target.closest('.act-menu') && !e.target.closest('#menu-panel')) {
+		panel.classList.remove('show');
+		document.querySelectorAll('.act-menu').forEach(function (btn) { btn.setAttribute('aria-expanded', 'false'); });
+	}
+});
+</script>
 {{ menu }}
 {% endif %}
 {% endif %}
