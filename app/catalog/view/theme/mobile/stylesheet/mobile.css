@@ -1,8 +1,14 @@
+@charset "UTF-8";
 /* 移动端 header —— 对齐 docs/ui/mobile 原型 */
 :root{
   --paper:#FFFFFF; --mist:#F6F4EF; --ink:#211D18; --slate:#6E675F;
   --line:#E9E4DB; --verm:#C63D2F;
 }
+/* 全站字体 —— 日文字体栈，覆盖 default/stylesheet.css 中 body 的字体 */
+body,.tooltip,.popover{font-family:"游ゴシック体",YuGothic,"Yu Gothic M","游ゴシック Medium","Yu Gothic Medium","ヒラギノ角ゴ ProN W3","Hiragino Kaku Gothic ProN W3",HiraKakuProN-W3,"ヒラギノ角ゴ ProN","Hiragino Kaku Gothic ProN","ヒラギノ角ゴ Pro","Hiragino Kaku Gothic Pro",メイリオ,Meiryo,Osaka,"ＭＳ Ｐゴシック","MS PGothic","Helvetica Neue",HelveticaNeue,Helvetica,Arial,"Segoe UI",sans-serif}
+button,input,select,textarea{font-family:inherit}
+/* 顶部广告 —— 全宽、固定高度、横向平铺 */
+.top-ad{display:block;width:100%;background-repeat:repeat-x;background-position:left center;background-size:auto 100%}
 .hd-contact{background:var(--ink);color:#E9E4DB;font-size:11px;display:flex;align-items:center;justify-content:center;gap:6px;height:30px;padding:0 12px}
 .hd-contact .hc-label{color:#C9C2B8}
 .hd-contact a{color:#C9C2B8;text-decoration:none}

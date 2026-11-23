@@ -139,6 +139,24 @@ class ControllerCommonHeader extends Controller {
 		$data['cart'] = $this->load->controller('common/cart');
 		$data['menu'] = $this->load->controller('common/menu');
 
+		// 顶部广告：仅在首页显示，取第一个生效的 top_ad 模块
+		$data['top_ad'] = '';
+
+		if ($route == 'common/home') {
+			$this->load->model('setting/module');
+
+			foreach ($this->model_setting_module->getModulesByCode('top_ad') as $top_ad_module) {
+				$top_ad_setting = $top_ad_module['setting'] ? json_decode($top_ad_module['setting'], true) : array();
+
+				$top_ad = $this->load->controller('extension/module/top_ad', $top_ad_setting);
+
+				if ($top_ad) {
+					$data['top_ad'] = $top_ad;
+					break;
+				}
+			}
+		}
+
         // modal view, no header logo, menu etc.
         $data['modal'] = array_get($this->request->get, 'modal');
 

@@ -1,9 +1,16 @@
+@charset "UTF-8";
 /* 桌面端 header/topbar/nav —— 对齐 docs/ui/web 原型 */
 :root{
   --paper:#FFFFFF; --mist:#F6F4EF; --mist2:#EFEBE3; --ink:#211D18; --slate:#6E675F;
   --line:#E9E4DB; --verm:#C63D2F; --verm-deep:#A93225; --shadow:0 8px 30px rgba(33,29,24,.08);
 }
+/* 全站字体 —— 日文字体栈，覆盖 stylesheet.css 中 body 的字体 */
+body,.tooltip,.popover{font-family:"游ゴシック体",YuGothic,"Yu Gothic M","游ゴシック Medium","Yu Gothic Medium","ヒラギノ角ゴ ProN W3","Hiragino Kaku Gothic ProN W3",HiraKakuProN-W3,"ヒラギノ角ゴ ProN","Hiragino Kaku Gothic ProN","ヒラギノ角ゴ Pro","Hiragino Kaku Gothic Pro",メイリオ,Meiryo,Osaka,"ＭＳ Ｐゴシック","MS PGothic","Helvetica Neue",HelveticaNeue,Helvetica,Arial,"Segoe UI",sans-serif}
+button,input,select,textarea{font-family:inherit}
 .wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+
+/* 顶部广告 —— 全宽、固定高度、横向平铺 */
+.top-ad{display:block;width:100%;background-repeat:repeat-x;background-position:left center;background-size:auto 100%}
 
 .topbar{background:var(--ink);color:#E9E4DB;font-size:12px}
 .topbar .wrap{display:flex;align-items:center;justify-content:space-between;height:32px}
@@ -13,7 +20,7 @@
 .topbar .r a{cursor:pointer}
 .topbar .order-contact{display:flex;align-items:center;gap:6px}
 
-.header{background:var(--paper)!important;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50}
+.header{background:#f2ebeb!important;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:50}
 .header-main{display:flex;align-items:center;gap:28px;padding:18px 0 14px}
 .logo{font-size:24px;font-weight:600;letter-spacing:.02em;line-height:1.1;cursor:pointer}
 .logo small{font-size:11px;color:var(--verm);letter-spacing:.22em;display:block;font-weight:500}
@@ -89,7 +96,7 @@ header #search button{position:static!important;height:32px!important;line-heigh
 .filter .cat-link.child{padding-left:14px;font-size:12.5px;color:var(--slate)}
 
 /* 整站色调 —— 对齐 docs/ui 调色板 */
-body{background-color:#E7E2D9!important;color:#211D18!important}
+body{background-color:#FFFFFF!important;color:#211D18!important}
 a{color:var(--verm)}
 a:hover,a:focus{color:var(--verm-deep)}
 h1,h2,h3,h4,h5,h6{color:#211D18}

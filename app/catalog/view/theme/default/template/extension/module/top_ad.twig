@@ -1,0 +1,5 @@
+{% if link %}
+<a class="top-ad" href="{{ link|e }}" title="{{ text|e }}" aria-label="{{ text|e }}" style="height:{{ height }}px;background-image:url('{{ image|e }}')"></a>
+{% else %}
+<div class="top-ad" role="img" title="{{ text|e }}" aria-label="{{ text|e }}" style="height:{{ height }}px;background-image:url('{{ image|e }}')"></div>
+{% endif %}
