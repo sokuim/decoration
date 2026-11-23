@@ -1,0 +1,46 @@
+{{ header }}
+<div id="quick-checkout-connect" class="container">
+  <div class="row">
+    <div id="content" class="col-sm-12">{{ content_top }}
+      <div class="connect-page">
+        <div class="connect-head">
+          <div class="connect-icon"><i class="fa fa-check" aria-hidden="true"></i></div>
+          <h1>{{ heading_title }}</h1>
+          <p class="connect-note">{{ text_success }}</p>
+        </div>
+        <div class="connect-info">
+          <div class="connect-row">
+            <span>{{ column_order_id }}</span>
+            <b>#{{ order_id }}</b>
+          </div>
+          <div class="connect-row">
+            <span>{{ column_total }}</span>
+            <b class="connect-total">{{ total }}</b>
+          </div>
+          {% if shipping_method %}
+          <div class="connect-row">
+            <span>{{ column_shipping_method }}</span>
+            <b>{{ shipping_method }}</b>
+          </div>
+          {% endif %}
+          <div class="connect-row">
+            <span>{{ column_payment_method }}</span>
+            <b>{{ payment_method }}</b>
+          </div>
+        </div>
+        {% if payment_view %}
+        <div class="connect-payment">
+          {% if text_note %}<p class="connect-payment-note">{{ text_note }}</p>{% endif %}
+          {{ payment_view }}
+        </div>
+        {% else %}
+        <div class="connect-actions">
+          <a href="{{ href }}" class="connect-btn">{{ button_view_order }}</a>
+        </div>
+        {% endif %}
+      </div>
+      {{ content_bottom }}
+    </div>
+  </div>
+</div>
+{{ footer }}

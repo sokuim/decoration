@@ -1,0 +1,383 @@
+{{ header }}
+<div id="product-product" class="wrap">
+  {{ include(helper.template('_partial/breadcrumb')) }}
+  {{ content_top }}
+  <div class="pd">
+        <div class="pd-gallery">
+          {% if images %}
+          {% set first = images|first %}
+          <div class="elevate-zoom-preview">
+            <a href="{{ first.popup }}">
+              <img id="elevate-zoom" src="{{ first.preview }}" data-zoom-image="{{ first.popup }}" class="img-responsive" width="{{ preview_width }}" height="{{ preview_height }}" alt="{{ heading_title }}" title="{{ heading_title }}" fetchpriority="high" decoding="async">
+            </a>
+          </div>
+          <div class="thumbnails-wrap" id="product-thumbnail-gallery">
+            <div class="thumbs-nav-bar">
+              <button type="button" class="thumbs-nav prev" aria-label="前へ">&#8249;</button>
+              <button type="button" class="thumbs-nav next" aria-label="次へ">&#8250;</button>
+            </div>
+            <div class="swiper-container thumbs-swiper">
+              <div class="swiper-wrapper">
+                {% for image in images %}
+                <div class="swiper-slide image-additional"><a class="thumbnail elevatezoom-gallery" rel="group" data-image="{{ image.preview }}" data-zoom-image="{{ image.popup }}" href="{{ image.popup }}" title="{{ heading_title }}"> <img src="{{ image.thumb }}" width="{{ image.thumb_width }}" height="{{ image.thumb_height }}" title="{{ heading_title }}" alt="{{ heading_title }}" loading="lazy" decoding="async" /></a></div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+        <div class="pd-info">
+          <h1 class="pd-title">{{ heading_title }}</h1>
+          {% if review_status %}
+          <div class="pd-rating">
+            <span class="pd-stars">
+              {% for i in 1..5 %}
+              <i class="fa fa-star{{ rating < i ? ' off' }}"></i>
+              {% endfor %}
+            </span>
+            <a class="pd-review-count" href="javascript:void(0);"><i class="fa fa-comment"></i> {{ reviews }}</a>
+          </div>
+          {% endif %}
+          <div class="pd-price">
+            {% if not special %}
+            <span class="now">{{ price }}</span>
+            {% else %}
+            <span class="now">{{ special }}</span>
+            <span class="old">{{ price }}</span>
+            {% endif %}
+            {% if points %}
+            <span class="points">{{ text_points }} {{ points }}</span>
+            {% endif %}
+          </div>
+          <ul class="list-unstyled pd-attrs">
+            {% if manufacturer %}
+            <li><span class="pd-attr-label">{{ text_manufacturer }}</span><span class="pd-attr-value"><a href="{{ manufacturers }}">{{ manufacturer }}</a></span></li>
+            {% endif %}
+            {% if reward %}
+            <li><span class="pd-attr-label">{{ text_reward }}</span><span class="pd-attr-value">{{ reward }}</span></li>
+            {% endif %}
+            <li><span class="pd-attr-label">{{ text_stock }}</span><span class="pd-attr-value">{{ stock }}</span></li>
+          </ul>
+          {% if price %}
+          <ul class="tax-discounts-box">
+            {% if tax %}
+            <li>{{ text_tax }} {{ tax }}</li>
+            {% endif %}
+            {% if discounts %}
+            {% for discount in discounts %}
+            <li>{{ discount.quantity }}{{ text_discount }}{{ discount.price }}</li>
+            {% endfor %}
+            {% endif %}
+          </ul>
+          {% endif %}
+          <div id="product">
+            {% include(helper.template('_partial/product/options')) %}
+            <div class="pd-qty-row">
+              <span class="pd-label">{{ text_qty_label }}</span>
+              <div class="quantity-input-wrapper">
+                <a href="#" class="quantity-down">-</a>
+                <input type="text" name="quantity" value="{{ minimum }}" size="2" id="input-quantity" class="form-control" data-minimum="{{ minimum }}" data-maximum="{{ maximum }}" inputmode="numeric" autocomplete="off" />
+                <a href="#" class="quantity-up">+</a>
+                <input type="hidden" name="product_id" value="{{ product_id }}" />
+              </div>
+            </div>
+            {% if price %}
+            <div class="pd-total-row" id="pd-total-row" data-unit-price="{{ price_value }}" data-currency-value="{{ currency_value }}" data-decimal-place="{{ currency_decimal_place }}" data-symbol-left="{{ currency_symbol_left }}" data-symbol-right="{{ currency_symbol_right }}" data-thousand="{{ thousand_point }}" data-decimal="{{ decimal_point }}">
+              <span class="pd-label">{{ text_total_label }}</span>
+              <span class="pd-total-value" id="pd-total-value">{% if special %}{{ special }}{% else %}{{ price }}{% endif %}</span>
+            </div>
+            {% endif %}
+            <button type="button" id="button-cart" data-loading-text="{{ text_loading }}" class="btn btn-primary pd-cart-btn">{{ button_cart }}</button>
+            {% if minimum > 1 %}
+            <div class="alert alert-info"><i class="fa fa-info-circle"></i> {{ text_minimum }}</div>
+            {% endif %}
+          </div>
+          <div class="pd-links">
+            <a href="javascript:void(0);" onclick="wishlist.add('{{ product_id }}');"><i class="fa fa-heart"></i> {{ button_wishlist }}</a>
+            <a href="javascript:void(0);" onclick="compare.add('{{ product_id }}');"><i class="fa fa-exchange"></i> {{ button_compare }}</a>
+          </div>
+            {{ include(helper.template('_partial/share'), {share_url: share}) }}
+        </div>
+      </div>
+      <ul class="nav nav-tabs">
+        <li class="active"><a href="#tab-description" data-toggle="tab">{{ tab_description }}</a></li>
+        {% if review_status %}
+        <li><a href="#tab-review" data-toggle="tab">{{ tab_review }}</a></li>
+        {% endif %}
+      </ul>
+      <div class="tab-content">
+        <div class="tab-pane active" id="tab-description">
+          {% if model or color or material or accessory or movement or bezel or band or waterproof or feature or hardware or size or weight_value or specification or tags or attribute_groups or shipping_info or return_info %}
+          <div class="pd-panel pd-spec-panel">
+            {% if model or color or material or accessory or movement or bezel or band or waterproof or feature or hardware or size or weight_value or specification or tags or shipping_info or return_info %}
+            <ul class="list-unstyled pd-attrs pd-spec-group">
+              {% if shipping_info %}
+              <li><span class="pd-attr-label">{{ text_shipping_info }}</span><span class="pd-attr-value">{{ shipping_info }}</span></li>
+              {% endif %}
+              {% if return_info %}
+              <li><span class="pd-attr-label">{{ text_return_info }}</span><span class="pd-attr-value">{{ return_info }}</span></li>
+              {% endif %}
+              {% if model %}
+              <li><span class="pd-attr-label">{{ text_model }}</span><span class="pd-attr-value">{{ model }}</span></li>
+              {% endif %}
+              {% if material %}
+              <li><span class="pd-attr-label">{{ text_material }}</span><span class="pd-attr-value">{{ material }}</span></li>
+              {% endif %}
+              {% if size %}
+              <li><span class="pd-attr-label">{{ text_size }}</span><span class="pd-attr-value">{{ size }}</span></li>
+              {% endif %}
+              {% if color %}
+              <li><span class="pd-attr-label">{{ text_color }}</span><span class="pd-attr-value">{{ color }}</span></li>
+              {% endif %}
+              {% if hardware %}
+              <li><span class="pd-attr-label">{{ text_hardware }}</span><span class="pd-attr-value">{{ hardware }}</span></li>
+              {% endif %}
+              {% if movement %}
+              <li><span class="pd-attr-label">{{ text_movement }}</span><span class="pd-attr-value">{{ movement }}</span></li>
+              {% endif %}
+              {% if bezel %}
+              <li><span class="pd-attr-label">{{ text_bezel }}</span><span class="pd-attr-value">{{ bezel }}</span></li>
+              {% endif %}
+              {% if band %}
+              <li><span class="pd-attr-label">{{ text_band }}</span><span class="pd-attr-value">{{ band }}</span></li>
+              {% endif %}
+              {% if waterproof %}
+              <li><span class="pd-attr-label">{{ text_waterproof }}</span><span class="pd-attr-value">{{ waterproof }}</span></li>
+              {% endif %}
+              {% if feature %}
+              <li><span class="pd-attr-label">{{ text_feature }}</span><span class="pd-attr-value">{{ feature }}</span></li>
+              {% endif %}
+              {% if specification %}
+              <li><span class="pd-attr-label">{{ text_specification }}</span><span class="pd-attr-value">{{ specification }}</span></li>
+              {% endif %}
+              {% if weight_value %}
+              <li><span class="pd-attr-label">{{ text_weight_label }}</span><span class="pd-attr-value">{{ weight_value }}</span></li>
+              {% endif %}
+              {% if accessory %}
+              <li><span class="pd-attr-label">{{ text_accessory }}</span><span class="pd-attr-value">{{ accessory }}</span></li>
+              {% endif %}
+              {% if tags %}
+              <li><span class="pd-attr-label">{{ text_tags }}</span><span class="pd-attr-value">{% for tag in tags %}{{ tag.tag }}{% if not loop.last %}、{% endif %}{% endfor %}</span></li>
+              {% endif %}
+            </ul>
+            {% endif %}
+            {% if attribute_groups %}
+            <table class="table table-bordered pd-attr-table">
+              {% for attribute_group in attribute_groups %}
+              <thead>
+                <tr><td colspan="2"><strong>{{ attribute_group.name }}</strong></td></tr>
+              </thead>
+              <tbody>
+              {% for attribute in attribute_group.attribute %}
+              <tr><td>{{ attribute.name }}</td><td>{{ attribute.text }}</td></tr>
+              {% endfor %}
+                </tbody>
+              {% endfor %}
+            </table>
+            {% endif %}
+          </div>
+          {% endif %}
+          {% if description %}
+          <div class="pd-panel pd-description-panel">
+            <div class="pd-description">{{ description }}</div>
+          </div>
+          {% endif %}
+        </div>
+        {% if review_status %}
+        <div class="tab-pane" id="tab-review">
+          <form class="form-horizontal" id="form-review">
+            <div id="review"></div>
+            {{ include(helper.template('_partial/product/review_form')) }}
+          </form>
+        </div>
+        {% endif %}
+      </div>
+      {% if products %}
+      <h3 class="widget-title"><span>{{ text_related }}</span></h3>
+      <div class="row"> {% set i = 0 %}
+        {% for product in products %}
+        {% if column_left and column_right %}
+        {% set class = 'col-xs-8 col-sm-6' %}
+        {% elseif column_left or column_right %}
+        {% set class = 'col-xs-6 col-md-4' %}
+        {% else %}
+        {% set class = 'col-xs-6 col-sm-3' %}
+        {% endif %}
+        <div class="{{ class }}">
+          {{ include(helper.template('_partial/product/product_single')) }}
+        </div>
+        {% if column_left and column_right and (i + 1) % 2 == 0 %}
+        <div class="clearfix visible-md visible-sm"></div>
+        {% elseif column_left or column_right and (i + 1) % 3 == 0 %}
+        <div class="clearfix visible-md"></div>
+        {% elseif (i + 1) % 4 == 0 %}
+        <div class="clearfix visible-md"></div>
+        {% endif %}
+        {% set i = i + 1 %}
+        {% endfor %} </div>
+        {% endif %}
+      {{ content_bottom }}
+</div>
+<script type="text/javascript"><!--
+  jQuery(document).ready(function($) {
+    // 数量校验（整数、最小值、库存上限）与合计联动
+    var qtyInput = $('#input-quantity');
+    var $totalRow = $('#pd-total-row');
+
+    if (qtyInput.length) {
+      var qtyMinimum = parseInt(qtyInput.attr('data-minimum'), 10) || 1;
+      var qtyMaximum = parseInt(qtyInput.attr('data-maximum'), 10) || 0;
+
+      var normalizeQuantity = function() {
+        var quantity = parseInt(qtyInput.val(), 10);
+
+        if (isNaN(quantity) || quantity < qtyMinimum) {
+          quantity = qtyMinimum;
+        }
+
+        if (qtyMaximum > 0 && quantity > qtyMaximum) {
+          quantity = qtyMaximum;
+        }
+
+        qtyInput.val(quantity);
+
+        return quantity;
+      };
+
+      var updateTotal = function() {
+        if (!$totalRow.length) {
+          return;
+        }
+
+        var unitPrice = parseFloat($totalRow.attr('data-unit-price')) || 0;
+        var currencyValue = parseFloat($totalRow.attr('data-currency-value')) || 1;
+        var decimalPlace = parseInt($totalRow.attr('data-decimal-place'), 10) || 0;
+        var symbolLeft = $totalRow.attr('data-symbol-left') || '';
+        var symbolRight = $totalRow.attr('data-symbol-right') || '';
+        var thousandPoint = $totalRow.attr('data-thousand') || ',';
+        var decimalPoint = $totalRow.attr('data-decimal') || '.';
+        var parts = (unitPrice * currencyValue * normalizeQuantity()).toFixed(decimalPlace).split('.');
+
+        parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, thousandPoint);
+
+        $('#pd-total-value').text(symbolLeft + parts.join(decimalPoint) + symbolRight);
+      };
+
+      // 只允许输入数字
+      qtyInput.on('input', function() {
+        this.value = this.value.replace(/[^\d]/g, '');
+      });
+
+      // 失焦或值变化时纠正到合法范围
+      qtyInput.on('blur change', function() {
+        normalizeQuantity();
+        updateTotal();
+      });
+
+      // 步进按钮
+      $('.quantity-input-wrapper a').on('click', function(e) {
+        e.preventDefault();
+
+        qtyInput.val(normalizeQuantity() + ($(this).hasClass('quantity-up') ? 1 : -1));
+        normalizeQuantity();
+        updateTotal();
+      });
+
+      // 加购前再次纠正数量
+      $('#button-cart').on('click', function() {
+        normalizeQuantity();
+        updateTotal();
+      });
+
+      normalizeQuantity();
+      updateTotal();
+    }
+
+    $('#button-cart').productInfoToCart({
+      data: [
+        '#product input[type=\'text\']',
+        '#product input[type=\'hidden\']',
+        '#product input[type=\'radio\']:checked',
+        '#product input[type=\'checkbox\']:checked',
+        '#product select, #product textarea'
+      ],
+    });
+
+    if ($(window).width() >= 768) {
+      $('#elevate-zoom').elevateZoom({
+        lensShape: 'basic',
+        lensSize: 150,
+        zoomWindowOffetx: 10,
+        zoomWindowWidth: 450,
+        zoomWindowHeight: 450,
+        borderSize: 1,
+        borderColour: '#eaeaea',
+        gallery: 'product-thumbnail-gallery',
+        galleryActiveClass: 'active',
+        cursor:'pointer',
+      });
+
+      $('#elevate-zoom').bind('click', function(e) {
+        var ez = $('#elevate-zoom').data('elevateZoom');
+        $.fancybox(ez.getGalleryList());
+        return false;
+      });
+    } else {
+      $('.elevatezoom-gallery').fancybox({
+        openEffect : 'none',
+        helpers : {
+          title : null
+        }
+      });
+      $('.elevate-zoom-preview a').bind('click', function(e) {
+        $('.elevatezoom-gallery').eq(0).trigger('click');
+        return false;
+      });
+    }
+
+    // 缩略图轮播：参考 mall.opencart.cn 的交互（左右按钮 / 拖动 / 滚轮切换，点击或悬停联动大图）
+    var thumbWrap = $('#product-thumbnail-gallery');
+
+    if (thumbWrap.length && typeof Swiper !== 'undefined') {
+      var syncThumbNav = function(swiper) {
+        if (!swiper) {
+          return;
+        }
+
+        thumbWrap.toggleClass('has-overflow', !(swiper.isBeginning && swiper.isEnd));
+      };
+
+      new Swiper('#product-thumbnail-gallery .thumbs-swiper', {
+        slidesPerView: 'auto',
+        spaceBetween: 8,
+        watchOverflow: true,
+        mousewheel: { forceToAxis: true },
+        navigation: {
+          nextEl: '#product-thumbnail-gallery .thumbs-nav.next',
+          prevEl: '#product-thumbnail-gallery .thumbs-nav.prev'
+        },
+        on: {
+          init: function() {
+            syncThumbNav(this);
+          },
+          update: function() {
+            syncThumbNav(this);
+          },
+          resize: function() {
+            syncThumbNav(this);
+          },
+          slideChange: function() {
+            syncThumbNav(this);
+          }
+        }
+      });
+
+      if ($(window).width() >= 768) {
+        thumbWrap.on('mouseenter', '.elevatezoom-gallery', function() {
+          $(this).trigger('click');
+        });
+      }
+    }
+  });
+//--></script>
+{{ footer }}

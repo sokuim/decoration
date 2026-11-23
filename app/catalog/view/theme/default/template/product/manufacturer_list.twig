@@ -1,0 +1,36 @@
+{{ header }}
+<div id="product-manufacturer-list" class="wrap">
+  {{ include(helper.template('_partial/breadcrumb')) }}
+  <h1 class="page-title">{{ heading_title }}</h1>
+  {% if text_subtitle %}
+  <p class="manufacturer-subtitle">{{ text_subtitle }}</p>
+  {% endif %}
+  {{ content_top }}
+  {% if manufacturers %}
+  <div class="manufacturer-grid">
+    {% for manufacturer in manufacturers %}
+    <a class="manufacturer-card" href="{{ manufacturer.href }}" title="{{ manufacturer.name }}">
+      <span class="manufacturer-head">
+        {% if manufacturer.thumb %}
+        <span class="manufacturer-logo"><img src="{{ manufacturer.thumb }}" alt="{{ manufacturer.name }}" loading="lazy" decoding="async"></span>
+        {% endif %}
+        <span class="manufacturer-info">
+          <span class="manufacturer-name">{{ manufacturer.name }}</span>
+          {% if manufacturer.description %}
+          <span class="manufacturer-desc">{{ manufacturer.description }}</span>
+          {% endif %}
+        </span>
+      </span>
+      <span class="manufacturer-more">{{ text_view_products }}</span>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p>{{ text_no_results }}</p>
+  <div class="buttons clearfix">
+    <div class="pull-right"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a></div>
+  </div>
+  {% endif %}
+  {{ content_bottom }}
+</div>
+{{ footer }}

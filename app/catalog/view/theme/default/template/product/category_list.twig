@@ -1,0 +1,54 @@
+{{ header }}
+<div id="product-category-list" class="wrap">
+  {{ include(helper.template('_partial/breadcrumb')) }}
+  <h1 class="page-title">{{ heading_title }}</h1>
+  {{ content_top }}
+  {% if categories %}
+  <div class="category-list">
+    {% for category in categories %}
+    <section class="category-group">
+      <a class="category-media" href="{{ category.href }}" title="{{ category.name }}">
+        {% if category.thumb %}
+        <img src="{{ category.thumb }}" alt="{{ category.name }}" loading="lazy" decoding="async">
+        {% endif %}
+      </a>
+      <div class="category-body">
+        <div class="category-head">
+          <h2 class="category-name"><a href="{{ category.href }}" title="{{ category.name }}">{{ category.name }}</a></h2>
+        </div>
+        {% if category.description %}
+        <p class="category-desc">{{ category.description }}</p>
+        {% endif %}
+        {% if category.children %}
+        <div class="category-sub">
+          <div class="category-sub-title">{{ category.name }}・{{ text_level2 }}</div>
+          <div class="category-children">
+            {% for child in category.children %}
+            <a class="category-child" href="{{ child.href }}" title="{{ child.name }}">
+              {% if child.thumb %}
+              <span class="category-child-thumb"><img src="{{ child.thumb }}" alt="{{ child.name }}" loading="lazy" decoding="async"></span>
+              {% endif %}
+              <span class="category-child-info">
+                <span class="category-child-name">{{ child.name }}</span>
+                {% if child.description %}
+                <span class="category-child-desc">{{ child.description }}</span>
+                {% endif %}
+              </span>
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+        {% endif %}
+      </div>
+    </section>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p>{{ text_no_results }}</p>
+  <div class="buttons">
+    <a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a>
+  </div>
+  {% endif %}
+  {{ content_bottom }}
+</div>
+{{ footer }}

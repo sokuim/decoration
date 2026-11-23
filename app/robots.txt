@@ -1,0 +1,44 @@
+User-agent: *
+Allow: /
+
+# 账户 / 结账 / 联盟等无收录价值页面（query 形式）
+Disallow: /*route=account
+Disallow: /*route=checkout
+Disallow: /*route=affiliate
+
+# 上述页面的 SEO 伪静态地址
+Disallow: /account
+Disallow: /login
+Disallow: /logout
+Disallow: /register
+Disallow: /favorites
+Disallow: /cart
+Disallow: /checkout
+Disallow: /order-tracking
+
+# 站内搜索与对比页
+Disallow: /*route=product/search
+Disallow: /*route=product/compare
+
+# 重复首页
+Disallow: /*route=common/home
+
+# 排序、分页数量等参数
+Disallow: /*?sort=
+Disallow: /*&sort=
+Disallow: /*?order=
+Disallow: /*&order=
+Disallow: /*?limit=
+Disallow: /*&limit=
+
+# 筛选与跟踪参数
+Disallow: /*?filter=
+Disallow: /*&filter=
+Disallow: /*?utm_
+Disallow: /*&utm_
+Disallow: /*?fbclid=
+Disallow: /*&fbclid=
+Disallow: /*?gclid=
+Disallow: /*&gclid=
+
+Sitemap: https://www.sokumart.com/index.php?route=extension/feed/google_sitemap

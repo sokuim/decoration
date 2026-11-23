@@ -1,0 +1,9 @@
+.git
+.gitignore
+.DS_Store
+*.log
+
+# 运行期生成/缓存产物，不打包进镜像（由 volume 挂载，运行时会自动重建）
+# 注意：image/catalog 含演示商品图、品牌图、Logo 等静态资源，必须打进镜像，不能排除
+image/cache
+system/storage

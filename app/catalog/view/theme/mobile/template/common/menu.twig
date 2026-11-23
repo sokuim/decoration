@@ -1,0 +1,27 @@
+<!-- drawer -->
+<div class="overlay" id="overlay" onclick="closeDrawer()"></div>
+<aside class="drawer" id="drawer">
+  <div class="drawer-head">
+    <div class="logo"><img src="{{ logo }}" alt="{{ helper.config('config_name') }}" /></div>
+    <button type="button" class="drawer-close" onclick="closeDrawer()" aria-label="{{ text_close }}">×</button>
+  </div>
+  {% if helper.customer.isLogged() %}
+  <div class="drawer-auth">
+    <a class="login" href="{{ helper.url.link('account/account') }}">{{ text_my_page }}</a>
+    <a class="reg" href="{{ helper.url.link('account/logout') }}">{{ text_logout }}</a>
+  </div>
+  {% else %}
+  <div class="drawer-auth">
+    <a class="login" href="{{ helper.url.link('account/login') }}">{{ text_login }}</a>
+    <a class="reg" href="{{ helper.url.link('account/register') }}">{{ text_new_register }}</a>
+  </div>
+  {% endif %}
+  <nav class="drawer-nav" aria-label="メインナビゲーション">
+    <ul class="drawer-list">
+      <li><a class="drawer-item" href="{{ home }}"><span class="ico">{{ text_home }}</span><span class="chev">›</span></a></li>
+      {% for item in drawer_menu %}
+      <li><a class="drawer-item" href="{{ item.link }}"><span class="ico">{{ item.title }}</span><span class="chev">›</span></a></li>
+      {% endfor %}
+    </ul>
+  </nav>
+</aside>

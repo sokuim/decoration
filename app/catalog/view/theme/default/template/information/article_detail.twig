@@ -1,0 +1,17 @@
+{{ header }}
+<div id="article-detail" class="wrap">
+  {{ include(helper.template('_partial/breadcrumb')) }}
+  {{ content_top }}
+  <article class="article-card">
+    <header class="article-head">
+      <h1 class="article-title">{{ heading_title }}</h1>
+      <div class="article-date">{{ date_added }}</div>
+    </header>
+    <div class="article-body">{{ description }}</div>
+    <div class="article-actions">
+      <a href="{{ continue }}" class="article-back-btn">{{ text_article }}</a>
+    </div>
+  </article>
+  {{ content_bottom }}
+</div>
+{{ footer }}

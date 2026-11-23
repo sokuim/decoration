@@ -1,0 +1,37 @@
+{{ header }}
+<div class="reward-page">
+  <div class="subhead">
+    <span class="back"></span>
+    <div class="ttl">{{ heading_title }}</div>
+    <span class="act"></span>
+  </div>
+  <div class="reward-body">
+    <div class="reward-summary">
+      <span>{{ text_total }}</span>
+      <b>{{ total }}</b>
+    </div>
+    {% if rewards %}
+    <div class="reward-list">
+      {% for reward in rewards %}
+      <div class="reward-item">
+        <div class="reward-item-head">
+          <span class="reward-date">{{ reward.date_added }}</span>
+          <b class="reward-points">{{ reward.points }}</b>
+        </div>
+        <div class="reward-desc">{% if reward.order_id %}<a href="{{ reward.href }}">{{ reward.description }}</a>{% else %}{{ reward.description }}{% endif %}</div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="reward-pagination">{{ pagination }}</div>
+    <div class="reward-results">{{ results }}</div>
+    {% else %}
+    <div class="reward-empty">
+      <div class="reward-empty-icon"><i class="fa fa-star-o"></i></div>
+      <p>{{ text_empty }}</p>
+    </div>
+    {% endif %}
+    {{ content_top }}
+    {{ content_bottom }}
+  </div>
+</div>
+{{ footer }}

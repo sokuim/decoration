@@ -1,0 +1,15 @@
+<div class="filter">
+  <h4>{{ heading_title }}</h4>
+  <div class="group">
+    {% for category in categories %}
+    <a class="cat-link {{ category.category_id == category_id ? 'on' : '' }}" href="{{ category.href }}">{{ category.name }}</a>
+    {% if category.children %}
+    <div class="cat-children">
+      {% for child in category.children %}
+      <a class="cat-link child {{ child.category_id == child_id ? 'on' : '' }}" href="{{ child.href }}">{{ child.name }}</a>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% endfor %}
+  </div>
+</div>

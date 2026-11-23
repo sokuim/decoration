@@ -1,0 +1,52 @@
+{{ header }}
+<div id="product-category-list" class="container">
+  {{ include(helper.template('_partial/breadcrumb')) }}
+  <div class="row">
+    <div id="content" class="col-sm-12">{{ content_top }}
+      <h1 class="h2">{{ heading_title }}</h1>
+      {% if categories %}
+      <div class="category-list">
+        {% for category in categories %}
+        <section class="category-group">
+          <a class="category-main" href="{{ category.href }}" title="{{ category.name }}">
+            {% if category.thumb_square %}
+            <img src="{{ category.thumb_square }}" alt="{{ category.name }}" loading="lazy" decoding="async">
+            {% endif %}
+            <div class="category-info">
+              <h2 class="category-name">{{ category.name }}</h2>
+              {% if category.description %}
+              <span class="category-desc">{{ category.description }}</span>
+              {% endif %}
+            </div>
+          </a>
+          {% if category.children %}
+          <div class="category-children">
+            {% for child in category.children %}
+            <a class="category-child" href="{{ child.href }}" title="{{ child.name }}">
+              <span class="category-child-head">
+                {% if child.thumb %}
+                <img class="category-child-thumb" src="{{ child.thumb }}" alt="{{ child.name }}" loading="lazy" decoding="async">
+                {% endif %}
+                <span class="category-child-name">{{ child.name }}</span>
+              </span>
+              {% if child.description %}
+              <span class="category-child-desc">{{ child.description }}</span>
+              {% endif %}
+            </a>
+            {% endfor %}
+          </div>
+          {% endif %}
+        </section>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p>{{ text_no_results }}</p>
+      <div class="buttons">
+        <div class="pull-right"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a></div>
+      </div>
+      {% endif %}
+      {{ content_bottom }}
+    </div>
+  </div>
+</div>
+{{ footer }}

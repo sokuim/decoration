@@ -1,0 +1,46 @@
+{{ header }}
+<div class="wishlist-page">
+  <div class="subhead">
+    <span class="back"></span>
+    <div class="ttl">{{ heading_title }}</div>
+    <span class="act"></span>
+  </div>
+  {% if success %}
+  <div class="wishlist-alert"><i class="fa fa-check-circle"></i> {{ success }}</div>
+  {% endif %}
+  <div class="wishlist-body">
+    {% if products %}
+    {% for product in products %}
+    <div class="wishlist-card">
+      <a href="{{ product.href }}" class="wishlist-thumb">{% if product.thumb %}<img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" />{% endif %}</a>
+      <div class="wishlist-info">
+        <a href="{{ product.href }}" class="wishlist-name">{{ product.name }}</a>
+        <div class="wishlist-stock">{{ product.stock }}</div>
+        {% if product.price %}
+        <div class="wishlist-price">
+          {% if product.special %}
+          <span class="special">{{ product.special }}</span><s>{{ product.price }}</s>
+          {% else %}
+          {{ product.price }}
+          {% endif %}
+        </div>
+        {% endif %}
+      </div>
+      <div class="wishlist-actions">
+        <button type="button" class="wishlist-cart" onclick="cart.add('{{ product.product_id }}');"><i class="fa fa-shopping-cart"></i> {{ button_cart }}</button>
+        <a href="{{ product.remove }}" class="wishlist-remove" title="{{ button_remove }}"><i class="fa fa-times"></i></a>
+      </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="wishlist-empty">
+      <div class="wishlist-empty-icon"><i class="fa fa-heart-o"></i></div>
+      <p>{{ text_empty }}</p>
+      <a href="{{ continue }}" class="wishlist-continue">{{ button_continue }}</a>
+    </div>
+    {% endif %}
+    {{ content_top }}
+    {{ content_bottom }}
+  </div>
+</div>
+{{ footer }}

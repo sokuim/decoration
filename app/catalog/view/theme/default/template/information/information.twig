@@ -1,0 +1,13 @@
+{{ header }}
+<div id="information-information" class="wrap">
+  {{ include(helper.template('_partial/breadcrumb')) }}
+  {{ content_top }}
+  <article class="info-card">
+    <header class="info-head">
+      <h1 class="info-title">{{ heading_title }}</h1>
+    </header>
+    <div class="info-body">{{ description }}</div>
+  </article>
+  {{ content_bottom }}
+</div>
+{{ footer }}

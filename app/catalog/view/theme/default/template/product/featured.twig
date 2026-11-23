@@ -1,0 +1,20 @@
+{{ header }}
+<div id="product-featured" class="wrap">
+  {{ include(helper.template('_partial/breadcrumb')) }}
+  <h1 class="page-title">{{ heading_title }}</h1>
+  {{ content_top }}
+  {% if products %}
+  <div class="list-grid">
+    {% for product in products %}
+    {{ include(helper.template('_partial/product/product_single')) }}
+    {% endfor %}
+  </div>
+  {% else %}
+  <p>{{ text_empty }}</p>
+  <div class="buttons">
+    <a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a>
+  </div>
+  {% endif %}
+  {{ content_bottom }}
+</div>
+{{ footer }}

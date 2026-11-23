@@ -1,0 +1,43 @@
+{{ header }}
+<div class="connect-page">
+  <div class="subhead">
+    <span class="back"></span>
+    <div class="ttl">{{ heading_title }}</div>
+    <span class="act"></span>
+  </div>
+  <div class="connect-wrap">
+    <div class="connect-card">
+      <div class="connect-icon"><i class="fa fa-check" aria-hidden="true"></i></div>
+      <p class="connect-note">{{ text_success }}</p>
+      <div class="connect-info">
+        <div class="connect-row">
+          <span>{{ column_order_id }}</span>
+          <b>#{{ order_id }}</b>
+        </div>
+        <div class="connect-row">
+          <span>{{ column_total }}</span>
+          <b class="connect-total">{{ total }}</b>
+        </div>
+        {% if shipping_method %}
+        <div class="connect-row">
+          <span>{{ column_shipping_method }}</span>
+          <b>{{ shipping_method }}</b>
+        </div>
+        {% endif %}
+        <div class="connect-row">
+          <span>{{ column_payment_method }}</span>
+          <b>{{ payment_method }}</b>
+        </div>
+      </div>
+      {% if payment_view %}
+      <div class="connect-payment">
+        {% if text_note %}<p class="connect-payment-note">{{ text_note }}</p>{% endif %}
+        {{ payment_view }}
+      </div>
+      {% else %}
+      <a href="{{ href }}" class="connect-btn">{{ button_view_order }}</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{{ footer }}

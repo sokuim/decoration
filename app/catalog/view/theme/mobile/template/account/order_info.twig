@@ -1,0 +1,129 @@
+{{ header }}
+<div class="order-detail-page">
+  <div class="subhead">
+    <span class="back"></span>
+    <div class="ttl">{{ text_order }}</div>
+    <span class="act"></span>
+  </div>
+  {% if success %}
+  <div class="detail-alert ok"><i class="fa fa-check-circle"></i> {{ success }}</div>
+  {% endif %}
+  {% if error_warning %}
+  <div class="detail-alert err"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}</div>
+  {% endif %}
+  <div class="detail-body">
+    <div class="detail-card">
+      <h3>{{ text_order_detail }}</h3>
+      <div class="detail-row">
+        <span>{{ text_order_id }}</span>
+        <b>#{{ order_id }}</b>
+      </div>
+      {% if invoice_no %}
+      <div class="detail-row">
+        <span>{{ text_invoice_no }}</span>
+        <b>{{ invoice_no }}</b>
+      </div>
+      {% endif %}
+      <div class="detail-row">
+        <span>{{ text_date_added }}</span>
+        <b>{{ date_added }}</b>
+      </div>
+      {% if payment_method %}
+      <div class="detail-row">
+        <span>{{ text_payment_method }}</span>
+        <b>{{ payment_method }}</b>
+      </div>
+      {% endif %}
+      {% if shipping_method %}
+      <div class="detail-row">
+        <span>{{ text_shipping_method }}</span>
+        <b>{{ shipping_method }}</b>
+      </div>
+      {% endif %}
+    </div>
+
+    {% if shipping_address %}
+    <div class="detail-card">
+      <h3>{{ text_shipping_address }}</h3>
+      <div class="detail-address">{{ shipping_address }}</div>
+    </div>
+    {% endif %}
+
+    <div class="detail-card">
+      <h3>{{ column_name }}</h3>
+      {% for product in products %}
+      <div class="detail-product">
+        <div class="detail-product-thumb">{% if product.thumb %}<img src="{{ product.thumb }}" alt="{{ product.name }}" />{% endif %}</div>
+        <div class="detail-product-main">
+          <div class="detail-product-head">
+            <div class="detail-product-name">{{ product.name }}</div>
+            <div class="detail-product-total">{{ product.total }}</div>
+          </div>
+          {% for option in product.option %}
+          <div class="detail-product-option">{{ option.name }}: {{ option.value }}</div>
+          {% endfor %}
+          <div class="detail-product-meta">{{ product.quantity }} × {{ product.price }}</div>
+        </div>
+        <div class="detail-product-actions">
+          {% if product.reorder %}
+          <a href="{{ product.reorder }}" class="detail-action"><i class="fa fa-shopping-cart"></i> {{ button_reorder }}</a>
+          {% endif %}
+          <a href="{{ product.return }}" class="detail-action"><i class="fa fa-reply"></i> {{ button_return }}</a>
+        </div>
+      </div>
+      {% endfor %}
+      {% for voucher in vouchers %}
+      <div class="detail-product">
+        <div class="detail-product-main">
+          <div class="detail-product-head">
+            <div class="detail-product-name">{{ voucher.description }}</div>
+            <div class="detail-product-total">{{ voucher.amount }}</div>
+          </div>
+          <div class="detail-product-meta">1 × {{ voucher.amount }}</div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+
+    <div class="detail-card">
+      <h3>{{ column_total }}</h3>
+      {% for total in totals %}
+      <div class="detail-row{% if loop.last %} grand{% endif %}">
+        <span>{{ total.title }}</span>
+        <b>{{ total.text }}</b>
+      </div>
+      {% endfor %}
+    </div>
+
+    {% if comment %}
+    <div class="detail-card">
+      <h3>{{ text_comment }}</h3>
+      <div class="detail-comment">{{ comment }}</div>
+    </div>
+    {% endif %}
+
+    {% if histories %}
+    <div class="detail-card">
+      <h3>{{ text_history }}</h3>
+      <div class="detail-history">
+        {% for history in histories %}
+        <div class="history-item">
+          <div class="history-head">
+            <span>{{ history.date_added }}</span>
+            <b>{{ history.status }}</b>
+          </div>
+          {% if history.comment %}
+          <div class="history-comment">{{ history.comment }}</div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    <a href="{{ continue }}" class="detail-back">{{ button_back }}</a>
+    {{ content_top }}
+    {{ content_bottom }}
+  </div>
+</div>
+{{ footer }}

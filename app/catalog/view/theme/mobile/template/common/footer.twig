@@ -1,0 +1,62 @@
+{% if not modal %}
+<footer class="foot">
+  <div class="foot-links">
+    {% for information in informations %}
+    <a href="{{ information.href }}">{{ information.title }}</a>
+    {% endfor %}
+    <a href="{{ article }}">{{ text_article }}</a>
+    <a href="{{ contact }}">{{ text_contact_us }}</a>
+  </div>
+  <div class="pay">{{ text_payment }}</div>
+  <div class="copy">© 2026 {{ name }}</div>
+</footer>
+{% set route = helper.current_route() %}
+<nav class="bnav" id="bnav">
+  <a href="{{ helper.url.link('common/home') }}" class="{% if route == 'common/home' %}on{% endif %}" id="nav-home">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11l8-7 8 7"/><path d="M6 10v9h12v-9"/></svg>{{ text_home }}
+  </a>
+  <a href="{{ helper.url.link('product/search') }}" class="{% if route == 'product/search' %}on{% endif %}" id="nav-search">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>{{ button_search }}
+  </a>
+  <a href="{{ helper.url.link('product/category_list') }}" class="{% if route == 'product/category_list' %}on{% endif %}" id="nav-cat">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>{{ text_categories }}
+  </a>
+  <a href="{{ helper.url.link('checkout/cart') }}" class="{% if route starts with 'checkout/' %}on{% endif %}{% if helper.registry('cart').hasProducts() %} bdot{% endif %}" id="nav-cart">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l1.5 13h-15L6 7z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>{{ text_cart }}
+  </a>
+  <a href="{{ helper.url.link('account/account') }}" class="{% if route starts with 'account/' %}on{% endif %}" id="nav-mypage">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>{{ text_my_page }}
+  </a>
+</nav>
+{% endif %}
+{% for script in scripts %}
+<script src="{{ script }}" type="text/javascript"></script>
+{% endfor %}
+
+<script type="text/javascript">
+  var showAlert = function(type, content) {
+    if (type == 'cart') {
+      redirectButtonText = '{{ button_checkout }}';
+      redirectButtonLocation = '{{ helper.url.link("checkout/cart") }}';
+    } else if (type == 'wishlist') {
+      redirectButtonText = '{{ button_wishlist }}';
+      redirectButtonLocation = '{{ wishlist }}';
+    } else if (type == 'compare') {
+      redirectButtonText = '{{ button_compare }}';
+      redirectButtonLocation = '{{ helper.url.link("product/compare") }}';
+    }
+
+    layer.open({
+      title: '{{ text_layer_popup_title }}',
+      skin: 'layer-alert',
+      shadeClose: true,
+      content: content,
+      btn: [redirectButtonText, '{{ button_continue_shopping }}'],
+      yes: function() {
+        location = redirectButtonLocation;
+      }
+    });
+  }
+</script>
+{{ helper.debug_bar.render }}
+</body></html>

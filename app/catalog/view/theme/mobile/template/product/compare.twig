@@ -1,0 +1,146 @@
+{{ header }}
+<div id="product-compare" class="compare-page">
+  <div class="subhead">
+    <span class="back"></span>
+    <div class="ttl">{{ heading_title }}</div>
+    <span class="act"></span>
+  </div>
+  {% if success %}
+  <div class="compare-alert"><i class="fa fa-check-circle"></i> {{ success }}</div>
+  {% endif %}
+  <div class="compare-body">
+    {% if products %}
+    <div class="compare-scroll">
+      <table class="compare-table" style="min-width: {{ 86 + 144 * (products|length) }}px">
+        <colgroup>
+          <col style="width: 86px">
+          {% for product in products %}
+          <col style="width: 144px">
+          {% endfor %}
+        </colgroup>
+        <thead>
+          <tr>
+            <td colspan="{{ products|length + 1 }}"><strong>{{ text_product }}</strong></td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th>{{ text_name }}</th>
+            {% for product in products %}
+            <td><a class="product-name" href="{{ product.href }}">{{ product.name }}</a></td>
+            {% endfor %}
+          </tr>
+          <tr>
+            <th>{{ text_image }}</th>
+            {% for product in products %}
+            <td class="compare-image">{% if product.thumb %}<img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" />{% endif %}</td>
+            {% endfor %}
+          </tr>
+          <tr>
+            <th>{{ text_price }}</th>
+            {% for product in products %}
+            <td>
+              <div class="compare-price">
+                {% if product.price %}
+                  {% if not product.special %}
+                  {{ product.price }}
+                  {% else %}
+                  <span class="price-new">{{ product.special }}</span>
+                  <span class="price-old">{{ product.price }}</span>
+                  {% endif %}
+                {% endif %}
+              </div>
+            </td>
+            {% endfor %}
+          </tr>
+          <tr>
+            <th>{{ text_model }}</th>
+            {% for product in products %}
+            <td>{{ product.model }}</td>
+            {% endfor %}
+          </tr>
+          <tr>
+            <th>{{ text_manufacturer }}</th>
+            {% for product in products %}
+            <td>{{ product.manufacturer }}</td>
+            {% endfor %}
+          </tr>
+          <tr>
+            <th>{{ text_availability }}</th>
+            {% for product in products %}
+            <td>{{ product.availability }}</td>
+            {% endfor %}
+          </tr>
+          {% if review_status %}
+          <tr>
+            <th>{{ text_rating }}</th>
+            {% for product in products %}
+            <td class="rating">
+              {{ include(helper.template('_partial/product/rating_block')) }}
+              <div class="rating-list">{{ product.reviews }}</div>
+            </td>
+            {% endfor %}
+          </tr>
+          {% endif %}
+          <tr>
+            <th>{{ text_summary }}</th>
+            {% for product in products %}
+            <td class="compare-desc">{{ product.description }}</td>
+            {% endfor %}
+          </tr>
+          <tr>
+            <th>{{ text_weight }}</th>
+            {% for product in products %}
+            <td>{{ product.weight }}</td>
+            {% endfor %}
+          </tr>
+          <tr>
+            <th>{{ text_dimension }}</th>
+            {% for product in products %}
+            <td>{{ product.length }} x {{ product.width }} x {{ product.height }}</td>
+            {% endfor %}
+          </tr>
+        </tbody>
+        {% for attribute_group in attribute_groups %}
+        <thead>
+          <tr>
+            <td colspan="{{ products|length + 1 }}"><strong>{{ attribute_group.name }}</strong></td>
+          </tr>
+        </thead>
+        <tbody>
+          {% for key, attribute in attribute_group.attribute %}
+          <tr>
+            <th>{{ attribute.name }}</th>
+            {% for product in products %}
+            <td>{% if product.attribute[key] %}{{ product.attribute[key] }}{% endif %}</td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </tbody>
+        {% endfor %}
+        <tbody>
+          <tr>
+            <th></th>
+            {% for product in products %}
+            <td>
+              <div class="compare-button">
+                <input type="button" value="{{ button_cart }}" class="btn btn-primary" onclick="cart.add('{{ product.product_id }}', '{{ product.minimum }}');" />
+                <a href="{{ product.remove }}" class="btn btn-default">{{ button_remove }}</a>
+              </div>
+            </td>
+            {% endfor %}
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    {% else %}
+    <div class="compare-empty">
+      <p>{{ text_no_results }}</p>
+      <a href="{{ continue }}" class="compare-continue">{{ button_continue }}</a>
+    </div>
+    {% endif %}
+    {{ content_top }}
+    {{ content_bottom }}
+  </div>
+</div>
+{{ footer }}

@@ -1,0 +1,13 @@
+{% if nav_links %}
+<nav aria-label="メインナビゲーション" class="nav">
+  <div class="wrap">
+    <ul>
+      {% for nav_link in nav_links %}
+      <li><a href="{{ nav_link.link }}">{{ nav_link.title }}</a></li>
+      {% endfor %}
+    </ul>
+    <span class="spacer"></span>
+    <span class="campaign">{{ text_welcome }}</span>
+  </div>
+</nav>
+{% endif %}

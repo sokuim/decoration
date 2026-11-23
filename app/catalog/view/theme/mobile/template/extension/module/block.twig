@@ -1,0 +1,15 @@
+{% if blocks %}
+<section aria-labelledby="heading-block-{{ module }}" class="block-section">
+  {% if module_title %}<div class="section-header"><h2 id="heading-block-{{ module }}" class="block-module-title">{{ module_title }}</h2></div>{% endif %}
+  <ul class="module-block">
+    {% for block in blocks %}
+    <li class="block-item">
+      {% if block.link %}<a href="{{ block.link }}" title="{{ block.title }}">{% endif %}
+        {% if block.image %}<img src="{{ block.image }}" alt="{{ block.title ? block.title : helper.config('config_name') ~ '（くらしマート）オンラインショップ' }}" loading="lazy" decoding="async" />{% endif %}
+        {% if block.title %}<span class="block-title">{{ block.title }}</span>{% endif %}
+      {% if block.link %}</a>{% endif %}
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endif %}

@@ -1,0 +1,15 @@
+{{ header }}
+<div class="subhead">
+  <a href="{{ continue }}" class="back">‹</a>
+  <div class="ttl">{{ heading_title }}</div>
+  <span class="act"></span>
+</div>
+<div class="cat-grid">
+  {% for category in categories %}
+  <a href="{{ category.href }}" class="cat-card">
+    <img src="{{ category.thumb }}" alt="{{ category.name }}">
+    <span>{{ category.name }}</span>
+  </a>
+  {% endfor %}
+</div>
+{{ footer }}

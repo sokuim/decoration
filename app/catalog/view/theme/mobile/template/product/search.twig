@@ -1,0 +1,61 @@
+{{ header }}
+<div class="subhead">
+  <a href="{{ helper.url.link('common/home') }}" class="back">‹</a>
+  <div class="ttl">{{ text_search_title }}</div>
+  <span class="act"></span>
+</div>
+<div id="product-search" class="search-page">
+  <div class="search-form">
+    <input type="text" name="search" value="{{ search }}" placeholder="{{ text_search_placeholder }}" id="input-search" />
+    <button type="button" id="button-search">{{ button_search }}</button>
+  </div>
+
+  {% if products %}
+  {% if style == 'list' %}
+  {% set class = 'product-list col-xs-12' %}
+  {% else %}
+  {% set class = 'product-grid col-xs-6' %}
+  {% endif %}
+  <div class="row">
+    <div class="product-wrapper">
+      {% for product in products %}
+      <div class="product-layout {{ class }}">
+        {{ include(helper.template('_partial/product/product_single')) }}
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="search-pagination">{{ pagination }}</div>
+  {% else %}
+  <div class="search-empty">
+    <div class="search-empty-circle">
+      <svg viewBox="0 0 24 24" fill="none" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M4 10h16v10H4z"/><path d="M2.5 7h19v3h-19z"/><path d="M12 7v13"/>
+        <path d="M12 7S10.8 3.2 8.8 3.2 6.2 5.6 8.2 7"/>
+        <path d="M12 7s1.2-3.8 3.2-3.8S17.8 5.6 15.8 7"/>
+      </svg>
+    </div>
+    <p>{{ text_empty }}</p>
+  </div>
+  {% endif %}
+</div>
+<script type="text/javascript"><!--
+$('#button-search').bind('click', function() {
+  var url = 'index.php?route=product/search';
+
+  var search = $('#input-search').prop('value');
+
+  if (search) {
+    url += '&search=' + encodeURIComponent(search);
+  }
+
+  location = url;
+});
+
+$('#input-search').bind('keydown', function(e) {
+  if (e.keyCode == 13) {
+    $('#button-search').trigger('click');
+  }
+});
+--></script>
+{{ footer }}

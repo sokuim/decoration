@@ -1,0 +1,52 @@
+{% for product in products %}
+<tr class="cart-item" data-cart-id="{{ product.cart_id }}">
+  <td>
+    <div class="cart-card">
+      <label class="cart-check"><input type="checkbox" class="cart-check-input" value="{{ product.cart_id }}" checked="checked" /><span></span></label>
+      <a class="cart-thumb" href="{{ product.href }}">
+        {% if product.thumb %}<img src="{{ product.thumb }}" alt="{{ product.name }}" />{% endif %}
+      </a>
+      <div class="cart-info">
+        {% if not product.stock %}<span class="cart-nostock">{{ text_no_stock }}</span>{% endif %}
+        <a class="cart-name" href="{{ product.href }}">{{ product.name }}</a>
+        {% for option in product.option %}<div class="cart-option">{{ option.name }}: {{ option.value }}</div>{% endfor %}
+        {% if product.reward %}<div class="cart-option">{{ product.reward }}</div>{% endif %}
+        <div class="cart-price">{{ product.price }}</div>
+      </div>
+      <div class="cart-qty quantity-wrapper">
+        <span class="quantity-down">−</span>
+        <input type="text" name="quantity[{{ product.cart_id }}]" value="{{ product.quantity }}" class="cart-quantity" onkeyup="this.value=this.value.replace(/\D/g,'');" onafterpaste="this.value=this.value.replace(/\D/g,'')" />
+        <span class="quantity-up">＋</span>
+      </div>
+    </div>
+  </td>
+</tr>
+{% endfor %}
+{% for voucher in vouchers %}
+<tr class="cart-item">
+  <td>
+    <div class="cart-card">
+      <span class="cart-check"></span>
+      <div class="cart-info">
+        <div class="cart-name">{{ voucher.description }}</div>
+        <div class="cart-price">{{ voucher.amount }}</div>
+      </div>
+      <button type="button" class="cart-remove" onclick="voucher.remove('{{ voucher.key }}');">{{ button_remove }}</button>
+    </div>
+  </td>
+</tr>
+{% endfor %}
+{% for recharge in recharges %}
+<tr class="cart-item">
+  <td>
+    <div class="cart-card">
+      <span class="cart-check"></span>
+      <div class="cart-info">
+        <div class="cart-name">{{ recharge.description }}</div>
+        <div class="cart-price">{{ recharge.amount }}</div>
+      </div>
+      <button type="button" class="cart-remove" onclick="cart.remove('{{ recharge.key }}');">{{ button_remove }}</button>
+    </div>
+  </td>
+</tr>
+{% endfor %}

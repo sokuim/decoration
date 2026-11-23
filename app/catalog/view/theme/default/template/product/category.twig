@@ -1,0 +1,47 @@
+{{ header }}
+<div id="product-category" class="wrap">
+  {{ include(helper.template('_partial/breadcrumb')) }}
+  <h1 class="page-title">{{ heading_title }}</h1>
+  <div class="two-col">
+    {{ column_left }}
+    <div id="content">
+      {{ content_top }}
+      {% if description %}
+      <div class="category-description">
+        <div class="cat-desc">{{ description }}</div>
+      </div>
+      {% endif %}
+      {% if categories %}
+      <div class="subcats">
+        {% for category in categories %}
+        <a href="{{ category.href }}">{{ category.name }}</a>
+        {% endfor %}
+      </div>
+      {% endif %}
+      {% if products %}
+      <div class="sortbar">
+        <span class="total">{{ results }}</span>
+        <div class="tabs">
+          {% for sort_item in sorts %}
+          <a class="chip {% if sort_item.value == sort ~ '-' ~ order %}on{% endif %}" href="{{ sort_item.href }}">{{ sort_item.text }}</a>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="list-grid">
+        {% for product in products %}
+        {{ include(helper.template('_partial/product/product_single')) }}
+        {% endfor %}
+      </div>
+      <div class="pagination-wrap">{{ pagination }}</div>
+      {% endif %}
+      {% if not categories and not products %}
+      <p>{{ text_no_results }}</p>
+      <div class="buttons">
+        <a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a>
+      </div>
+      {% endif %}
+      {{ content_bottom }}
+    </div>
+  </div>
+</div>
+{{ footer }}

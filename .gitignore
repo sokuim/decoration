@@ -1,0 +1,40 @@
+# OS
+.DS_Store
+
+# IDE
+.idea/
+
+# 非 app 内容（设计稿、截图、预览等）
+docs/
+.screenshots/
+.trae-html-share-packages/
+
+# 图片资源（不提交，部署时另行提供）
+app/image/**/*.png
+app/image/**/*.jpg
+app/image/**/*.jpeg
+app/image/**/*.gif
+app/image/**/*.svg
+app/image/**/*.webp
+app/image/**/*.ico
+app/image/**/*.cache
+
+# 后台界面图片资源（不提交）
+app/admin/view/image/
+
+# 运行期图片缓存与缩略图（保留目录占位 index.html）
+app/image/cache/*
+!app/image/cache/index.html
+app/image/.ckfinder/cache/
+
+# 环境相关配置文件（含数据库凭据，不入库）
+app/config.php
+app/admin/config.php
+
+# 安装目录（部署完成后应删除，不入库）
+app/install/
+
+
+# tmp
+.user.ini
+tmp

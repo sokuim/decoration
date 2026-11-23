@@ -1,0 +1,20 @@
+{{ header }}
+<div class="success-page">
+  <div class="subhead">
+    <a class="back" href="{{ continue }}" aria-label="{{ button_continue }}">&#8249;</a>
+    <div class="ttl">{{ heading_title }}</div>
+    <span class="act"></span>
+  </div>
+  <div class="success-wrap">
+    {{ content_top }}
+    <div class="success-card{{ failure ? ' is-failure' }}">
+      <div class="success-icon">
+        <i class="fa fa-{{ failure ? 'times' : 'check' }}" aria-hidden="true"></i>
+      </div>
+      <div class="success-message">{{ text_message }}</div>
+      <a href="{{ continue }}" class="success-continue">{{ button_continue }}</a>
+    </div>
+    {{ content_bottom }}
+  </div>
+</div>
+{{ footer }}

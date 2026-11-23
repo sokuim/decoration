@@ -1,0 +1,16 @@
+{{ header }}
+<div id="common-success" class="container">
+  {{ include(helper.template('_partial/breadcrumb')) }}
+  <div class="row">
+    <div id="content" class="col-sm-12">{{ content_top }}
+      <div class="addr-panel common-success-panel">
+        <div class="common-success-icon"><i class="fa fa-check" aria-hidden="true"></i></div>
+        <h3>{{ heading_title }}</h3>
+        <div class="common-success-text">{{ text_message }}</div>
+        <div class="common-success-actions"><a href="{{ continue }}" class="addr-submit">{{ button_continue }}</a></div>
+      </div>
+      {{ content_bottom }}
+    </div>
+  </div>
+</div>
+{{ footer }}

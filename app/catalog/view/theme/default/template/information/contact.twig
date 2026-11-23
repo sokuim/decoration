@@ -1,0 +1,72 @@
+{{ header }}
+<div id="information-contact" class="container">
+  {{ include(helper.template('_partial/breadcrumb')) }}
+  <div class="row">{{ column_left }}
+    {% if column_left and column_right %}
+    {% set class = 'col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'col-sm-9' %}
+    {% else %}
+    {% set class = 'col-sm-12' %}
+    {% endif %}
+    <div id="content" class="{{ class }}">{{ content_top }}
+      <h1>{{ heading_title }}</h1>
+      <div class="form-card contact-card">
+        <h4>{{ text_location }}</h4>
+        <div class="contact-store-grid">
+          {% if image %}<div class="csi-img"><img src="{{ image }}" alt="{{ store }}" title="{{ store }}" /></div>{% endif %}
+          <div class="csi-info">
+            <div class="csi-name">{{ store }}</div>
+            {% if address %}<div class="csi-addr">{{ address }}</div>{% endif %}
+            {% if store_email %}<div class="csi-row"><span class="csi-label">{{ text_email }}</span><span class="csi-val">{{ store_email }}</span></div>{% endif %}
+            {% if fax %}<div class="csi-row"><span class="csi-label">{{ text_fax }}</span><span class="csi-val">{{ fax }}</span></div>{% endif %}
+            {% if open %}<div class="csi-row"><span class="csi-label">{{ text_open }}</span><span class="csi-val">{{ open }}</span></div>{% endif %}
+            {% if comment %}<div class="csi-comment">{{ comment }}</div>{% endif %}
+          </div>
+        </div>
+        {% if geocode %}<a href="https://maps.google.com/maps?q={{ geocode|url_encode }}&hl={{ geocode_hl }}&t=m&z=15" target="_blank" class="addr-btn contact-map"><i class="fa fa-map-marker"></i> {{ button_map }}</a>{% endif %}
+      </div>
+      {% if locations %}
+      <div class="form-card contact-card">
+        <h4>{{ text_store }}</h4>
+        <div class="contact-locations">
+          {% for location in locations %}
+          <div class="cl-item">
+            <div class="cl-name">{{ location.name }}</div>
+            {% if location.address %}<div class="csi-addr">{{ location.address }}</div>{% endif %}
+            {% if location.telephone %}<div class="csi-row"><span class="csi-label">{{ text_telephone }}</span><span class="csi-val">{{ location.telephone }}</span></div>{% endif %}
+            {% if location.open %}<div class="csi-row"><span class="csi-label">{{ text_open }}</span><span class="csi-val">{{ location.open }}</span></div>{% endif %}
+            {% if location.comment %}<div class="csi-comment">{{ location.comment }}</div>{% endif %}
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+      <div class="form-card contact-form-card">
+        <h4>{{ text_contact }}</h4>
+        <form action="{{ action }}" method="post" enctype="multipart/form-data">
+          <div class="field">
+            <label for="input-name">{{ entry_name }}</label>
+            <input type="text" name="name" value="{{ name }}" id="input-name" class="input" />
+            {% if error_name %}<div class="text-danger">{{ error_name }}</div>{% endif %}
+          </div>
+          <div class="field">
+            <label for="input-email">{{ entry_email }}</label>
+            <input type="text" name="email" value="{{ email }}" id="input-email" class="input" />
+            {% if error_email %}<div class="text-danger">{{ error_email }}</div>{% endif %}
+          </div>
+          <div class="field">
+            <label for="input-enquiry">{{ entry_enquiry }}</label>
+            <textarea name="enquiry" rows="8" id="input-enquiry" class="input">{{ enquiry }}</textarea>
+            {% if error_enquiry %}<div class="text-danger">{{ error_enquiry }}</div>{% endif %}
+          </div>
+          {{ captcha }}
+          <button type="submit" class="addr-submit">{{ button_submit }}</button>
+        </form>
+      </div>
+      {{ content_bottom }}
+    </div>
+    {{ column_right }}
+  </div>
+</div>
+{{ footer }}

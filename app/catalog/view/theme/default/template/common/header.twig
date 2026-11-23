@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<!--[if IE]><![endif]-->
+<!--[if IE 8 ]><html dir="{{ direction }}" lang="{{ lang }}" class="ie8"><![endif]-->
+<!--[if IE 9 ]><html dir="{{ direction }}" lang="{{ lang }}" class="ie9"><![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+<html dir="{{ direction }}" lang="{{ lang }}">
+<!--<![endif]-->
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>{{ title }}</title>
+<base href="{{ base }}" />
+{% if description %}
+<meta name="description" content="{{ description }}" />
+{% endif %}
+{% if keywords %}
+<meta name="keywords" content="{{ keywords }}" />
+{% endif %}
+<meta name="robots" content="{{ robots }}" />
+{% if canonical %}
+<link rel="alternate" hreflang="ja-JP" href="{{ canonical }}" />
+<link rel="alternate" hreflang="x-default" href="{{ canonical }}" />
+{% endif %}
+
+<!-- Facebook share -->
+<meta property="og:site_name" content="{{ facebook_site_name }}" />
+<meta property="og:locale" content="{{ og_locale }}" />
+<meta property="og:url" content="{{ facebook_share_url }}" />
+<meta property="og:type" content="{{ facebook_share_type }}" />
+<meta property="og:title" content="{{ facebook_share_title }}" />
+<meta property="og:description" content="{{ facebook_share_description }}" />
+<meta property="og:image" content="{{ facebook_share_image }}" />
+<meta property="og:image:width" content="{{ facebook_share_image_width }}" />
+<meta property="og:image:height" content="{{ facebook_share_image_height }}" />
+<meta property="og:image:alt" content="{{ facebook_share_title }}" />
+
+<!-- Twitter share -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="{{ facebook_share_title }}" />
+<meta name="twitter:description" content="{{ facebook_share_description }}" />
+<meta name="twitter:image" content="{{ facebook_share_image }}" />
+{% if facebook_share_type == 'product' %}
+<meta property="product:price:amount" content="{{ facebook_product_price_amount }}" />
+<meta property="product:price:currency" content="{{ facebook_product_price_currency }}" />
+{% endif %}
+
+  {% if config_analytics_status %}
+    <script charset="UTF-8" id="LA_COLLECT" src="//sdk.51.la/js-sdk-pro.min.js"></script>
+    <script>LA.init({id:"3Rq6WLUOEP2NjjJ9",ck:"3Rq6WLUOEP2NjjJ9"})</script>
+  {% endif %}
+
+<script src="catalog/view/javascript/jquery/jquery-2.1.1.min.js" type="text/javascript"></script>
+<script src="catalog/view/javascript/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+<script src="catalog/view/javascript/layer/layer.js" type="text/javascript"></script>
+<link href="catalog/view/theme/default/stylesheet/stylesheet.css?v=asgd9a7jk21bxaiusc9" rel="stylesheet">
+<link href="catalog/view/theme/default/stylesheet/default.css?v=asgd9a7jk21bxaiuscj80" rel="stylesheet">
+<link href="catalog/view/javascript/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+{% for style in styles %}
+<link href="{{ style.href }}" type="text/css" rel="{{ style.rel }}" media="{{ style.media }}" />
+{% endfor %}
+{% for script in scripts %}
+<script src="{{ script }}" type="text/javascript"></script>
+{% endfor %}
+<script src="catalog/view/javascript/common.js?v=20261112b" type="text/javascript"></script>
+{% for link in links %}
+<link href="{{ link.href }}" rel="{{ link.rel }}" />
+{% endfor %}
+{% for analytic in analytics %}
+{{ analytic }}
+{% endfor %}
+{{ structured_data }}
+{{ helper.debug_bar.renderHead }}
+</head>
+<body class="{{ class }}">
+{% if not modal %}
+{% set simple = class in ['account-login', 'account-register', 'account-forgotten'] %}
+{% if not simple %}
+<!-- topbar -->
+<div class="topbar"><div class="wrap">{% if topbar_message %}<span>{{ topbar_message }}</span>{% endif %}<span class="r"><span class="order-contact"><span class="oc-label">{{ text_order_contact }}</span>{% if store_email %}<a href="mailto:{{ store_email }}">{{ store_email }}</a>{% endif %}</span><span>{{ text_track_order }}</span><a href="{{ contact }}">{{ text_contact_us }}</a></span></div></div>
+
+<!-- header -->
+<header class="header">
+  <div class="wrap">
+    <div class="header-main">
+      {% if class == 'common-home' %}
+      <h1 class="logo"><a href="{{ home }}"><img src="{{ logo }}" alt="{{ name }}" /></a></h1>
+      {% else %}
+      <a class="logo" href="{{ home }}"><img src="{{ logo }}" alt="{{ name }}" /></a>
+      {% endif %}
+      {{ search }}
+      <div class="actions">
+        <a class="act" href="{{ wishlist }}"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 8 0 4 4 0 0 1 6 0c0 5.5-7 10-7 10z"/></svg>{{ text_favorite }}</a>
+        {% if logged %}
+        <a class="act" href="{{ account }}"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>{{ text_my_page }}</a>
+        <a class="act" href="{{ logout }}"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>{{ text_logout }}</a>
+        {% else %}
+        <a class="act" href="{{ login }}"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg>{{ text_login }}</a>
+        <a class="act" href="{{ register }}"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M19 8v6M16 11h6"/></svg>{{ text_new_register }}</a>
+        {% endif %}
+        {{ cart }}
+      </div>
+    </div>
+  </div>
+</header>
+{{ menu }}
+{% endif %}
+{% endif %}

@@ -1,0 +1,16 @@
+{{ header }}
+<div class="info-page">
+  <div class="subhead">
+    <a class="back" href="{{ continue }}" aria-label="{{ text_back|default('戻る') }}">&#8249;</a>
+    <h1 class="ttl">{{ heading_title }}</h1>
+    <span class="act"></span>
+  </div>
+  <div class="info-wrap">
+    {{ content_top }}
+    <article class="info-card">
+      <div class="info-body">{{ description }}</div>
+    </article>
+    {{ content_bottom }}
+  </div>
+</div>
+{{ footer }}

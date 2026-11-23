@@ -1,0 +1,315 @@
+{{ header }}
+<div id="account-edit" class="container">
+  {{ include(helper.template('_partial/breadcrumb')) }}
+  {% if error_warning %}
+  <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}</div>
+  {% endif %}
+  <div class="row">{{ column_left }}
+    {% if column_left and column_right %}
+    {% set class = 'col-sm-6' %}
+    {% elseif column_left or column_right %}
+    {% set class = 'col-sm-9' %}
+    {% else %}
+    {% set class = 'col-sm-12' %}
+    {% endif %}
+    <div id="content" class="{{ class }}">{{ content_top }}
+      <div class="form-card">
+        <h4>{{ heading_title }}</h4>
+      <form action="{{ action }}" method="post" enctype="multipart/form-data">
+        <table class="addr-form">
+          <tbody>
+            <tr>
+              <th>{{ text_name }} <span class="req">{{ text_required }}</span></th>
+              <td>
+                <div class="row2">
+                  <input type="text" name="lastname" value="{{ lastname }}" placeholder="{{ placeholder_lastname }}" id="input-lastname" class="input" />
+                  <input type="text" name="firstname" value="{{ firstname }}" placeholder="{{ placeholder_firstname }}" id="input-firstname" class="input" />
+                </div>
+                {% if error_lastname %}
+                <div class="text-danger">{{ error_lastname }}</div>
+                {% endif %}
+                {% if error_firstname %}
+                <div class="text-danger">{{ error_firstname }}</div>
+                {% endif %}
+              </td>
+            </tr>
+            <tr>
+              <th>{{ text_kana }} <span class="req">{{ text_required }}</span></th>
+              <td>
+                <div class="row2">
+                  <input type="text" name="lastname_kana" value="{{ lastname_kana }}" placeholder="{{ placeholder_lastname_kana }}" id="input-lastname_kana" class="input" />
+                  <input type="text" name="firstname_kana" value="{{ firstname_kana }}" placeholder="{{ placeholder_firstname_kana }}" id="input-firstname_kana" class="input" />
+                </div>
+                {% if error_lastname_kana %}
+                <div class="text-danger">{{ error_lastname_kana }}</div>
+                {% endif %}
+                {% if error_firstname_kana %}
+                <div class="text-danger">{{ error_firstname_kana }}</div>
+                {% endif %}
+              </td>
+            </tr>
+            <tr>
+              <th>{{ entry_email }} <span class="req">{{ text_required }}</span></th>
+              <td>
+                <input type="email" name="email" value="{{ email }}" placeholder="{{ entry_email }}" id="input-email" class="input" />
+                {% if error_email %}
+                <div class="text-danger">{{ error_email }}</div>
+                {% endif %}
+              </td>
+            </tr>
+            <tr>
+              <th>{{ entry_telephone }} <span class="req">{{ text_required }}</span></th>
+              <td>
+                <div class="segs">
+                  <input type="text" name="telephone_1" value="{{ telephone_1 }}" placeholder="0X" id="input-telephone-1" class="input" maxlength="3" />
+                  <span class="sep">−</span>
+                  <input type="text" name="telephone_2" value="{{ telephone_2 }}" placeholder="XXXX" id="input-telephone-2" class="input" maxlength="4" />
+                  <span class="sep">−</span>
+                  <input type="text" name="telephone_3" value="{{ telephone_3 }}" placeholder="XXXX" id="input-telephone-3" class="input" maxlength="4" />
+                </div>
+                {% if error_telephone %}
+                <div class="text-danger">{{ error_telephone }}</div>
+                {% endif %}
+              </td>
+            </tr>
+          {% for custom_field in custom_fields %}
+          {% if custom_field.type == 'select' %}
+          <tr data-sort="{{ custom_field.sort_order }}">
+            <th>{{ custom_field.name }}</th>
+            <td>
+              <select name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" id="input-custom-field{{ custom_field.custom_field_id }}" class="select">
+                <option value="">{{ text_select }}</option>
+                {% for custom_field_value in custom_field.custom_field_value %}
+                {% if account_custom_field[custom_field.custom_field_id] and custom_field_value.custom_field_value_id == account_custom_field[custom_field.custom_field_id] %}
+                <option value="{{ custom_field_value.custom_field_value_id }}" selected="selected">{{ custom_field_value.name }}</option>
+                {% else %}
+                <option value="{{ custom_field_value.custom_field_value_id }}">{{ custom_field_value.name }}</option>
+                {% endif %}
+                {% endfor %}
+              </select>
+              {% if error_custom_field[custom_field.custom_field_id] %}
+              <div class="text-danger">{{ error_custom_field[custom_field.custom_field_id] }}</div>
+              {% endif %}
+            </td>
+          </tr>
+          {% endif %}
+          {% if custom_field.type == 'radio' %}
+          <tr data-sort="{{ custom_field.sort_order }}">
+            <th>{{ custom_field.name }}</th>
+            <td>
+              {% for custom_field_value in custom_field.custom_field_value %}
+              <label class="radio-inline">
+                {% if account_custom_field[custom_field.custom_field_id] and custom_field_value.custom_field_value_id == account_custom_field[custom_field.custom_field_id] %}
+                <input type="radio" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{{ custom_field_value.custom_field_value_id }}" checked="checked" />
+                {% else %}
+                <input type="radio" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{{ custom_field_value.custom_field_value_id }}" />
+                {% endif %}
+                {{ custom_field_value.name }}
+              </label>
+              {% endfor %}
+              {% if error_custom_field[custom_field.custom_field_id] %}
+              <div class="text-danger">{{ error_custom_field[custom_field.custom_field_id] }}</div>
+              {% endif %}
+            </td>
+          </tr>
+          {% endif %}
+          {% if custom_field.type == 'checkbox' %}
+          <tr data-sort="{{ custom_field.sort_order }}">
+            <th>{{ custom_field.name }}</th>
+            <td>
+              {% for custom_field_value in custom_field.custom_field_value %}
+              <label class="checkbox-inline">
+                {% if account_custom_field[custom_field.custom_field_id] and custom_field_value.custom_field_value_id in account_custom_field[custom_field.custom_field_id] %}
+                <input type="checkbox" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}][]" value="{{ custom_field_value.custom_field_value_id }}" checked="checked" />
+                {% else %}
+                <input type="checkbox" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}][]" value="{{ custom_field_value.custom_field_value_id }}" />
+                {% endif %}
+                {{ custom_field_value.name }}
+              </label>
+              {% endfor %}
+              {% if error_custom_field[custom_field.custom_field_id] %}
+              <div class="text-danger">{{ error_custom_field[custom_field.custom_field_id] }}</div>
+              {% endif %}
+            </td>
+          </tr>
+          {% endif %}
+          {% if custom_field.type == 'text' %}
+          <tr data-sort="{{ custom_field.sort_order }}">
+            <th>{{ custom_field.name }}</th>
+            <td>
+              <input type="text" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{% if account_custom_field[custom_field.custom_field_id] %}{{ account_custom_field[custom_field.custom_field_id] }}{% else %}{{ custom_field.value }}{% endif %}" placeholder="{{ custom_field.name }}" id="input-custom-field{{ custom_field.custom_field_id }}" class="input" />
+              {% if error_custom_field[custom_field.custom_field_id] %}
+              <div class="text-danger">{{ error_custom_field[custom_field.custom_field_id] }}</div>
+              {% endif %}
+            </td>
+          </tr>
+          {% endif %}
+          {% if custom_field.type == 'textarea' %}
+          <tr data-sort="{{ custom_field.sort_order }}">
+            <th>{{ custom_field.name }}</th>
+            <td>
+              <textarea name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" rows="5" placeholder="{{ custom_field.name }}" id="input-custom-field{{ custom_field.custom_field_id }}" class="input">{% if account_custom_field[custom_field.custom_field_id] %}{{ account_custom_field[custom_field.custom_field_id] }}{% else %}{{ custom_field.value }}{% endif %}</textarea>
+              {% if error_custom_field[custom_field.custom_field_id] %}
+              <div class="text-danger">{{ error_custom_field[custom_field.custom_field_id] }}</div>
+              {% endif %}
+            </td>
+          </tr>
+          {% endif %}
+          {% if custom_field.type == 'file' %}
+          <tr data-sort="{{ custom_field.sort_order }}">
+            <th>{{ custom_field.name }}</th>
+            <td>
+              <button type="button" id="button-custom-field{{ custom_field.custom_field_id }}" data-loading-text="{{ text_loading }}" class="addr-btn"><i class="fa fa-upload"></i> {{ button_upload }}</button>
+              <input type="hidden" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{% if account_custom_field[custom_field.custom_field_id] %}  {{ account_custom_field[custom_field.custom_field_id] }} {% endif %}" />
+              {% if error_custom_field[custom_field.custom_field_id] %}
+              <div class="text-danger">{{ error_custom_field[custom_field.custom_field_id] }}</div>
+              {% endif %}
+            </td>
+          </tr>
+          {% endif %}
+          {% if custom_field.type == 'date' %}
+          <tr data-sort="{{ custom_field.sort_order }}">
+            <th>{{ custom_field.name }}</th>
+            <td>
+              <div class="input-group date">
+                <input type="text" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{% if account_custom_field[custom_field.custom_field_id] %}{{ account_custom_field[custom_field.custom_field_id] }}{% else %}{{ custom_field.value }}{% endif %}" placeholder="{{ custom_field.name }}" data-date-format="YYYY-MM-DD" id="input-custom-field{{ custom_field.custom_field_id }}" class="input" />
+                <div class="input-group-btn"><button type="button" class="addr-btn"><i class="fa fa-calendar"></i></button></div>
+              </div>
+              {% if error_custom_field[custom_field.custom_field_id] %}
+              <div class="text-danger">{{ error_custom_field[custom_field.custom_field_id] }}</div>
+              {% endif %}
+            </td>
+          </tr>
+          {% endif %}
+          {% if custom_field.type == 'time' %}
+          <tr data-sort="{{ custom_field.sort_order }}">
+            <th>{{ custom_field.name }}</th>
+            <td>
+              <div class="input-group time">
+                <input type="text" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{% if account_custom_field[custom_field.custom_field_id] %}{{ account_custom_field[custom_field.custom_field_id] }}{% else %}{{ custom_field.value }}{% endif %}" placeholder="{{ custom_field.name }}" data-date-format="HH:mm" id="input-custom-field{{ custom_field.custom_field_id }}" class="input" />
+                <div class="input-group-btn"><button type="button" class="addr-btn"><i class="fa fa-calendar"></i></button></div>
+              </div>
+              {% if error_custom_field[custom_field.custom_field_id] %}
+              <div class="text-danger">{{ error_custom_field[custom_field.custom_field_id] }}</div>
+              {% endif %}
+            </td>
+          </tr>
+          {% endif %}
+          {% if custom_field.type == 'datetime' %}
+          <tr data-sort="{{ custom_field.sort_order }}">
+            <th>{{ custom_field.name }}</th>
+            <td>
+              <div class="input-group datetime">
+                <input type="text" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{% if account_custom_field[custom_field.custom_field_id] %}{{ account_custom_field[custom_field.custom_field_id] }}{% else %}{{ custom_field.value }}{% endif %}" placeholder="{{ custom_field.name }}" data-date-format="YYYY-MM-DD HH:mm" id="input-custom-field{{ custom_field.custom_field_id }}" class="input" />
+                <div class="input-group-btn"><button type="button" class="addr-btn"><i class="fa fa-calendar"></i></button></div>
+              </div>
+              {% if error_custom_field[custom_field.custom_field_id] %}
+              <div class="text-danger">{{ error_custom_field[custom_field.custom_field_id] }}</div>
+              {% endif %}
+            </td>
+          </tr>
+          {% endif %}
+          {% endfor %}
+          </tbody>
+        </table>
+        <div class="buttons addr-buttons">
+          <input type="submit" value="{{ button_submit }}" class="addr-submit" />
+          <a href="{{ back }}" class="addr-btn addr-back">{{ button_back }}</a>
+        </div>
+      </form>
+      </div>
+      {{ content_bottom }}</div>
+    {{ column_right }}</div>
+</div>
+<script type="text/javascript"><!--
+// Sort the custom fields
+$('tr[data-sort]').detach().each(function() {
+  var $tbody = $('form table tbody');
+  if ($(this).attr('data-sort') >= 0 && $(this).attr('data-sort') <= $tbody.find('tr').length - 2) {
+    $tbody.find('tr').eq(parseInt($(this).attr('data-sort')) + 2).before(this);
+  }
+
+  if ($(this).attr('data-sort') > $tbody.find('tr').length - 2) {
+    $tbody.find('tr:last').after(this);
+  }
+
+  if ($(this).attr('data-sort') == $tbody.find('tr').length - 2) {
+    $tbody.find('tr:last').after(this);
+  }
+
+  if ($(this).attr('data-sort') < -$tbody.find('tr').length - 2) {
+    $tbody.find('tr:first').before(this);
+  }
+});
+//--></script>
+<script type="text/javascript"><!--
+$('button[id^=\'button-custom-field\']').on('click', function() {
+  var element = this;
+
+  $('#form-upload').remove();
+
+  $('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display: none;"><input type="file" name="file" /></form>');
+
+  $('#form-upload input[name=\'file\']').trigger('click');
+
+  if (typeof timer != 'undefined') {
+      clearInterval(timer);
+  }
+
+  timer = setInterval(function() {
+    if ($('#form-upload input[name=\'file\']').val() != '') {
+      clearInterval(timer);
+
+      $.ajax({
+        url: 'index.php?route=tool/upload',
+        type: 'post',
+        dataType: 'json',
+        data: new FormData($('#form-upload')[0]),
+        cache: false,
+        contentType: false,
+        processData: false,
+        beforeSend: function() {
+          $(element).button('loading');
+        },
+        complete: function() {
+          $(element).button('reset');
+        },
+        success: function(json) {
+          $(element).parent().find('.text-danger').remove();
+
+          if (json['error']) {
+            $(element).parent().find('input').after('<div class="text-danger">' + json['error'] + '</div>');
+          }
+
+          if (json['success']) {
+            alert(json['success']);
+
+            $(element).parent().find('input').val(json['code']);
+          }
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+          alert(thrownError + "\r\n" + xhr.statusText + "\r\n" + xhr.responseText);
+        }
+      });
+    }
+  }, 500);
+});
+//--></script>
+<script type="text/javascript"><!--
+$('.date').datetimepicker({
+  language: '{{ datepicker }}',
+  pickTime: false
+});
+
+$('.time').datetimepicker({
+  language: '{{ datepicker }}',
+  pickDate: false
+});
+
+$('.datetime').datetimepicker({
+  language: '{{ datepicker }}',
+  pickDate: true,
+  pickTime: true
+});
+//--></script>
+{{ footer }}

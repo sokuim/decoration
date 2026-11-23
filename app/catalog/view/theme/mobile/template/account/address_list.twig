@@ -1,0 +1,43 @@
+{{ header }}
+<div class="address-page">
+  <div class="subhead">
+    <span class="back"></span>
+    <div class="ttl">{{ heading_title }}</div>
+    <span class="act"></span>
+  </div>
+  {% if success %}
+  <div class="address-alert ok"><i class="fa fa-check-circle"></i> {{ success }}</div>
+  {% endif %}
+  {% if error_warning %}
+  <div class="address-alert err"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}</div>
+  {% endif %}
+  <div class="address-body">
+    {% if addresses %}
+    {% for result in addresses %}
+    <div class="address-card">
+      <div class="address-name">{{ result.lastname }} {{ result.firstname }}<span>{{ text_sama }}</span></div>
+      <div class="address-kana">{{ result.lastname_kana }} {{ result.firstname_kana }}</div>
+      <div class="address-line">
+        <i class="fa fa-map-marker"></i>
+        <span>{{ result.postcode }}<br>{{ result.address }}</span>
+      </div>
+      <div class="address-line">
+        <i class="fa fa-phone"></i>
+        <span>{{ result.telephone }}</span>
+      </div>
+      <div class="address-actions">
+        <a href="{{ result.update }}" class="address-btn">{{ button_edit }}</a>
+        <a href="{{ result.delete }}" class="address-btn danger">{{ button_delete }}</a>
+      </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <div class="address-empty">
+      <div class="address-empty-icon"><i class="fa fa-map-marker"></i></div>
+      <p>{{ text_no_results }}</p>
+    </div>
+    {% endif %}
+    <a href="{{ add }}" class="address-add">{{ button_new_address }}</a>
+  </div>
+</div>
+{{ footer }}

@@ -1,0 +1,43 @@
+{{ header }}
+<div class="order-page">
+  <div class="subhead">
+    <span class="back"></span>
+    <div class="ttl">{{ heading_title }}</div>
+    <span class="act"></span>
+  </div>
+  <div class="order-body">
+    {% if orders %}
+    {% for order in orders %}
+    <a href="{{ order.view }}" class="order-card">
+      <div class="order-head">
+        <span class="order-no">{{ column_order_id }} #{{ order.order_id }}</span>
+        <span class="order-status">{{ order.status }}</span>
+      </div>
+      <div class="order-row">
+        <span>{{ column_date_added }}</span>
+        <b>{{ order.date_added }}</b>
+      </div>
+      <div class="order-row">
+        <span>{{ text_items }}</span>
+        <b>{{ order.products }}</b>
+      </div>
+      <div class="order-foot">
+        <b class="order-total">{{ order.total }}</b>
+        <span class="order-view">{{ button_view }} ›</span>
+      </div>
+    </a>
+    {% endfor %}
+    <div class="order-pagination">{{ pagination }}</div>
+    <div class="order-results">{{ results }}</div>
+    {% else %}
+    <div class="order-empty">
+      <div class="order-empty-icon"><i class="fa fa-file-text-o"></i></div>
+      <p>{{ text_empty }}</p>
+      <a href="{{ continue }}" class="order-back">{{ button_back }}</a>
+    </div>
+    {% endif %}
+    {{ content_top }}
+    {{ content_bottom }}
+  </div>
+</div>
+{{ footer }}

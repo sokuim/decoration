@@ -1,0 +1,44 @@
+{{ header }}
+<div id="account-reward" class="container">
+  {{ include(helper.template('_partial/breadcrumb')) }}
+  <div class="row">
+    <div id="content" class="col-sm-12">{{ content_top }}
+      <div class="addr-panel reward-panel">
+        <h3>{{ heading_title }}</h3>
+        <div class="reward-total">
+          <span>{{ text_total }}</span>
+          <b>{{ total }}</b>
+        </div>
+        {% if rewards %}
+        <table class="address-table reward-table">
+          <thead>
+            <tr>
+              <th>{{ column_date_added }}</th>
+              <th>{{ column_description }}</th>
+              <th class="text-right">{{ column_points }}</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for reward in rewards %}
+            <tr>
+              <td>{{ reward.date_added }}</td>
+              <td>{% if reward.order_id %}<a href="{{ reward.href }}">{{ reward.description }}</a>{% else %}{{ reward.description }}{% endif %}</td>
+              <td class="text-right">{{ reward.points }}</td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+        <div class="reward-pagination">{{ pagination }}</div>
+        <div class="reward-results">{{ results }}</div>
+        {% else %}
+        <div class="no-items">
+          <img src="catalog/view/theme/default/image/no_items.png" class="img-responsive">
+          <span>{{ text_empty }}</span>
+        </div>
+        {% endif %}
+      </div>
+      {{ content_bottom }}
+    </div>
+  </div>
+</div>
+{{ footer }}

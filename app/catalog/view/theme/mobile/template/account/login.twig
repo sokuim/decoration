@@ -1,0 +1,38 @@
+{{ header }}
+<div class="login-page">
+  <div class="container">
+    <div class="row">
+      <div id="content" class="col-sm-12">{{ content_top }}
+        <a class="login-logo" href="{{ helper.url.link('common/home') }}"><img src="{{ transparent_logo ? transparent_logo : logo }}" alt="{{ name }}" /></a>
+        <div class="form-card login-card">
+          {% if success %}
+          <div class="alert alert-success">{{ success }}</div>
+          {% endif %}
+          {% if error_warning %}
+          <div class="alert alert-danger">{{ error_warning }}</div>
+          {% endif %}
+          <form action="{{ action }}" method="post" enctype="multipart/form-data">
+            <div class="field">
+              <label for="input-email">{{ entry_email }}</label>
+              <input type="text" name="email" value="{{ email }}" placeholder="{{ entry_email }}" id="input-email" class="input" />
+            </div>
+            <div class="field">
+              <label for="input-password">{{ entry_password }}</label>
+              <input type="password" name="password" value="{{ password }}" placeholder="{{ entry_password }}" id="input-password" class="input" />
+            </div>
+            <button type="submit" class="addr-submit">{{ button_login }}</button>
+            <div class="login-forgot"><a href="{{ forgotten }}">{{ text_forgotten }}</a></div>
+            <div class="login-divider"></div>
+            <a href="{{ register }}" class="addr-btn">{{ text_new_customer }}</a>
+            {% if redirect %}
+            <input type="hidden" name="redirect" value="{{ redirect }}" />
+            {% endif %}
+            {{ include(helper.template('_partial/omni_auth_section')) }}
+          </form>
+        </div>
+        {{ content_bottom }}
+      </div>
+    </div>
+  </div>
+</div>
+{{ footer }}

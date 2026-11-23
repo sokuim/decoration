@@ -1,0 +1,63 @@
+{% if not modal %}
+<footer>
+  <div class="wrap">
+    <div class="foot-top">
+      <div class="foot-brand">
+        <div class="logo"><img src="{{ transparent_logo ? transparent_logo : logo }}" alt="{{ name }}" /></div>
+        {% if footer_description %}<p>{{ footer_description }}</p>{% endif %}
+      </div>
+      <div class="foot-col">
+        <h4>{{ text_shopping_guide }}</h4>
+        {% for information in informations %}<a href="{{ information.href }}">{{ information.title }}</a>{% endfor %}
+      </div>
+      <div class="foot-col">
+        <h4>{{ text_about }}</h4>
+        <a href="{{ contact }}">{{ text_contact }}</a>
+        <a href="{{ sitemap }}">{{ text_sitemap }}</a>
+        <a href="{{ manufacturer }}">{{ text_manufacturer }}</a>
+        <a href="{{ special }}">{{ text_special }}</a>
+        <a href="{{ article }}">{{ text_article }}</a>
+      </div>
+      <div class="foot-col">
+        <h4>{{ text_support }}</h4>
+        <a href="{{ contact }}">{{ text_contact_us }}</a>
+        <a href="{{ tracking }}">{{ text_track_order }}</a>
+        <a href="{{ helper.url.link('account/register') }}">{{ text_register }}</a>
+        <a href="{{ helper.url.link('account/login') }}">{{ text_login }}</a>
+      </div>
+    </div>
+    <div class="foot-bottom"><span>© 2026 {{ name }}</span><span>{{ text_tagline }}</span></div>
+  </div>
+</footer>
+{% endif %}
+{% for script in scripts %}
+<script src="{{ script }}" type="text/javascript"></script>
+{% endfor %}
+
+<script type="text/javascript">
+  var showAlert = function(type, content) {
+    if (type == 'cart') {
+      redirectButtonText = '{{ button_checkout }}';
+      redirectButtonLocation = '{{ helper.url.link("checkout/cart") }}';
+    } else if (type == 'wishlist') {
+      redirectButtonText = '{{ button_wishlist }}';
+      redirectButtonLocation = '{{ wishlist }}';
+    } else if (type == 'compare') {
+      redirectButtonText = '{{ button_compare }}';
+      redirectButtonLocation = '{{ helper.url.link("product/compare") }}';
+    }
+
+    layer.open({
+      title: '{{ text_layer_popup_title }}',
+      skin: 'layer-alert',
+      shadeClose: true,
+      content: content,
+      btn: [redirectButtonText, '{{ button_continue_shopping }}'],
+      yes: function() {
+        location = redirectButtonLocation;
+      }
+    });
+  }
+</script>
+{{ helper.debug_bar.render }}
+</body></html>

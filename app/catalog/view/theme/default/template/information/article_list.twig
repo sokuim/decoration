@@ -1,0 +1,63 @@
+{{ header }}
+<div id="article-list" class="wrap">
+  {{ include(helper.template('_partial/breadcrumb')) }}
+  <h1 class="page-title">{{ heading_title }}</h1>
+  {{ content_top }}
+  {% if article_category_id %}
+  {% if category_image or category_description %}
+  <div class="article-cat-hero">
+    {% if category_image %}
+    <div class="article-cat-media"><img src="{{ category_image }}" alt="{{ heading_title }}"/></div>
+    {% endif %}
+    {% if category_description %}
+    <div class="article-cat-desc">{{ category_description }}</div>
+    {% endif %}
+  </div>
+  {% endif %}
+  {% if categories %}
+  <div class="article-cats">
+    <a class="chip" href="{{ helper.url.link('information/article') }}">{{ text_category }}</a>
+    {% for category in categories %}
+    <a class="chip{% if category.article_category_id == article_category_id %} active{% endif %}" href="{{ category.href }}">{{ category.name }}</a>
+    {% endfor %}
+  </div>
+  {% endif %}
+  {% if articles %}
+  <div class="article-list">
+    {% for article in articles %}
+    <a class="article-item" href="{{ article.href }}">
+      <h2 class="article-title">{{ article.title }}</h2>
+      <span class="article-date">{{ article.date_added }}</span>
+      <p class="article-desc">{{ article.description }}</p>
+    </a>
+    {% endfor %}
+  </div>
+  <div class="pagination-wrap">{{ pagination }}</div>
+  <div class="results">{{ results }}</div>
+  {% else %}
+  <p>{{ text_no_results }}</p>
+  {% endif %}
+  {% else %}
+  {% if categories %}
+  <div class="article-cat-grid">
+    {% for category in categories %}
+    <a class="article-cat-card" href="{{ category.href }}">
+      {% if category.thumb %}
+      <div class="article-cat-thumb"><img src="{{ category.thumb }}" alt="{{ category.name }}"/></div>
+      {% endif %}
+      <div class="article-cat-body">
+        <h2 class="article-cat-name">{{ category.name }}</h2>
+        {% if category.description %}
+        <p class="article-cat-excerpt">{{ category.description }}</p>
+        {% endif %}
+      </div>
+    </a>
+    {% endfor %}
+  </div>
+  {% else %}
+  <p>{{ text_no_results }}</p>
+  {% endif %}
+  {% endif %}
+  {{ content_bottom }}
+</div>
+{{ footer }}
