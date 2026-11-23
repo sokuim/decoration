@@ -1,0 +1,9 @@
+<div class="top-links-wrap">
+  <div class="wrap">
+    <ol class="top-links">
+      {% for link in links %}
+      <li>{% if link.href %}<a href="{{ link.href|e }}">{{ link.text|e }}</a>{% else %}<span>{{ link.text|e }}</span>{% endif %}</li>
+      {% endfor %}
+    </ol>
+  </div>
+</div>

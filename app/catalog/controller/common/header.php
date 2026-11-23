@@ -139,8 +139,9 @@ class ControllerCommonHeader extends Controller {
 		$data['cart'] = $this->load->controller('common/cart');
 		$data['menu'] = $this->load->controller('common/menu');
 
-		// 顶部广告：仅在首页显示，取第一个生效的 top_ad 模块
+		// 顶部广告 / 顶部链接：仅在首页显示，各取第一个生效的模块
 		$data['top_ad'] = '';
+		$data['top_links'] = '';
 
 		if ($route == 'common/home') {
 			$this->load->model('setting/module');
@@ -152,6 +153,17 @@ class ControllerCommonHeader extends Controller {
 
 				if ($top_ad) {
 					$data['top_ad'] = $top_ad;
+					break;
+				}
+			}
+
+			foreach ($this->model_setting_module->getModulesByCode('top_links') as $top_links_module) {
+				$top_links_setting = $top_links_module['setting'] ? json_decode($top_links_module['setting'], true) : array();
+
+				$top_links = $this->load->controller('extension/module/top_links', $top_links_setting);
+
+				if ($top_links) {
+					$data['top_links'] = $top_links;
 					break;
 				}
 			}

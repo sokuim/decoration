@@ -54,7 +54,7 @@
 <script src="catalog/view/javascript/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
 <script src="catalog/view/javascript/layer/layer.js" type="text/javascript"></script>
 <link href="catalog/view/theme/default/stylesheet/stylesheet.css?v=asgd9a7jk21bxaiusc9" rel="stylesheet">
-<link href="catalog/view/theme/default/stylesheet/default.css?v=20261123ad" rel="stylesheet">
+<link href="catalog/view/theme/default/stylesheet/default.css?v=20261124icon18" rel="stylesheet">
 <link href="catalog/view/javascript/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 {% for style in styles %}
 <link href="{{ style.href }}" type="text/css" rel="{{ style.rel }}" media="{{ style.media }}" />
@@ -77,6 +77,7 @@
 {% set simple = class in ['account-login', 'account-register', 'account-forgotten'] %}
 {% if not simple %}
 {{ top_ad }}
+{{ top_links }}
 <!-- header -->
 <header class="header">
   <div class="wrap">
