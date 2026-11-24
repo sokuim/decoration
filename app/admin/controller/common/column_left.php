@@ -549,6 +549,14 @@ class ControllerCommonColumnLeft extends Controller {
                 );
             }
 
+			if ($this->user->hasPermission('access', 'localisation/currency')) {
+				$localisation[] = array(
+					'name'	   => $this->language->get('text_currency'),
+					'href'     => $this->url->link('localisation/currency', 'user_token=' . $this->session->data['user_token']),
+					'children' => array()
+				);
+			}
+
 			if ($this->user->hasPermission('access', 'localisation/geo_zone')) {
 				$localisation[] = array(
 					'name'	   => $this->language->get('text_geo_zone'),

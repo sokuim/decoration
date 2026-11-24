@@ -189,7 +189,7 @@ function ajax_success(json) {
   $('#product-table > tbody').html(json['product_list_html']);
   $('#accordion').html(json['module_html']);
   $('#cart-totals').html(json['total_html']);
-  $('#cart').load('index.php?route=common/cart/info');
+  cart_ajax_load_html();
   toggle_check_all_state();
 }
 //--></script>

@@ -1,4 +1,42 @@
-<a id="cart" class="act" href="{{ cart }}">
+<a id="cart" class="act" href="{{ cart }}" aria-label="{{ text_cart_label }}">
   <svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l1.5 13h-15L6 7z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>
-  <span class="act-label">{{ text_cart_label }}</span><span class="badge cart-count">{{ count }}</span>
+  <span class="act-label">{{ text_cart_label }}</span>{% if count > 0 %}<span class="badge cart-count">{{ count }}</span>{% endif %}
 </a>
+<div class="cart-panel">
+  {% if products or vouchers %}
+  <ul class="cart-panel-list">
+    {% for product in products %}
+    <li>
+      <a class="cart-panel-thumb" href="{{ product.href }}"><img src="{{ product.thumb }}" alt="{{ product.name }}"/></a>
+      <div class="cart-panel-info">
+        {% if product.manufacturer %}<div class="cart-panel-brand">{{ product.manufacturer }}</div>{% endif %}
+        <a class="cart-panel-name" href="{{ product.href }}">{{ product.name }}</a>
+        <div class="cart-panel-meta">{{ text_quantity }}：{{ product.quantity }}×{{ product.price }}　{{ text_subtotal }} {{ product.total }}</div>
+        {% for option in product.option %}
+        <div class="cart-panel-option">{{ option.name }}: {{ option.value }}</div>
+        {% endfor %}
+        {% if product.recurring %}
+        <div class="cart-panel-option">{{ text_recurring }}: {{ product.recurring }}</div>
+        {% endif %}
+      </div>
+    </li>
+    {% endfor %}
+    {% for voucher in vouchers %}
+    <li>
+      <div class="cart-panel-info">
+        <span class="cart-panel-name">{{ voucher.description }}</span>
+        <div class="cart-panel-meta">{{ voucher.amount }}</div>
+      </div>
+    </li>
+    {% endfor %}
+  </ul>
+  <div class="cart-panel-footer">
+    {% set grand_total = totals|last %}
+    <div class="cart-panel-total"><span>{{ text_total_label }}</span><strong>{{ grand_total.text }}</strong></div>
+    <p class="cart-panel-note">{{ text_cart_note }}</p>
+    <a class="cart-panel-btn" href="{{ cart }}"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l1.5 13h-15L6 7z"/><path d="M9 9V6a3 3 0 0 1 6 0v3"/></svg>{{ text_cart }}</a>
+  </div>
+  {% else %}
+  <div class="cart-panel-empty">{{ text_empty }}</div>
+  {% endif %}
+</div>

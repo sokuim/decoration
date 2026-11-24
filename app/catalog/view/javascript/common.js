@@ -32,7 +32,14 @@ var hide_load = function() {
 
 var cart_ajax_load_html = function() {
   $.get('index.php?route=common/cart/info', function(html) {
-    $('#cart').replaceWith(html);
+    var $cart = $('#cart');
+
+    // 购物车模板输出「图标 + 下拉面板」，需替换整个 li，避免旧面板残留
+    if ($cart.closest('.cart-item').length) {
+      $cart.closest('.cart-item').html(html);
+    } else {
+      $cart.replaceWith(html);
+    }
   });
 }
 

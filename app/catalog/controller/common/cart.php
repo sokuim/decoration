@@ -53,10 +53,13 @@ class ControllerCommonCart extends Controller {
 
 		$this->load->model('tool/image');
 		$this->load->model('tool/upload');
+		$this->load->model('catalog/product');
 
 		$data['products'] = array();
 
 		foreach ($this->cart->getProducts() as $product) {
+			$product_info = $this->model_catalog_product->getProduct($product['product_id']);
+
 			$image = $this->model_tool_image->resize($product['image'], $this->config->get('theme_' . $this->config->get('config_theme') . '_image_cart_width'), $this->config->get('theme_' . $this->config->get('config_theme') . '_image_cart_height'));
 
 			$option_data = array();
@@ -96,6 +99,7 @@ class ControllerCommonCart extends Controller {
 				'cart_id'   => $product['cart_id'],
 				'thumb'     => $image,
 				'name'      => $product['name'],
+				'manufacturer' => $product_info ? $product_info['manufacturer'] : '',
 				'model'     => $product['model'],
 				'option'    => $option_data,
 				'recurring' => ($product['recurring'] ? $product['recurring']['name'] : ''),
