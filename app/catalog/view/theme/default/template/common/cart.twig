@@ -7,26 +7,28 @@
   <ul class="cart-panel-list">
     {% for product in products %}
     <li>
-      <a class="cart-panel-thumb" href="{{ product.href }}"><img src="{{ product.thumb }}" alt="{{ product.name }}"/></a>
-      <div class="cart-panel-info">
-        {% if product.manufacturer %}<div class="cart-panel-brand">{{ product.manufacturer }}</div>{% endif %}
-        <a class="cart-panel-name" href="{{ product.href }}">{{ product.name }}</a>
-        <div class="cart-panel-meta">{{ text_quantity }}：{{ product.quantity }}×{{ product.price }}　{{ text_subtotal }} {{ product.total }}</div>
-        {% for option in product.option %}
-        <div class="cart-panel-option">{{ option.name }}: {{ option.value }}</div>
-        {% endfor %}
-        {% if product.recurring %}
-        <div class="cart-panel-option">{{ text_recurring }}: {{ product.recurring }}</div>
-        {% endif %}
-      </div>
+      <a class="cart-panel-item" href="{{ product.href }}">
+        <span class="cart-panel-thumb"><img src="{{ product.thumb }}" alt="{{ product.name }}"/></span>
+        <span class="cart-panel-info">
+          {% if product.manufacturer %}<span class="cart-panel-brand">{{ product.manufacturer }}</span>{% endif %}
+          <span class="cart-panel-name">{{ product.name }}</span>
+          <span class="cart-panel-meta">{{ text_quantity }}：{{ product.quantity }}×{{ product.price }}　{{ text_subtotal }} {{ product.total }}</span>
+          {% for option in product.option %}
+          <span class="cart-panel-option">{{ option.name }}: {{ option.value }}</span>
+          {% endfor %}
+          {% if product.recurring %}
+          <span class="cart-panel-option">{{ text_recurring }}: {{ product.recurring }}</span>
+          {% endif %}
+        </span>
+      </a>
     </li>
     {% endfor %}
     {% for voucher in vouchers %}
     <li>
-      <div class="cart-panel-info">
+      <span class="cart-panel-info">
         <span class="cart-panel-name">{{ voucher.description }}</span>
-        <div class="cart-panel-meta">{{ voucher.amount }}</div>
-      </div>
+        <span class="cart-panel-meta">{{ voucher.amount }}</span>
+      </span>
     </li>
     {% endfor %}
   </ul>

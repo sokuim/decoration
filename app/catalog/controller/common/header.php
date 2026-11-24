@@ -111,15 +111,57 @@ class ControllerCommonHeader extends Controller {
 		if ($this->customer->isLogged()) {
 			$this->load->model('account/wishlist');
 
-			$data['text_wishlist'] = sprintf($this->language->get('text_wishlist'), $this->model_account_wishlist->getTotalWishlist());
+			$data['wishlist_total'] = $this->model_account_wishlist->getTotalWishlist();
+			$data['text_wishlist'] = sprintf($this->language->get('text_wishlist'), $data['wishlist_total']);
 		} else {
-			$data['text_wishlist'] = sprintf($this->language->get('text_wishlist'), (isset($this->session->data['wishlist']) ? count($this->session->data['wishlist']) : 0));
+			$data['wishlist_total'] = (isset($this->session->data['wishlist']) ? count($this->session->data['wishlist']) : 0);
+			$data['text_wishlist'] = sprintf($this->language->get('text_wishlist'), $data['wishlist_total']);
+		}
+
+		// 登录后收藏弹层：最新 5 个商品
+		$data['wishlist_products'] = array();
+
+		if ($this->customer->isLogged() && $data['wishlist_total'] > 0) {
+			$this->load->model('catalog/product');
+			$this->load->model('tool/image');
+
+			$image_width = $this->config->get('theme_' . $this->config->get('config_theme') . '_image_wishlist_width');
+			$image_height = $this->config->get('theme_' . $this->config->get('config_theme') . '_image_wishlist_height');
+
+			foreach ($this->model_account_wishlist->getLatestWishlist(5) as $wishlist_item) {
+				$product_info = $this->model_catalog_product->getProduct($wishlist_item['product_id']);
+
+				if (!$product_info) {
+					continue;
+				}
+
+				if ($product_info['image']) {
+					$thumb = $this->model_tool_image->resize($product_info['image'], $image_width, $image_height);
+				} else {
+					$thumb = $this->model_tool_image->resize('placeholder.png', $image_width, $image_height);
+				}
+
+				$price = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+
+				$data['wishlist_products'][] = array(
+					'product_id'   => $product_info['product_id'],
+					'thumb'        => $thumb,
+					'name'         => $product_info['name'],
+					'manufacturer' => $product_info['manufacturer'],
+					'price'        => $price,
+					'href'         => $this->url->link('product/product', 'product_id=' . $product_info['product_id'])
+				);
+			}
 		}
 
 		$data['text_logged'] = sprintf($this->language->get('text_logged'), $this->url->link('account/account'), get_name($this->customer->getFirstName(), $this->customer->getLastName()), $this->url->link('account/logout'));
 
+		// 登录后账号名称（姓 名）
+		$data['customer_name'] = get_name($this->customer->getFirstName(), $this->customer->getLastName());
+
 		$data['home'] = $this->url->link('common/home');
 		$data['wishlist'] = $this->url->link('account/wishlist');
+		$data['search_page'] = $this->url->link('product/search');
 		$data['logged'] = $this->customer->isLogged();
 		$data['account'] = $this->url->link('account/account');
 		$data['register'] = $this->url->link('account/register');
@@ -127,6 +169,7 @@ class ControllerCommonHeader extends Controller {
 		$data['order'] = $this->url->link('account/order');
 		$data['transaction'] = $this->url->link('account/transaction');
 		$data['download'] = $this->url->link('account/download');
+		$data['newsletter'] = $this->url->link('account/newsletter');
 		$data['logout'] = $this->url->link('account/logout');
 		$data['shopping_cart'] = $this->url->link('checkout/cart');
 		$data['checkout'] = $this->url->link('checkout/checkout');

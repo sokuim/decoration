@@ -54,7 +54,7 @@
 <script src="catalog/view/javascript/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
 <script src="catalog/view/javascript/layer/layer.js" type="text/javascript"></script>
 <link href="catalog/view/theme/default/stylesheet/stylesheet.css?v=20261124headerpad" rel="stylesheet">
-<link href="catalog/view/theme/default/stylesheet/default.css?v=20261124cartthumb64" rel="stylesheet">
+<link href="catalog/view/theme/default/stylesheet/default.css?v=20261124accpad" rel="stylesheet">
 <link href="catalog/view/javascript/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
 {% for style in styles %}
 <link href="{{ style.href }}" type="text/css" rel="{{ style.rel }}" media="{{ style.media }}" />
@@ -90,11 +90,62 @@
       {{ search }}
       <ul class="actions">
         {% if logged %}
-        <li><a class="act act-account" href="{{ account }}"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg><span class="act-label">{{ text_my_page }}</span></a></li>
+        <li class="account-item"><a class="act act-account" href="{{ account }}"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg><span class="act-label">{{ customer_name }}{{ text_sama }}</span><svg class="act-caret" viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg></a>
+          <div class="account-panel">
+            <ul>
+              <li><a href="{{ account }}">{{ text_my_page }}<svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></a></li>
+              <li><a href="{{ order }}">{{ text_order_history }}<svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></a></li>
+              <li><a href="{{ newsletter }}">{{ text_newsletter }}<svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></a></li>
+              <li><a href="{{ logout }}">{{ text_logout }}<svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></a></li>
+            </ul>
+          </div>
+        </li>
         {% else %}
         <li><a class="act act-account" href="{{ login }}"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.5"/><path d="M5 20a7 7 0 0 1 14 0"/></svg><span class="act-label">{{ text_login }}</span></a></li>
         {% endif %}
-        <li><a class="act" href="{{ wishlist }}"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 8 0 4 4 0 0 1 6 0c0 5.5-7 10-7 10z"/></svg><span class="act-label">{{ text_favorite }}</span></a></li>
+        {% if logged %}
+        <li class="wishlist-item"><a class="act" href="{{ wishlist }}"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 8 0 4 4 0 0 1 6 0c0 5.5-7 10-7 10z"/></svg><span class="act-label">{{ text_favorite }}</span></a>
+          <div class="wishlist-panel">
+            <div class="wishlist-panel-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 8 0 4 4 0 0 1 6 0c0 5.5-7 10-7 10z"/></svg><span>{{ text_favorite }}</span></div>
+            {% if wishlist_total == 0 %}
+            <div class="wishlist-panel-empty">
+              <div class="wishlist-panel-empty-text">{{ text_wishlist_empty }}</div>
+              <a class="wishlist-panel-empty-btn" href="{{ search_page }}">{{ text_wishlist_add }}</a>
+            </div>
+            {% else %}
+            <ul class="cart-panel-list wishlist-panel-list">
+              {% for product in wishlist_products %}
+              <li>
+                <a class="cart-panel-item" href="{{ product.href }}">
+                  <span class="cart-panel-thumb"><img src="{{ product.thumb }}" alt="{{ product.name }}" /></span>
+                  <span class="cart-panel-info">
+                    <span class="cart-panel-brand">{{ product.manufacturer }}</span>
+                    <span class="cart-panel-name">{{ product.name }}</span>
+                    <span class="cart-panel-meta">{{ product.price }}</span>
+                  </span>
+                </a>
+              </li>
+              {% endfor %}
+            </ul>
+            <div class="cart-panel-footer">
+              <a class="cart-panel-btn wishlist-panel-btn" href="{{ wishlist }}">{{ text_wishlist_view_all }}</a>
+            </div>
+            {% endif %}
+          </div>
+        </li>
+        {% else %}
+        <li class="wishlist-item"><a class="act" href="{{ wishlist }}"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 8 0 4 4 0 0 1 6 0c0 5.5-7 10-7 10z"/></svg><span class="act-label">{{ text_favorite }}</span></a>
+          <div class="wishlist-panel">
+            <div class="wishlist-panel-title"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-4.5-7-10a4 4 0 0 1 8 0 4 4 0 0 1 6 0c0 5.5-7 10-7 10z"/></svg><span>{{ text_favorite }}</span></div>
+            <p class="wishlist-panel-lead">{{ text_wishlist_login_required }}</p>
+            <p class="wishlist-panel-desc">{{ text_wishlist_login_desc }}</p>
+            <div class="wishlist-panel-btns">
+              <a class="wishlist-btn-outline" href="{{ login }}">{{ text_login_action }}</a>
+              <a class="wishlist-btn-primary" href="{{ register }}">{{ text_new_register }}</a>
+            </div>
+          </div>
+        </li>
+        {% endif %}
         <li class="cart-item">{{ cart }}</li>
         <li class="menu-item"><button type="button" class="act act-menu" aria-label="メニュー"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.7" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span class="act-label">メニュー</span></button>
           <div class="menu-panel" id="menu-panel">
