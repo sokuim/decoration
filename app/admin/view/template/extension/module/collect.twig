@@ -1,0 +1,529 @@
+{{ header }}{{ column_left }}
+<div id="content">
+  <div class="page-header">
+    <div class="container-fluid">
+      <div class="pull-right">
+        <button type="submit" form="form-module" data-toggle="tooltip" title="{{ button_save }}" class="btn btn-primary"><i class="fa fa-save"></i></button>
+        <a href="{{ cancel }}" data-toggle="tooltip" title="{{ button_cancel }}" class="btn btn-default"><i class="fa fa-reply"></i></a></div>
+      <h1>{{ heading_title }}</h1>
+      <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+        <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+  <div class="container-fluid">
+    {% if error_warning %}
+    <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
+    <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-module" class="form-horizontal">
+
+      <div class="c-section">
+        <div class="c-section-head"><i class="fa fa-cog"></i>{{ text_edit }}</div>
+        <div class="c-section-body">
+          <div class="c-row">
+            <div class="c-field" style="flex:2;">
+              <label class="c-label" for="input-name">{{ entry_name }}</label>
+              <input type="text" name="name" value="{{ name }}" placeholder="{{ entry_name }}" id="input-name" class="form-control"/>
+              {% if error_name %}
+              <div class="text-danger">{{ error_name }}</div>
+              {% endif %}
+            </div>
+            <div class="c-field">
+              <label class="c-label" for="input-display-name">{{ entry_display_name }}</label>
+              <select name="display_name" id="input-display-name" class="form-control">
+                {% if display_name %}
+                <option value="1" selected="selected">{{ text_enabled }}</option>
+                <option value="0">{{ text_disabled }}</option>
+                {% else %}
+                <option value="1">{{ text_enabled }}</option>
+                <option value="0" selected="selected">{{ text_disabled }}</option>
+                {% endif %}
+              </select>
+            </div>
+            <div class="c-field">
+              <label class="c-label" for="input-status">{{ entry_status }}</label>
+              <select name="status" id="input-status" class="form-control">
+                {% if status %}
+                <option value="1" selected="selected">{{ text_enabled }}</option>
+                <option value="0">{{ text_disabled }}</option>
+                {% else %}
+                <option value="1">{{ text_enabled }}</option>
+                <option value="0" selected="selected">{{ text_disabled }}</option>
+                {% endif %}
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="c-section">
+        <div class="c-section-head"><i class="fa fa-search"></i>{{ text_seo }}</div>
+        <div class="c-section-body">
+          <div class="c-field">
+            <label class="c-label" for="input-seo-title">{{ entry_meta_title }}</label>
+            <input type="text" name="seo_title" value="{{ seo_title }}" id="input-seo-title" class="form-control"/>
+          </div>
+          <div class="c-row">
+            <div class="c-field">
+              <label class="c-label" for="input-seo-description">{{ entry_meta_description }}</label>
+              <textarea name="seo_description" rows="3" id="input-seo-description" class="form-control">{{ seo_description }}</textarea>
+            </div>
+            <div class="c-field">
+              <label class="c-label" for="input-seo-keywords">{{ entry_meta_keywords }}</label>
+              <textarea name="seo_keywords" rows="3" id="input-seo-keywords" class="form-control">{{ seo_keywords }}</textarea>
+            </div>
+          </div>
+          <div class="help-block" style="margin-bottom:0;">{{ help_seo }}</div>
+        </div>
+      </div>
+
+      <div class="c-section">
+        <div class="c-section-head"><i class="fa fa-folder-open"></i>{{ text_topic }} / {{ text_category }}</div>
+        <div class="c-section-body">
+          {% if error_topic_title %}
+          <div class="text-danger" style="margin-bottom:10px;">{{ error_topic_title }}</div>
+          {% endif %}
+          {% if error_category_name %}
+          <div class="text-danger" style="margin-bottom:10px;">{{ error_category_name }}</div>
+          {% endif %}
+          <div class="c-topics-layout">
+            <div class="c-topics-nav">
+              <div class="c-nav-head">
+                <span>{{ text_topic }}</span>
+                <button type="button" id="button-topic-add" class="btn btn-primary btn-xs pull-right" title="{{ button_topic_add }}"><i class="fa fa-plus"></i></button>
+              </div>
+              <ul id="topic-nav">
+                {% for topic in topics %}
+                {% set topic_index = loop.index0 %}
+                <li>
+                  <a href="javascript:;" class="c-nav-link{% if loop.first %} is-active{% endif %}" data-topic-index="{{ topic_index }}">
+                    <i class="fa fa-bars c-nav-drag"></i>
+                    <span class="c-nav-title">{{ topic.title }}</span>
+                    <span class="c-nav-count">{% if topic_categories[topic_index] is defined %}{{ topic_categories[topic_index]|length }}{% else %}0{% endif %}</span>
+                  </a>
+                </li>
+                {% endfor %}
+              </ul>
+            </div>
+            <div class="c-topics-panes">
+              {% for topic in topics %}
+              {% set topic_index = loop.index0 %}
+              <div class="c-topic-pane collect-topic{% if loop.first %} is-active{% endif %}" data-topic-index="{{ topic_index }}">
+                <div class="c-topic-head">
+                  <input type="hidden" name="topics[{{ topic_index }}][topic_id]" value="{{ topic.topic_id }}"/>
+                  <div class="c-topic-title">
+                    <input type="text" name="topics[{{ topic_index }}][title]" value="{{ topic.title }}" placeholder="{{ entry_topic_title }}" class="form-control collect-topic-title-input"/>
+                  </div>
+                  <div class="c-topic-status" title="{{ entry_display }}">
+                    <select name="topics[{{ topic_index }}][status]" class="form-control">
+                      {% if topic.status is defined and not topic.status %}
+                      <option value="1">{{ text_enabled }}</option>
+                      <option value="0" selected="selected">{{ text_disabled }}</option>
+                      {% else %}
+                      <option value="1" selected="selected">{{ text_enabled }}</option>
+                      <option value="0">{{ text_disabled }}</option>
+                      {% endif %}
+                    </select>
+                  </div>
+                  <div class="c-sort" title="{{ entry_sort_order }}">
+                    <input type="number" name="topics[{{ topic_index }}][sort_order]" value="{{ topic.sort_order }}" placeholder="{{ entry_sort_order }}" class="form-control"/>
+                  </div>
+                  <button type="button" class="btn btn-default btn-sm collect-remove-topic" title="{{ button_remove }}"><i class="fa fa-trash-o text-danger"></i></button>
+                </div>
+                <div class="c-body">
+                  <div class="c-cat-tabs">
+                    {% if topic_categories[topic_index] is defined %}
+                    {% for item in topic_categories[topic_index] %}
+                    <a href="javascript:;" class="c-cat-tab{% if loop.first %} is-active{% endif %}" data-cat-row="{{ item.index }}"><span class="c-cat-tab-name">{{ item.category.name }}</span><i class="fa fa-times collect-remove-category" title="{{ button_remove }}"></i></a>
+                    {% endfor %}
+                    {% endif %}
+                    <button type="button" class="c-cat-tab c-cat-tab--add collect-add-category" data-topic-index="{{ topic_index }}"><i class="fa fa-plus"></i> {{ button_category_add }}</button>
+                  </div>
+                  <div class="collect-topic-categories">
+                    {% if topic_categories[topic_index] is defined %}
+                    {% for item in topic_categories[topic_index] %}
+                    {% set category_row = item.index %}
+                    {% set category = item.category %}
+                    <div class="c-cat collect-category{% if loop.first %} is-active{% endif %}" id="category-row{{ category_row }}">
+                      <div class="c-cat-body">
+                        <input type="hidden" name="categories[{{ category_row }}][category_id]" value="{{ category.category_id }}"/>
+                        <input type="hidden" name="categories[{{ category_row }}][topic_index]" value="{{ topic_index }}"/>
+                        <div class="c-row">
+                          <div class="c-field" style="flex:2;">
+                            <label class="c-label">{{ entry_category_name }}</label>
+                            <input type="text" name="categories[{{ category_row }}][name]" value="{{ category.name }}" placeholder="{{ entry_category_name }}" class="form-control collect-cat-name"/>
+                          </div>
+                          <div class="c-field">
+                            <label class="c-label">{{ entry_sort_order }}</label>
+                            <input type="number" name="categories[{{ category_row }}][sort_order]" value="{{ category.sort_order }}" class="form-control"/>
+                          </div>
+                          <div class="c-field">
+                            <label class="c-label">{{ entry_display }}</label>
+                            <select name="categories[{{ category_row }}][status]" class="form-control">
+                              {% if category.status %}
+                              <option value="1" selected="selected">{{ text_enabled }}</option>
+                              <option value="0">{{ text_disabled }}</option>
+                              {% else %}
+                              <option value="1">{{ text_enabled }}</option>
+                              <option value="0" selected="selected">{{ text_disabled }}</option>
+                              {% endif %}
+                            </select>
+                          </div>
+                        </div>
+                        <div class="c-field">
+                          <label class="c-label">{{ entry_description }}</label>
+                          <textarea name="categories[{{ category_row }}][description]" rows="3" class="form-control">{{ category.description }}</textarea>
+                        </div>
+                        <div class="c-field">
+                          <label class="c-label">{{ entry_image_list }} / {{ entry_image_detail }}</label>
+                          <div class="c-images">
+                            <div class="c-image-box">
+                              <a href="" id="thumb-list{{ category_row }}" data-toggle="image" class="img-thumbnail"><img src="{{ category.thumb_list }}" alt="" title="" data-placeholder="{{ placeholder }}"/></a>
+                              <input type="hidden" name="categories[{{ category_row }}][image_list]" value="{{ category.image_list }}" id="input-list{{ category_row }}"/>
+                              <div class="c-hint">{{ entry_image_list }}</div>
+                            </div>
+                            <div class="c-image-box">
+                              <a href="" id="thumb-detail{{ category_row }}" data-toggle="image" class="img-thumbnail"><img src="{{ category.thumb_detail }}" alt="" title="" data-placeholder="{{ placeholder }}"/></a>
+                              <input type="hidden" name="categories[{{ category_row }}][image_detail]" value="{{ category.image_detail }}" id="input-detail{{ category_row }}"/>
+                              <div class="c-hint">{{ entry_image_detail }}</div>
+                            </div>
+                          </div>
+                          <div class="help-block" style="margin:8px 0 0;">{{ help_image }}</div>
+                        </div>
+                        <div class="c-seo">
+                          <div class="c-field">
+                            <label class="c-label">{{ entry_meta_title }}</label>
+                            <input type="text" name="categories[{{ category_row }}][meta_title]" value="{{ category.meta_title }}" class="form-control"/>
+                          </div>
+                          <div class="c-row">
+                            <div class="c-field">
+                              <label class="c-label">{{ entry_meta_description }}</label>
+                              <textarea name="categories[{{ category_row }}][meta_description]" rows="2" class="form-control">{{ category.meta_description }}</textarea>
+                            </div>
+                            <div class="c-field">
+                              <label class="c-label">{{ entry_meta_keywords }}</label>
+                              <textarea name="categories[{{ category_row }}][meta_keywords]" rows="2" class="form-control">{{ category.meta_keywords }}</textarea>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="c-field" style="margin-bottom:0;">
+                          <label class="c-label">{{ entry_product }}</label>
+                          <input type="text" class="form-control collect-product-input" placeholder="{{ entry_product }}"/>
+                          <div class="help-block" style="margin:6px 0;">{{ help_product }}</div>
+                          <div class="collect-product-list" data-name="categories[{{ category_row }}][products][]">
+                            {% for product in category.product_list %}
+                            <div class="c-product"><i class="fa fa-minus-circle"></i><span>{{ product.name }}</span>
+                              <input type="hidden" name="categories[{{ category_row }}][products][]" value="{{ product.product_id }}"/>
+                            </div>
+                            {% endfor %}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>
+<style type="text/css">
+.c-section{border:1px solid #e3e3e3;border-radius:6px;background:#fff;margin-bottom:18px;box-shadow:0 1px 2px rgba(0,0,0,.03)}
+.c-section-head{padding:12px 16px;border-bottom:1px solid #eee;font-size:14px;font-weight:600;color:#333}
+.c-section-head i{margin-right:8px;color:#8a6d66}
+.c-section-body{padding:16px}
+.c-row{display:flex;flex-wrap:wrap;gap:14px}
+.c-row>.c-field{flex:1;min-width:180px}
+.c-field{margin-bottom:14px}
+.c-label{display:block;margin-bottom:6px;font-size:12.5px;font-weight:600;color:#666}
+.c-topics-layout{display:flex;align-items:stretch;gap:0;border:1px solid #e3e3e3;border-radius:6px;overflow:hidden}
+.c-topics-nav{width:250px;flex:none;background:#fafafa;border-right:1px solid #e3e3e3}
+.c-nav-head{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;border-bottom:1px solid #e9e9e9;font-size:13px;font-weight:600;color:#555}
+#topic-nav{list-style:none;margin:0;padding:6px}
+#topic-nav li{margin-bottom:2px}
+.c-nav-link{display:flex;align-items:center;gap:8px;padding:9px 10px;border-radius:4px;color:#333;text-decoration:none;font-size:13px}
+.c-nav-drag{color:#c2c2c2;font-size:11px;flex:none}
+#topic-nav li{cursor:move}
+#topic-nav li.ui-sortable-helper{background:#fff;box-shadow:0 4px 12px rgba(0,0,0,.12);border-radius:4px}
+#topic-nav li.ui-sortable-placeholder{background:#f6f6f6;border:1px dashed #ddd;border-radius:4px;visibility:visible!important}
+.c-nav-link:hover{background:#f2ebeb;color:#333;text-decoration:none}
+.c-nav-link.is-active{background:#f2ebeb;color:#7a4b47;font-weight:600}
+.c-nav-title{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.c-nav-count{flex:none;min-width:22px;height:20px;padding:0 6px;border-radius:10px;background:#e9e9e9;color:#777;font-size:11px;line-height:20px;text-align:center}
+.c-nav-link.is-active .c-nav-count{background:#e3d3d1;color:#7a4b47}
+.c-topics-panes{flex:1;min-width:0;padding:16px;background:#fff}
+.c-topic-pane{display:none}
+.c-topic-pane.is-active{display:block}
+.c-topic-head{display:flex;align-items:center;gap:10px;padding-bottom:12px;margin-bottom:14px;border-bottom:1px solid #f0f0f0}
+.c-topic-title{flex:1}
+.c-sort{width:90px;flex:none}
+.c-topic-status{width:140px;flex:none}
+.c-badge{display:inline-flex;align-items:center;justify-content:center;height:24px;padding:0 10px;border-radius:12px;background:#f2ebeb;color:#7a4b47;font-size:12px;font-weight:600;flex:none}
+.c-badge--cat{background:#f1f1f1;color:#666}
+.c-body{padding:0}
+.c-cat-tabs{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #f0f0f0}
+.c-cat-tab{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border:1px solid #e3e3e3;border-radius:16px;background:#fff;font-size:13px;color:#555;text-decoration:none}
+.c-cat-tab:hover{border-color:#d8bfbb;color:#7a4b47;text-decoration:none}
+.c-cat-tab.is-active{background:#f2ebeb;border-color:#e0cbc8;color:#7a4b47;font-weight:600}
+.c-cat-tab .fa-times{font-size:11px;color:#b9b9b9;cursor:pointer}
+.c-cat-tab .fa-times:hover{color:#d9534f}
+.c-cat-tab--add{color:#666;border-style:dashed}
+.c-cat{display:none;border:1px solid #e3e3e3;border-radius:6px;background:#fff;margin-bottom:0}
+.collect-category.is-active{display:block}
+.c-cat-body{padding:16px}
+.c-images{display:flex;gap:24px;flex-wrap:wrap}
+.c-image-box{width:120px}
+.c-image-box .img-thumbnail{display:block;margin:0;padding:4px;border-radius:6px}
+.c-image-box .img-thumbnail img{display:block;width:100%;height:82px;object-fit:contain;margin:0}
+.c-hint{margin-top:6px;font-size:12px;color:#999;text-align:center}
+.c-seo{background:#f7f7f7;border:1px dashed #dcdcdc;border-radius:6px;padding:14px;margin-bottom:14px}
+.collect-product-list{max-height:140px;overflow:auto;border:1px solid #e3e3e3;border-radius:4px;background:#fff;padding:6px 8px}
+.c-product{display:flex;align-items:center;gap:8px;padding:3px 0;font-size:13px;color:#333}
+.c-product .fa-minus-circle{cursor:pointer;color:#d9534f}
+.collect-product-list:empty:after{content:"-";color:#bbb;font-size:12px}
+@media(max-width:991px){
+  .c-topics-layout{flex-direction:column}
+  .c-topics-nav{width:auto;border-right:0;border-bottom:1px solid #e3e3e3}
+  #topic-nav{display:flex;flex-wrap:wrap;gap:4px}
+  #topic-nav li{margin:0}
+}
+</style>
+<script type="text/javascript" src="view/javascript/jquery/jquery-ui/jquery-ui.min.js"></script>
+<script type="text/javascript"><!--
+var topic_row = {{ initial_topic_row }};
+var category_row = {{ initial_category_row }};
+
+function collectEscape(text) {
+	return $('<div>').text(text).html();
+}
+
+function collectActivateTopic(topicIndex) {
+	$('#topic-nav .c-nav-link').removeClass('is-active');
+	$('#topic-nav .c-nav-link[data-topic-index="' + topicIndex + '"]').addClass('is-active');
+
+	$('.c-topic-pane').removeClass('is-active');
+	$('.c-topic-pane[data-topic-index="' + topicIndex + '"]').addClass('is-active');
+}
+
+function collectUpdateNavCount(topicIndex) {
+	var count = $('.c-topic-pane[data-topic-index="' + topicIndex + '"] .collect-category').length;
+
+	$('#topic-nav .c-nav-link[data-topic-index="' + topicIndex + '"] .c-nav-count').text(count);
+}
+
+function collectSyncTopicSort() {
+	$('#topic-nav .c-nav-link').each(function(index) {
+		var topicIndex = $(this).data('topic-index');
+
+		$('.c-topic-pane[data-topic-index="' + topicIndex + '"] input[name="topics[' + topicIndex + '][sort_order]"]').val(index);
+	});
+}
+
+function collectActivateCategory(topicIndex, row) {	var $pane = $('.c-topic-pane[data-topic-index="' + topicIndex + '"]');
+
+	$pane.find('.c-cat-tab[data-cat-row]').removeClass('is-active');
+	$pane.find('.c-cat-tab[data-cat-row="' + row + '"]').addClass('is-active');
+
+	$pane.find('.collect-category').removeClass('is-active');
+	$pane.find('#category-row' + row).addClass('is-active');
+}
+
+function collectInitProductInput($input) {
+	if ($input.data('collect-init')) {
+		return;
+	}
+
+	$input.data('collect-init', true);
+
+	$input.autocomplete({
+		source: function(request, response) {
+			$.ajax({
+				url: 'index.php?route=catalog/product/autocomplete&user_token={{ user_token }}&filter_name=' + encodeURIComponent(request),
+				dataType: 'json',
+				success: function(json) {
+					response($.map(json, function(item) {
+						return {
+							label: item['name'],
+							value: item['product_id']
+						}
+					}));
+				}
+			});
+		},
+		select: function(item) {
+			var $input = $(this);
+			var $list = $input.closest('.collect-category').find('.collect-product-list');
+
+			$list.find('input[value="' + item['value'] + '"]').parent().remove();
+			$list.append('<div class="c-product"><i class="fa fa-minus-circle"></i><span>' + collectEscape(item['label']) + '</span><input type="hidden" name="' + $list.data('name') + '" value="' + item['value'] + '" /></div>');
+
+			$input.val('');
+
+			return false;
+		}
+	});
+}
+
+function collectCategoryHtml(index, topicIndex) {
+	var html = '';
+
+	html += '<div class="c-cat collect-category" id="category-row' + index + '">';
+	html += '  <div class="c-cat-body">';
+	html += '    <input type="hidden" name="categories[' + index + '][category_id]" value=""/>';
+	html += '    <input type="hidden" name="categories[' + index + '][topic_index]" value="' + topicIndex + '"/>';
+	html += '    <div class="c-row">';
+	html += '      <div class="c-field" style="flex:2;"><label class="c-label">{{ entry_category_name }}</label><input type="text" name="categories[' + index + '][name]" value="" placeholder="{{ entry_category_name }}" class="form-control collect-cat-name"/></div>';
+	html += '      <div class="c-field"><label class="c-label">{{ entry_sort_order }}</label><input type="number" name="categories[' + index + '][sort_order]" value="0" class="form-control"/></div>';
+	html += '      <div class="c-field"><label class="c-label">{{ entry_display }}</label><select name="categories[' + index + '][status]" class="form-control"><option value="1" selected="selected">{{ text_enabled }}</option><option value="0">{{ text_disabled }}</option></select></div>';
+	html += '    </div>';
+	html += '    <div class="c-field"><label class="c-label">{{ entry_description }}</label><textarea name="categories[' + index + '][description]" rows="3" class="form-control"></textarea></div>';
+	html += '    <div class="c-field"><label class="c-label">{{ entry_image_list }} / {{ entry_image_detail }}</label><div class="c-images">';
+	html += '      <div class="c-image-box"><a href="" id="thumb-list' + index + '" data-toggle="image" class="img-thumbnail"><img src="{{ placeholder }}" alt="" title="" data-placeholder="{{ placeholder }}"/></a><input type="hidden" name="categories[' + index + '][image_list]" value="" id="input-list' + index + '"/><div class="c-hint">{{ entry_image_list }}</div></div>';
+	html += '      <div class="c-image-box"><a href="" id="thumb-detail' + index + '" data-toggle="image" class="img-thumbnail"><img src="{{ placeholder }}" alt="" title="" data-placeholder="{{ placeholder }}"/></a><input type="hidden" name="categories[' + index + '][image_detail]" value="" id="input-detail' + index + '"/><div class="c-hint">{{ entry_image_detail }}</div></div>';
+	html += '    </div></div>';
+	html += '    <div class="c-seo"><div class="c-field"><label class="c-label">{{ entry_meta_title }}</label><input type="text" name="categories[' + index + '][meta_title]" value="" class="form-control"/></div><div class="c-row"><div class="c-field"><label class="c-label">{{ entry_meta_description }}</label><textarea name="categories[' + index + '][meta_description]" rows="2" class="form-control"></textarea></div><div class="c-field"><label class="c-label">{{ entry_meta_keywords }}</label><textarea name="categories[' + index + '][meta_keywords]" rows="2" class="form-control"></textarea></div></div></div>';
+	html += '    <div class="c-field" style="margin-bottom:0;"><label class="c-label">{{ entry_product }}</label><input type="text" class="form-control collect-product-input" placeholder="{{ entry_product }}"/><div class="help-block" style="margin:6px 0;">{{ help_product }}</div><div class="collect-product-list" data-name="categories[' + index + '][products][]"></div></div>';
+	html += '  </div>';
+	html += '</div>';
+
+	return html;
+}
+
+$('#button-topic-add').on('click', function() {
+	var topicIndex = topic_row;
+
+	$('#topic-nav').append('<li><a href="javascript:;" class="c-nav-link" data-topic-index="' + topicIndex + '"><i class="fa fa-bars c-nav-drag"></i><span class="c-nav-title"></span><span class="c-nav-count">0</span></a></li>');
+
+	var html = '';
+
+	html += '<div class="c-topic-pane collect-topic" data-topic-index="' + topicIndex + '">';
+	html += '  <div class="c-topic-head"><input type="hidden" name="topics[' + topicIndex + '][topic_id]" value=""/>';
+	html += '    <div class="c-topic-title"><input type="text" name="topics[' + topicIndex + '][title]" value="" placeholder="{{ entry_topic_title }}" class="form-control collect-topic-title-input"/></div>';
+	html += '    <div class="c-topic-status" title="{{ entry_display }}"><select name="topics[' + topicIndex + '][status]" class="form-control"><option value="1" selected="selected">{{ text_enabled }}</option><option value="0">{{ text_disabled }}</option></select></div>';
+	html += '    <div class="c-sort"><input type="number" name="topics[' + topicIndex + '][sort_order]" value="0" placeholder="{{ entry_sort_order }}" class="form-control"/></div>';
+	html += '    <button type="button" class="btn btn-default btn-sm collect-remove-topic" title="{{ button_remove }}"><i class="fa fa-trash-o text-danger"></i></button>';
+	html += '  </div>';
+	html += '  <div class="c-body"><div class="c-cat-tabs"><button type="button" class="c-cat-tab c-cat-tab--add collect-add-category" data-topic-index="' + topicIndex + '"><i class="fa fa-plus"></i> {{ button_category_add }}</button></div><div class="collect-topic-categories"></div></div>';
+	html += '</div>';
+
+	$('.c-topics-panes').append(html);
+
+	collectSyncTopicSort();
+	collectActivateTopic(topicIndex);
+
+	$('.c-topic-pane[data-topic-index="' + topicIndex + '"] .collect-topic-title-input').trigger('focus');
+
+	topic_row++;
+});
+
+$('#topic-nav').on('click', '.c-nav-link', function() {
+	collectActivateTopic($(this).data('topic-index'));
+});
+
+// 拖动排序主题，拖动后按显示顺序重写 sort_order
+$('#topic-nav').sortable({
+	items: '> li',
+	axis: 'y',
+	cursor: 'move',
+	tolerance: 'pointer',
+	update: function() {
+		collectSyncTopicSort();
+	}
+});
+
+$(document).on('click', '.collect-add-category', function() {
+	var topicIndex = $(this).data('topic-index');
+	var row = category_row;
+	var $pane = $('.c-topic-pane[data-topic-index="' + topicIndex + '"]');
+
+	$pane.find('.collect-topic-categories').append(collectCategoryHtml(row, topicIndex));
+
+	$pane.find('.c-cat-tabs .c-cat-tab--add').before('<a href="javascript:;" class="c-cat-tab" data-cat-row="' + row + '"><span class="c-cat-tab-name"></span><i class="fa fa-times collect-remove-category" title="{{ button_remove }}"></i></a>');
+
+	collectActivateCategory(topicIndex, row);
+	collectUpdateNavCount(topicIndex);
+
+	$pane.find('#category-row' + row + ' .collect-cat-name').trigger('focus');
+
+	category_row++;
+});
+
+$(document).on('click', '.collect-remove-topic', function() {
+	var $pane = $(this).closest('.c-topic-pane');
+	var topicIndex = $pane.data('topic-index');
+	var wasActive = $pane.hasClass('is-active');
+
+	$pane.remove();
+	$('#topic-nav .c-nav-link[data-topic-index="' + topicIndex + '"]').parent().remove();
+
+	if (wasActive) {
+		var $first = $('#topic-nav .c-nav-link').first();
+
+		if ($first.length) {
+			collectActivateTopic($first.data('topic-index'));
+		}
+	}
+});
+
+$(document).on('click', '.c-cat-tab[data-cat-row]', function() {
+	var $pane = $(this).closest('.c-topic-pane');
+
+	collectActivateCategory($pane.data('topic-index'), $(this).data('cat-row'));
+});
+
+$(document).on('click', '.collect-remove-category', function(e) {
+	e.preventDefault();
+	e.stopPropagation();
+
+	var $tab = $(this).closest('.c-cat-tab');
+	var $pane = $(this).closest('.c-topic-pane');
+	var row = $tab.data('cat-row');
+	var wasActive = $tab.hasClass('is-active');
+	var topicIndex = $pane.data('topic-index');
+
+	$tab.remove();
+	$pane.find('#category-row' + row).remove();
+
+	collectUpdateNavCount(topicIndex);
+
+	if (wasActive) {
+		var $next = $pane.find('.c-cat-tab[data-cat-row]').first();
+
+		if ($next.length) {
+			collectActivateCategory(topicIndex, $next.data('cat-row'));
+		}
+	}
+});
+
+$(document).on('input', '.collect-cat-name', function() {
+	var row = $(this).closest('.collect-category').attr('id').replace('category-row', '');
+
+	$(this).closest('.c-topic-pane').find('.c-cat-tab[data-cat-row="' + row + '"] .c-cat-tab-name').text($(this).val());
+});
+
+$(document).on('input', '.collect-topic-title-input', function() {
+	var topicIndex = $(this).closest('.c-topic-pane').data('topic-index');
+
+	$('#topic-nav .c-nav-link[data-topic-index="' + topicIndex + '"] .c-nav-title').text($(this).val());
+});
+
+$(document).on('focus', '.collect-product-input', function() {
+	collectInitProductInput($(this));
+});
+
+$(document).on('click', '.collect-product-list .fa-minus-circle', function() {
+	$(this).parent().remove();
+});
+//--></script>
+{{ footer }}

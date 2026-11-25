@@ -1,0 +1,81 @@
+<div class="collect-module">
+  <div class="container-inner">
+    {% if heading %}
+    <h2 class="collect-heading">{{ heading }}</h2>
+    {% endif %}
+    {% if topics|length > 1 %}
+    <div class="collect-tabs">
+      <ul>
+        {% for topic in topics %}
+        <li><button type="button" class="collect-tab{% if loop.first %} is-active{% endif %}" data-collect-tab="{{ loop.index0 }}">{{ topic.title }}</button></li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+    <div class="collect-strip">
+      {% if topics|length > 1 %}
+      <button type="button" class="collect-strip-prev" aria-label="前の特集"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+      {% endif %}
+      {% for topic in topics %}
+      <div class="collect-pane{% if loop.first %} is-active{% endif %}" data-collect-pane="{{ loop.index0 }}">
+        <ul class="collect-categories">
+          {% for category in topic.categories %}
+          <li><a href="{{ category.href }}"><img src="{{ category.image }}" alt="{{ category.name|e }}" loading="lazy" /></a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endfor %}
+      {% if topics|length > 1 %}
+      <button type="button" class="collect-strip-next" aria-label="次の特集"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+      {% endif %}
+    </div>
+    <div class="collect-more"><a href="{{ list_url }}">{{ text_more }}<svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></a></div>
+  </div>
+</div>
+<script type="text/javascript"><!--
+jQuery(document).ready(function($) {
+  function collectShowTopic($module, index) {
+    var $pane = $module.find('.collect-pane[data-collect-pane="' + index + '"]');
+
+    if (!$pane.length || $pane.hasClass('is-active')) {
+      return;
+    }
+
+    var $current = $module.find('.collect-pane.is-active');
+
+    $module.find('.collect-tab').removeClass('is-active');
+    $module.find('.collect-tab[data-collect-tab="' + index + '"]').addClass('is-active');
+
+    $current.addClass('is-fading');
+
+    setTimeout(function() {
+      $current.removeClass('is-active is-fading');
+      $pane.addClass('is-active');
+    }, 200);
+  }
+
+  function collectActiveIndex($module) {
+    var index = parseInt($module.find('.collect-pane.is-active').data('collect-pane'), 10);
+
+    return isNaN(index) ? 0 : index;
+  }
+
+  $('.collect-module .collect-tab').on('click', function() {
+    collectShowTopic($(this).closest('.collect-module'), $(this).data('collect-tab'));
+  });
+
+  $('.collect-strip-prev').on('click', function() {
+    var $module = $(this).closest('.collect-module');
+    var total = $module.find('.collect-pane').length;
+
+    collectShowTopic($module, (collectActiveIndex($module) - 1 + total) % total);
+  });
+
+  $('.collect-strip-next').on('click', function() {
+    var $module = $(this).closest('.collect-module');
+    var total = $module.find('.collect-pane').length;
+
+    collectShowTopic($module, (collectActiveIndex($module) + 1) % total);
+  });
+});
+--></script>

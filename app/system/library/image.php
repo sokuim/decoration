@@ -42,7 +42,8 @@ class Image {
 			if ($this->mime == 'image/gif') {
 				$this->image = imagecreatefromgif($file);
 			} elseif ($this->mime == 'image/png') {
-				$this->image = imagecreatefrompng($file);
+				// 部分 PNG 的 iCCP(sRGB) 配置不合法，libpng 会抛 warning，此处忽略
+				$this->image = @imagecreatefrompng($file);
 			} elseif ($this->mime == 'image/jpeg') {
 				$this->image = imagecreatefromjpeg($file);
 			}

@@ -168,6 +168,67 @@ header #search button{position:static!important;width:calc(40px - 8px)!important
 .popular-search-list{display:flex;flex-wrap:wrap;align-items:center;gap:10px;list-style:none;margin:0;padding:0}
 .popular-search-item{display:inline-block;padding:7px 16px;border:1px solid var(--line);border-radius:18px;background:#fff;box-shadow:0 2px 6px rgba(33,29,24,.08);font-size:13px;color:var(--ink);text-decoration:none}
 .popular-search-item:hover,.popular-search-item:focus{color:var(--ink);opacity:.7}
+
+/* 专题模块 */
+.collect-module{padding:26px 0 8px}
+.collect-heading{margin:0 0 18px;font-size:22px;font-weight:700;text-align:center;color:var(--ink)}
+.collect-tabs{margin-bottom:20px}
+.collect-tabs ul{display:flex;flex-wrap:wrap;justify-content:center;gap:14px;list-style:none;margin:0;padding:0}
+.collect-tabs li{display:flex}
+.collect-tab{padding:9px 22px;border:1px solid #E3D9C8;border-radius:20px;background:#fff;font-family:inherit;font-size:15px;color:#5B4636;cursor:pointer;transition:background .15s ease,border-color .15s ease}
+.collect-tab:hover{border-color:#D3C4AE}
+.collect-tab.is-active{background:#EADFCA;border-color:#EADFCA;color:#5B4636;font-weight:600}
+.collect-pane{display:none;opacity:1;transition:opacity .2s ease}
+.collect-pane.is-active{display:block;animation:collectFadeIn .25s ease}
+.collect-pane.is-fading{opacity:0}
+@keyframes collectFadeIn{from{opacity:0}to{opacity:1}}
+.collect-strip{position:relative;padding:0 52px}
+.collect-categories{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;list-style:none;margin:0;padding:0}
+.collect-categories li{min-width:0}
+.collect-categories a{display:block;text-decoration:none}
+.collect-categories a:hover{opacity:.7}
+.collect-categories img{display:block;width:100%;height:220px;object-fit:cover;border:1px solid #E6E1D8;background:#fff}
+.collect-strip-prev,.collect-strip-next{position:absolute;top:50%;transform:translateY(-50%);display:flex;align-items:center;justify-content:center;width:40px;height:40px;padding:0;border:0;border-radius:0;background:transparent;color:#9A948B;cursor:pointer;z-index:2}
+.collect-strip-prev{left:0}
+.collect-strip-next{right:0}
+.collect-strip-prev svg,.collect-strip-next svg{width:22px;height:22px;stroke:currentColor}
+.collect-strip-prev:hover,.collect-strip-next:hover{color:var(--ink);opacity:.7}
+.collect-more{margin-top:20px;text-align:right}
+.collect-more a{display:inline-flex;align-items:center;gap:6px;font-size:14px;color:var(--ink);text-decoration:none}
+.collect-more a svg{width:14px;height:14px;stroke:currentColor}
+.collect-more a:hover{opacity:.7}
+@media(max-width:991px){
+  .collect-categories{grid-template-columns:repeat(2,1fr)}
+  .collect-categories img{height:200px}
+}
+@media(max-width:767px){
+  .collect-categories img{height:160px}
+}
+
+/* 专题列表页 / 类别详情页 */
+.collect-topic{margin:0 0 36px}
+.collect-topic-title{margin:0 0 16px;font-size:20px;font-weight:700;color:var(--ink)}
+.collect-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;list-style:none;margin:0;padding:0}
+.collect-grid a{display:block;text-decoration:none}
+.collect-grid a:hover{opacity:.7}
+.collect-grid-thumb img{display:block;width:100%;height:auto;border-radius:6px}
+.collect-grid-name{display:block;margin-top:8px;font-size:14px;color:var(--ink)}
+.collect-cat-image img{display:block;width:100%;height:auto;border-radius:8px}
+.collect-cat-head{margin:24px 0 8px}
+.collect-cat-desc{margin-top:12px;font-size:14px;line-height:1.9;color:var(--ink)}
+.collect-products-title{margin:32px 0 18px;font-size:20px;font-weight:700;color:var(--ink)}
+.collect-products{display:grid;grid-template-columns:repeat(4,1fr);gap:22px 18px;list-style:none;margin:0;padding:0}
+.collect-product{display:block;color:var(--ink);text-decoration:none}
+.collect-product:hover{opacity:.7}
+.collect-product-thumb img{display:block;width:100%;height:auto;border-radius:6px}
+.collect-product-name{display:block;margin-top:10px;font-size:14px;line-height:1.5}
+.collect-product-price{display:block;margin-top:6px;font-size:15px;font-weight:700}
+.collect-empty{padding:18px 0;font-size:14px;color:var(--slate)}
+.collect-back{margin:32px 0 8px}
+.collect-back a{font-size:14px;color:var(--ink);text-decoration:underline}
+@media(max-width:991px){
+  .collect-grid,.collect-products{grid-template-columns:repeat(2,1fr)}
+}
 .drop-wrap{position:relative}
 .drop-menu{position:absolute;top:100%;left:0;background:var(--paper);border:1px solid var(--line);border-radius:8px;box-shadow:var(--shadow);min-width:180px;display:none;z-index:60;padding:6px 0}
 .drop-wrap:hover .drop-menu{display:block}

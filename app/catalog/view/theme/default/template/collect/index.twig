@@ -1,0 +1,25 @@
+{{ header }}
+<div id="collect-index" class="container">
+  {{ include(helper.template('_partial/breadcrumb')) }}
+  <div class="row">
+    <div id="content" class="col-sm-12">
+      <h1 class="page-title">{{ heading_title }}</h1>
+      {% for topic in topics %}
+      <section class="collect-topic">
+        <h2 class="collect-topic-title">{{ topic.title }}</h2>
+        <ul class="collect-grid">
+          {% for category in topic.categories %}
+          <li>
+            <a href="{{ category.href }}">
+              <span class="collect-grid-thumb"><img src="{{ category.image }}" alt="{{ category.name|e }}" loading="lazy" /></span>
+              <span class="collect-grid-name">{{ category.name }}</span>
+            </a>
+          </li>
+          {% endfor %}
+        </ul>
+      </section>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{{ footer }}

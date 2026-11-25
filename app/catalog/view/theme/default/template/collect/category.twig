@@ -1,0 +1,33 @@
+{{ header }}
+<div id="collect-category" class="container">
+  {{ include(helper.template('_partial/breadcrumb')) }}
+  <div class="row">
+    <div id="content" class="col-sm-12">
+      <div class="collect-cat-hero">
+        {% if image %}<div class="collect-cat-image"><img src="{{ image }}" alt="{{ heading_title|e }}" /></div>{% endif %}
+        <div class="collect-cat-head">
+          <h1 class="page-title">{{ heading_title }}</h1>
+          {% if description %}<div class="collect-cat-desc">{{ description }}</div>{% endif %}
+        </div>
+      </div>
+      <h2 class="collect-products-title">{{ text_products }}</h2>
+      {% if products %}
+      <ul class="collect-products">
+        {% for product in products %}
+        <li>
+          <a class="collect-product" href="{{ product.href }}">
+            <span class="collect-product-thumb"><img src="{{ product.thumb }}" alt="{{ product.name|e }}" loading="lazy" /></span>
+            <span class="collect-product-name">{{ product.name }}</span>
+            <span class="collect-product-price">{{ product.price }}</span>
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+      {% else %}
+      <p class="collect-empty">{{ text_no_products }}</p>
+      {% endif %}
+      <div class="collect-back"><a href="{{ back }}">{{ text_back }}</a></div>
+    </div>
+  </div>
+</div>
+{{ footer }}
