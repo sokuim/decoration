@@ -1,19 +1,22 @@
-<div class="swiper-viewport module-slideshow">
+<div class="swiper-viewport module-slideshow{% if banners|length == 1 %} module-slideshow--single{% endif %}">
   <div id="slideshow{{ module }}_swiper" class="swiper-container">
     <div class="swiper-wrapper"> {% for banner in banners %}
-      <div class="swiper-slide text-center">{% if banner.link %}<a href="{{ banner.link }}"><img src="{{ banner.image }}" alt="{{ banner.title ? banner.title : helper.config('config_name') ~ '（くらしマート）オンラインショップ' }}" class="img-responsive" loading="lazy" style="border-radius:6px;" /></a>{% else %}<img src="{{ banner.image }}" alt="{{ banner.title ? banner.title : helper.config('config_name') ~ '（くらしマート）オンラインショップ' }}" class="img-responsive" loading="lazy" style="border-radius:6px;" />{% endif %}</div>
+      <div class="swiper-slide text-center">{% if banner.link %}<a href="{{ banner.link }}"><img src="{{ banner.image }}" alt="{{ banner.title ? banner.title : helper.config('config_name') ~ '（くらしマート）オンラインショップ' }}" class="img-responsive" loading="lazy" /></a>{% else %}<img src="{{ banner.image }}" alt="{{ banner.title ? banner.title : helper.config('config_name') ~ '（くらしマート）オンラインショップ' }}" class="img-responsive" loading="lazy" />{% endif %}</div>
       {% endfor %} </div>
   </div>
-  <div class="swiper-pagination slideshow-pagination-{{ module }}"></div>
-  <div class="swiper-pager">
-    <div class="swiper-button-next slideshow-next{{ module }}"></div>
-    <div class="swiper-button-prev slideshow-prev{{ module }}"></div>
+  <div class="slideshow-controls">
+    <button type="button" class="slideshow-arrow slideshow-prev{{ module }}" aria-label="前へ"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+    <div class="swiper-pagination slideshow-pagination-{{ module }}"></div>
+    <button type="button" class="slideshow-arrow slideshow-next{{ module }}" aria-label="次へ"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+    <button type="button" class="slideshow-pause slideshow-pause{{ module }}" aria-label="一時停止"><svg class="icon-pause" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 7v10M15 7v10"/></svg><svg class="icon-play" viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 7l8 5-8 5z"/></svg></button>
   </div>
 </div>
 <script type="text/javascript"><!--
 jQuery(document).ready(function($) {
   var slideshow{{ module }}_swiper = new Swiper('#slideshow{{ module }}_swiper', {
-    slidesPerView: 1,
+    slidesPerView: {% if banners|length == 1 %}1{% else %}3{% endif %},
+    spaceBetween: {% if banners|length == 1 %}0{% else %}20{% endif %},
+    centeredSlides: true,
     pagination: {
       el: '.slideshow-pagination-{{ module }}',
       clickable :true
@@ -23,16 +26,42 @@ jQuery(document).ready(function($) {
       prevEl: '.slideshow-prev{{ module }}',
     },
     autoplay: {
-      delay: 3000,
+      delay: 4000,
       disableOnInteraction: false
     },
-    loop: true
+    loop: true{% if banners|length > 1 %},
+    breakpoints: {
+      0: {
+        slidesPerView: 1
+      },
+      768: {
+        slidesPerView: 2
+      },
+      992: {
+        slidesPerView: 3
+      }
+    }
+    {% endif %}
   });
 
   $('.module-slideshow').hover(function() {
     slideshow{{ module }}_swiper.autoplay.stop();
   }, function() {
-    slideshow{{ module }}_swiper.autoplay.start();
+    if (!$('.slideshow-pause{{ module }}').hasClass('is-paused')) {
+      slideshow{{ module }}_swiper.autoplay.start();
+    }
+  });
+
+  $('.slideshow-pause{{ module }}').on('click', function() {
+    var $btn = $(this);
+
+    if ($btn.hasClass('is-paused')) {
+      $btn.removeClass('is-paused');
+      slideshow{{ module }}_swiper.autoplay.start();
+    } else {
+      $btn.addClass('is-paused');
+      slideshow{{ module }}_swiper.autoplay.stop();
+    }
   });
 });
 --></script>

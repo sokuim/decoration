@@ -56,6 +56,22 @@ class ControllerCommonHome extends Controller {
 		$data['footer'] = $this->load->controller('common/footer');
 		$data['header'] = $this->load->controller('common/header');
 
+		// 热门搜索（注目ワードから探す）
+		$data['popular_search'] = '';
+
+		$this->load->model('setting/module');
+
+		foreach ($this->model_setting_module->getModulesByCode('popular_search') as $popular_search_module) {
+			$popular_search_setting = $popular_search_module['setting'] ? json_decode($popular_search_module['setting'], true) : array();
+
+			$popular_search = $this->load->controller('extension/module/popular_search', $popular_search_setting);
+
+			if ($popular_search) {
+				$data['popular_search'] = $popular_search;
+				break;
+			}
+		}
+
 		$this->response->setOutput($this->load->view('common/home', $data));
 	}
 }

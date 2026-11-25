@@ -1,0 +1,8 @@
+<div class="popular-search">
+  <h2 class="popular-search-title">{{ heading }}</h2>
+  <ul class="popular-search-list">
+    {% for keyword in keywords %}
+    <li><a class="popular-search-item" href="{{ keyword.href }}">{{ keyword.title|e }}</a></li>
+    {% endfor %}
+  </ul>
+</div>
