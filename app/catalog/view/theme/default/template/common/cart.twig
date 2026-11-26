@@ -8,7 +8,7 @@
     {% for product in products %}
     <li>
       <a class="cart-panel-item" href="{{ product.href }}">
-        <span class="cart-panel-thumb"><img src="{{ product.thumb }}" alt="{{ product.name }}"/></span>
+        <span class="cart-panel-thumb"><img src="{{ product.thumb }}" alt="{{ product.name }}" loading="lazy"/></span>
         <span class="cart-panel-info">
           {% if product.manufacturer %}<span class="cart-panel-brand">{{ product.manufacturer }}</span>{% endif %}
           <span class="cart-panel-name">{{ product.name }}</span>

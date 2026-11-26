@@ -1,7 +1,7 @@
 <div class="swiper-viewport module-slideshow{% if banners|length == 1 %} module-slideshow--single{% endif %}">
   <div id="slideshow{{ module }}_swiper" class="swiper-container">
     <div class="swiper-wrapper"> {% for banner in banners %}
-      <div class="swiper-slide text-center">{% if banner.link %}<a href="{{ banner.link }}"><img src="{{ banner.image }}" alt="{{ banner.title ? banner.title : helper.config('config_name') ~ '（くらしマート）オンラインショップ' }}" class="img-responsive" loading="lazy" /></a>{% else %}<img src="{{ banner.image }}" alt="{{ banner.title ? banner.title : helper.config('config_name') ~ '（くらしマート）オンラインショップ' }}" class="img-responsive" loading="lazy" />{% endif %}</div>
+      <div class="swiper-slide text-center">{% if banner.link %}<a href="{{ banner.link }}"><img src="{{ banner.image }}" alt="{{ banner.title ? banner.title : helper.config('config_name') ~ '（くらしマート）オンラインショップ' }}" class="img-responsive" /></a>{% else %}<img src="{{ banner.image }}" alt="{{ banner.title ? banner.title : helper.config('config_name') ~ '（くらしマート）オンラインショップ' }}" class="img-responsive" />{% endif %}</div>
       {% endfor %} </div>
   </div>
   <div class="slideshow-controls">

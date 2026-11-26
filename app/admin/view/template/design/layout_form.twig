@@ -87,7 +87,8 @@
                     {% for layout_module in layout_modules %}
                       {% if layout_module.position == 'column_left' %}
                         <tr id="module-row{{ module_row }}">
-                          <td class="text-left">
+                          <td class="text-left layout-module-cell">
+                            <span class="layout-drag" title="{{ text_drag }}"><i class="fa fa-bars"></i></span>
                             <div class="input-group">
                               <select name="layout_module[{{ module_row }}][code]" class="form-control input-sm">
                                 {% for extension in extensions %}
@@ -158,7 +159,8 @@
                     {% for layout_module in layout_modules %}
                       {% if layout_module.position == 'content_top' %}
                         <tr id="module-row{{ module_row }}">
-                          <td class="text-left">
+                          <td class="text-left layout-module-cell">
+                            <span class="layout-drag" title="{{ text_drag }}"><i class="fa fa-bars"></i></span>
                             <div class="input-group">
                               <select name="layout_module[{{ module_row }}][code]" class="form-control input-sm">
                                 {% for extension in extensions %}
@@ -227,7 +229,8 @@
                     {% for layout_module in layout_modules %}
                       {% if layout_module.position == 'content_bottom' %}
                         <tr id="module-row{{ module_row }}">
-                          <td class="text-left">
+                          <td class="text-left layout-module-cell">
+                            <span class="layout-drag" title="{{ text_drag }}"><i class="fa fa-bars"></i></span>
                             <div class="input-group">
                               <select name="layout_module[{{ module_row }}][code]" class="form-control input-sm">
                                 {% for extension in extensions %}
@@ -298,7 +301,8 @@
                     {% for layout_module in layout_modules %}
                       {% if layout_module.position == 'column_right' %}
                         <tr id="module-row{{ module_row }}">
-                          <td class="text-left">
+                          <td class="text-left layout-module-cell">
+                            <span class="layout-drag" title="{{ text_drag }}"><i class="fa fa-bars"></i></span>
                             <div class="input-group">
                               <select name="layout_module[{{ module_row }}][code]" class="form-control input-sm">
                                 {% for extension in extensions %}
@@ -365,7 +369,21 @@
     </div>
   </div>
 </div>
+<style type="text/css">
+.layout-module-cell{position:relative}
+.layout-module-cell .layout-drag{position:absolute;left:2px;top:50%;transform:translateY(-50%);color:#bbb;cursor:move;font-size:13px;padding:4px}
+.layout-module-cell .layout-drag:hover{color:#666}
+.layout-module-cell .input-group{margin-left:20px}
+#module-column-left tbody tr.ui-sortable-helper,#module-content-top tbody tr.ui-sortable-helper,#module-content-bottom tbody tr.ui-sortable-helper,#module-column-right tbody tr.ui-sortable-helper{display:table;width:100%;background:#fff;box-shadow:0 4px 12px rgba(0,0,0,.15)}
+#module-column-left tbody tr.ui-sortable-placeholder,#module-content-top tbody tr.ui-sortable-placeholder,#module-content-bottom tbody tr.ui-sortable-placeholder,#module-column-right tbody tr.ui-sortable-placeholder{visibility:visible!important;background:#f6f6f6}
+</style>
+<script type="text/javascript">// 先保存 Bootstrap 的 tooltip 插件，jQuery UI 会覆盖同名方法导致 destroy 报错
+window.layoutBootstrapTooltip = jQuery.fn.tooltip;</script>
+<script type="text/javascript" src="view/javascript/jquery/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript"><!--
+// 恢复 Bootstrap tooltip（模块删除等依赖它），jQuery UI 仅用于拖动排序
+jQuery.fn.tooltip = window.layoutBootstrapTooltip;
+
 var route_row = {{ route_row }};
 
 function addRoute() {
@@ -389,7 +407,7 @@ var module_row = {{ module_row }};
 
 function addModule(type) {
 	html = '<tr id="module-row' + module_row + '">';
-	html += '  <td class="text-left"><div class="input-group"><select name="layout_module[' + module_row + '][code]" class="form-control input-sm">';
+	html += '  <td class="text-left layout-module-cell"><span class="layout-drag" title="{{ text_drag }}"><i class="fa fa-bars"></i></span><div class="input-group"><select name="layout_module[' + module_row + '][code]" class="form-control input-sm">';
   {% for extension in extensions %}
 	html += '    <optgroup label="{{ extension.name|escape('js') }}">';
   {% if not extension.module %}
@@ -431,5 +449,19 @@ $('#module-column-left, #module-column-right, #module-content-top, #module-conte
 });
 
 $('#module-column-left, #module-column-right, #module-content-top, #module-content-bottom').trigger('change');
+
+// 各位置的模块支持拖动排序，拖动后重写 sort_order
+$('#module-column-left tbody, #module-content-top tbody, #module-content-bottom tbody, #module-column-right tbody').sortable({
+	items: '> tr',
+	handle: '.layout-drag',
+	axis: 'y',
+	cursor: 'move',
+	tolerance: 'pointer',
+	update: function() {
+		$(this).find('> tr').each(function(index) {
+			$(this).find('input[name*="[sort_order]"]').val(index);
+		});
+	}
+});
 //--></script>
 {{ footer }}

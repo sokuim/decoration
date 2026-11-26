@@ -19,6 +19,11 @@
       <button type="button" class="close" data-dismiss="alert">&times;</button>
     </div>
     {% endif %}
+    {% if error_seo_keyword %}
+    <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_seo_keyword }}
+      <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+    {% endif %}
     <form action="{{ action }}" method="post" enctype="multipart/form-data" id="form-module" class="form-horizontal">
 
       <div class="c-section">
@@ -63,6 +68,11 @@
       <div class="c-section">
         <div class="c-section-head"><i class="fa fa-search"></i>{{ text_seo }}</div>
         <div class="c-section-body">
+          <div class="c-field">
+            <label class="c-label" for="input-seo-keyword">{{ entry_seo_keyword }}</label>
+            <input type="text" name="seo_keyword" value="{{ seo_keyword }}" id="input-seo-keyword" class="form-control"/>
+            <div class="help-block" style="margin:6px 0 0;">{{ help_seo_keyword }}</div>
+          </div>
           <div class="c-field">
             <label class="c-label" for="input-seo-title">{{ entry_meta_title }}</label>
             <input type="text" name="seo_title" value="{{ seo_title }}" id="input-seo-title" class="form-control"/>
@@ -196,6 +206,10 @@
                         </div>
                         <div class="c-seo">
                           <div class="c-field">
+                            <label class="c-label">{{ entry_seo_keyword }}</label>
+                            <input type="text" name="categories[{{ category_row }}][seo_keyword]" value="{{ category.seo_keyword }}" class="form-control"/>
+                          </div>
+                          <div class="c-field">
                             <label class="c-label">{{ entry_meta_title }}</label>
                             <input type="text" name="categories[{{ category_row }}][meta_title]" value="{{ category.meta_title }}" class="form-control"/>
                           </div>
@@ -299,8 +313,15 @@
   #topic-nav li{margin:0}
 }
 </style>
+<script type="text/javascript">// 先保存后台自带的自动补全与 tooltip 插件，jQuery UI 会覆盖同名方法
+window.collectOcAutocomplete = jQuery.fn.autocomplete;
+window.collectOcTooltip = jQuery.fn.tooltip;</script>
 <script type="text/javascript" src="view/javascript/jquery/jquery-ui/jquery-ui.min.js"></script>
 <script type="text/javascript"><!--
+// 恢复后台自带的插件（商品搜索/提示依赖它们），jQuery UI 仅用于主题拖动排序
+jQuery.fn.autocomplete = window.collectOcAutocomplete;
+jQuery.fn.tooltip = window.collectOcTooltip;
+
 var topic_row = {{ initial_topic_row }};
 var category_row = {{ initial_category_row }};
 
@@ -392,7 +413,7 @@ function collectCategoryHtml(index, topicIndex) {
 	html += '      <div class="c-image-box"><a href="" id="thumb-list' + index + '" data-toggle="image" class="img-thumbnail"><img src="{{ placeholder }}" alt="" title="" data-placeholder="{{ placeholder }}"/></a><input type="hidden" name="categories[' + index + '][image_list]" value="" id="input-list' + index + '"/><div class="c-hint">{{ entry_image_list }}</div></div>';
 	html += '      <div class="c-image-box"><a href="" id="thumb-detail' + index + '" data-toggle="image" class="img-thumbnail"><img src="{{ placeholder }}" alt="" title="" data-placeholder="{{ placeholder }}"/></a><input type="hidden" name="categories[' + index + '][image_detail]" value="" id="input-detail' + index + '"/><div class="c-hint">{{ entry_image_detail }}</div></div>';
 	html += '    </div></div>';
-	html += '    <div class="c-seo"><div class="c-field"><label class="c-label">{{ entry_meta_title }}</label><input type="text" name="categories[' + index + '][meta_title]" value="" class="form-control"/></div><div class="c-row"><div class="c-field"><label class="c-label">{{ entry_meta_description }}</label><textarea name="categories[' + index + '][meta_description]" rows="2" class="form-control"></textarea></div><div class="c-field"><label class="c-label">{{ entry_meta_keywords }}</label><textarea name="categories[' + index + '][meta_keywords]" rows="2" class="form-control"></textarea></div></div></div>';
+	html += '    <div class="c-seo"><div class="c-field"><label class="c-label">{{ entry_seo_keyword }}</label><input type="text" name="categories[' + index + '][seo_keyword]" value="" class="form-control"/></div><div class="c-field"><label class="c-label">{{ entry_meta_title }}</label><input type="text" name="categories[' + index + '][meta_title]" value="" class="form-control"/></div><div class="c-row"><div class="c-field"><label class="c-label">{{ entry_meta_description }}</label><textarea name="categories[' + index + '][meta_description]" rows="2" class="form-control"></textarea></div><div class="c-field"><label class="c-label">{{ entry_meta_keywords }}</label><textarea name="categories[' + index + '][meta_keywords]" rows="2" class="form-control"></textarea></div></div></div>';
 	html += '    <div class="c-field" style="margin-bottom:0;"><label class="c-label">{{ entry_product }}</label><input type="text" class="form-control collect-product-input" placeholder="{{ entry_product }}"/><div class="help-block" style="margin:6px 0;">{{ help_product }}</div><div class="collect-product-list" data-name="categories[' + index + '][products][]"></div></div>';
 	html += '  </div>';
 	html += '</div>';

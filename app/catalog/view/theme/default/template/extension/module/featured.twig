@@ -1,13 +1,15 @@
-<section aria-labelledby="heading-featured" class="product-section">
-  <div class="section-header">
-    <h2 id="heading-featured">{{ heading_title }}</h2>
-    <a href="{{ more_href }}" class="more-link">{{ more_text }}</a>
+<section aria-labelledby="heading-featured" class="product-section featured-section">
+  <div class="container-inner">
+    <div class="section-header">
+      <h2 id="heading-featured">{{ heading_title }}</h2>
+      <a href="{{ more_href }}" class="more-link">{{ more_text }}</a>
+    </div>
+    <ul class="product-grid">
+      {% for product in products %}
+      <li class="product-layout col-lg-3 col-md-3 col-sm-4 col-xs-6">
+        {{ include(helper.template('_partial/product/product_card')) }}
+      </li>
+      {% endfor %}
+    </ul>
   </div>
-  <ul class="product-grid">
-    {% for product in products %}
-    <li class="product-layout col-lg-3 col-md-3 col-sm-4 col-xs-6">
-      {{ include(helper.template('_partial/product/product_card')) }}
-    </li>
-    {% endfor %}
-  </ul>
 </section>

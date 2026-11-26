@@ -65,6 +65,7 @@ class ControllerCollectIndex extends Controller {
 			$grouped[$topic_index]['categories'][] = array(
 				'category_id' => isset($category['category_id']) ? (int)$category['category_id'] : 0,
 				'name'        => isset($category['name']) ? $category['name'] : '',
+				'description' => isset($category['description']) ? $category['description'] : '',
 				'image'       => $image,
 				'sort_order'  => isset($category['sort_order']) ? (int)$category['sort_order'] : 0,
 				'href'        => $this->url->link('collect/category', 'module_id=' . $module_id . '&category_id=' . (isset($category['category_id']) ? (int)$category['category_id'] : 0))

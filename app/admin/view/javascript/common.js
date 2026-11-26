@@ -73,7 +73,14 @@ $(document).ready(function() {
 
 	// tooltip remove
 	$('[data-toggle=\'tooltip\']').on('remove', function() {
-		$(this).tooltip('destroy');
+		var tooltip = $(this).data('bs.tooltip');
+
+		// 仅在已用 Bootstrap 初始化时销毁，且先移除数据避免重复销毁报错
+		if (tooltip) {
+			$(this).removeData('bs.tooltip');
+
+			tooltip.destroy();
+		}
 	});
 
 	// Tooltip remove fixed

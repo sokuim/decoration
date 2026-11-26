@@ -4,7 +4,7 @@
   <div class="row">
     <div id="content" class="col-sm-12">
       <div class="collect-cat-hero">
-        {% if image %}<div class="collect-cat-image"><img src="{{ image }}" alt="{{ heading_title|e }}" /></div>{% endif %}
+        {% if image %}<div class="collect-cat-image"><img src="{{ image }}" alt="{{ heading_title|e }}" loading="lazy" /></div>{% endif %}
         <div class="collect-cat-head">
           <h1 class="page-title">{{ heading_title }}</h1>
           {% if description %}<div class="collect-cat-desc">{{ description }}</div>{% endif %}
@@ -17,8 +17,8 @@
         <li>
           <a class="collect-product" href="{{ product.href }}">
             <span class="collect-product-thumb"><img src="{{ product.thumb }}" alt="{{ product.name|e }}" loading="lazy" /></span>
-            <span class="collect-product-name">{{ product.name }}</span>
-            <span class="collect-product-price">{{ product.price }}</span>
+            <h2 class="collect-product-name">{{ product.name }}</h2>
+            <span class="collect-product-price">{% if product.symbol_left %}<span class="collect-price-symbol">{{ product.symbol_left }}</span>{% endif %}<span class="collect-price-amount">{{ product.price_amount }}</span>{% if product.symbol_right %}<span class="collect-price-symbol">{{ product.symbol_right }}</span>{% endif %}</span>
           </a>
         </li>
         {% endfor %}
@@ -26,7 +26,6 @@
       {% else %}
       <p class="collect-empty">{{ text_no_products }}</p>
       {% endif %}
-      <div class="collect-back"><a href="{{ back }}">{{ text_back }}</a></div>
     </div>
   </div>
 </div>

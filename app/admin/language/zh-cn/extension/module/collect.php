@@ -25,6 +25,7 @@ $_['entry_image_detail']     = '类别详情图片';
 $_['entry_meta_title']       = 'HTML 标题';
 $_['entry_meta_description'] = 'HTML 描述';
 $_['entry_meta_keywords']    = 'HTML 关键字';
+$_['entry_seo_keyword']      = '伪静态关键字';
 $_['entry_display']          = '在模块中显示';
 $_['entry_product']          = '商品';
 $_['entry_status']           = '状态';
@@ -35,6 +36,7 @@ $_['button_category_add']    = '添加类别';
 
 // Help
 $_['help_seo']               = '以下 SEO 信息用于「专题列表页」。';
+$_['help_seo_keyword']       = '用于生成伪静态地址，如 feature、category-1；留空则使用默认动态地址。';
 $_['help_product']           = '输入商品名称自动补全。';
 $_['help_image']             = '列表页图片显示在专题列表页与首页模块中；类别详情图片显示在类别详情页。';
 
@@ -43,3 +45,4 @@ $_['error_permission']       = '错误：您没有权限修改专题模块！';
 $_['error_name']             = '模块名称必须在 2 到 64 个字符之间！';
 $_['error_topic_title']      = '主题名称不能为空！';
 $_['error_category_name']    = '类别名称不能为空！';
+$_['error_seo_keyword']      = '伪静态关键字重复或已被其他页面使用！';

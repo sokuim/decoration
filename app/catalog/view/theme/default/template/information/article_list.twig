@@ -7,7 +7,7 @@
   {% if category_image or category_description %}
   <div class="article-cat-hero">
     {% if category_image %}
-    <div class="article-cat-media"><img src="{{ category_image }}" alt="{{ heading_title }}"/></div>
+    <div class="article-cat-media"><img src="{{ category_image }}" alt="{{ heading_title }}" loading="lazy"/></div>
     {% endif %}
     {% if category_description %}
     <div class="article-cat-desc">{{ category_description }}</div>
@@ -43,7 +43,7 @@
     {% for category in categories %}
     <a class="article-cat-card" href="{{ category.href }}">
       {% if category.thumb %}
-      <div class="article-cat-thumb"><img src="{{ category.thumb }}" alt="{{ category.name }}"/></div>
+      <div class="article-cat-thumb"><img src="{{ category.thumb }}" alt="{{ category.name }}" loading="lazy"/></div>
       {% endif %}
       <div class="article-cat-body">
         <h2 class="article-cat-name">{{ category.name }}</h2>

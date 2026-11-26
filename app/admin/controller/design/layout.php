@@ -111,6 +111,8 @@ class ControllerDesignLayout extends Controller {
 	}
 
 	protected function getList() {
+		$data['heading_title'] = $this->language->get('heading_title');
+
 		if (isset($this->request->get['sort'])) {
 			$sort = $this->request->get['sort'];
 		} else {
@@ -244,6 +246,8 @@ class ControllerDesignLayout extends Controller {
 	}
 
 	protected function getForm() {
+		$data['heading_title'] = $this->language->get('heading_title');
+
 		$data['text_form'] = !isset($this->request->get['layout_id']) ? $this->language->get('text_add') : $this->language->get('text_edit');
 
 		if (isset($this->error['warning'])) {
@@ -366,11 +370,12 @@ class ControllerDesignLayout extends Controller {
 		foreach ($layout_modules as $layout_module) {
 			$part = explode('.', $layout_module['code']);
 
-			$this->load->language('extension/module/' . $part[0]);
+			// 按独立命名空间加载模块语言，避免覆盖布局页自身的 heading_title
+			$this->load->language('extension/module/' . $part[0], 'module');
 
 			if (!isset($part[1])) {
 				$data['layout_modules'][] = array(
-					'name'       => strip_tags($this->language->get('heading_title')),
+					'name'       => strip_tags($this->language->get('module')->get('heading_title')),
 					'code'       => $layout_module['code'],
 					'edit'       => $this->url->link('extension/module/' . $part[0], 'user_token=' . $this->session->data['user_token']),
 					'position'   => $layout_module['position'],

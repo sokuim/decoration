@@ -68,16 +68,9 @@ class ControllerCollectCategory extends Controller {
 		$data['image'] = !empty($category_info['image_detail']) ? $this->model_tool_image->resize($category_info['image_detail'], 1200, 600) : '';
 		$data['back'] = $this->url->link('collect/index', 'module_id=' . $module_id);
 
-		$image_width = $this->config->get('theme_' . $this->config->get('config_theme') . '_image_thumb_width');
-		$image_height = $this->config->get('theme_' . $this->config->get('config_theme') . '_image_thumb_height');
-
-		if (!$image_width) {
-			$image_width = 300;
-		}
-
-		if (!$image_height) {
-			$image_height = 300;
-		}
+		// 商品网格每列约 270px 宽，主题默认 70×70 缩略图会模糊，这里单独使用 300×300
+		$image_width = 300;
+		$image_height = 300;
 
 		$data['products'] = array();
 
@@ -91,14 +84,20 @@ class ControllerCollectCategory extends Controller {
 
 				$image = $product_info['image'] ? $this->model_tool_image->resize($product_info['image'], $image_width, $image_height) : $this->model_tool_image->resize('placeholder.png', $image_width, $image_height);
 
-				$price = $this->currency->format($this->tax->calculate($product_info['price'], $product_info['tax_class_id'], $this->config->get('config_tax')), $this->session->data['currency']);
+				// 价格与货币单位分开输出，便于分别设置字号
+				$currency_code = $this->session->data['currency'];
+				$amount = $this->tax->calculate($product_info['price'], $product_info['tax_class_id'], $this->config->get('config_tax'));
+				$price_value = $this->currency->format($amount, $currency_code, '', false);
+				$price_amount = number_format($price_value, (int)$this->currency->getDecimalPlace($currency_code), $this->language->get('decimal_point'), $this->language->get('thousand_point'));
 
 				$data['products'][] = array(
-					'product_id' => $product_info['product_id'],
-					'name'       => $product_info['name'],
-					'thumb'      => $image,
-					'price'      => $price,
-					'href'       => $this->url->link('product/product', 'product_id=' . $product_info['product_id'])
+					'product_id'   => $product_info['product_id'],
+					'name'         => $product_info['name'],
+					'thumb'        => $image,
+					'price_amount' => $price_amount,
+					'symbol_left'  => $this->currency->getSymbolLeft($currency_code),
+					'symbol_right' => $this->currency->getSymbolRight($currency_code),
+					'href'         => $this->url->link('product/product', 'product_id=' . $product_info['product_id'])
 				);
 			}
 		}

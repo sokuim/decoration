@@ -22,7 +22,7 @@
       <input type="radio" name="option[{{ option.product_option_id }}]" value="{{ option_value.product_option_value_id }}" />
       <span>
         {% if option_value.image %}
-        <img src="{{ option_value.image }}" alt="{{ option_value.name }} {% if option_value.price %} {{ option_value.price_prefix }} {{ option_value.price }} {% endif %}" class="img-thumbnail" /> {% endif %}
+        <img src="{{ option_value.image }}" alt="{{ option_value.name }} {% if option_value.price %} {{ option_value.price_prefix }} {{ option_value.price }} {% endif %}" class="img-thumbnail" loading="lazy" /> {% endif %}
         {{ option_value.name }}
         {% if option_value.price %}
         ({{ option_value.price_prefix }}{{ option_value.price }})
@@ -42,7 +42,7 @@
         <input type="checkbox" name="option[{{ option.product_option_id }}][]" value="{{ option_value.product_option_value_id }}" />
         <span>
           {% if option_value.image %}
-            <img src="{{ option_value.image }}" alt="{{ option_value.name }} {% if option_value.price %} {{ option_value.price_prefix }} {{ option_value.price }} {% endif %}" class="img-thumbnail" />
+            <img src="{{ option_value.image }}" alt="{{ option_value.name }} {% if option_value.price %} {{ option_value.price_prefix }} {{ option_value.price }} {% endif %}" class="img-thumbnail" loading="lazy" />
           {% endif %}
           {{ option_value.name }}
           {% if option_value.price %}

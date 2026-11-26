@@ -1,6 +1,6 @@
 <?php
 // Heading
-$_['heading_title'] = 'おすすめ商品';
+$_['heading_title'] = '今週のおすすめ';
 
 // Text
 $_['text_tax']      = '税別:';

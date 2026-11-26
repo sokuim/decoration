@@ -14,18 +14,28 @@ class ControllerExtensionModuleCollect extends Controller {
 		}
 
 		if (($this->request->server['REQUEST_METHOD'] == 'POST') && $this->validate()) {
+			$old_setting = array();
+
 			if (!isset($this->request->get['module_id'])) {
 				$this->model_setting_module->addModule('collect', $this->request->post);
+
+				$module_id = $this->db->getLastId();
 			} else {
-				$this->model_setting_module->editModule($this->request->get['module_id'], $this->request->post);
+				$module_id = (int)$this->request->get['module_id'];
+				$old_setting = $this->model_setting_module->getModule($module_id);
+
+				$this->model_setting_module->editModule($module_id, $this->request->post);
 			}
+
+			// 同步专题列表页 / 类别页的伪静态规则
+			$this->saveSeoUrls($module_id, $this->request->post, $old_setting);
 
 			$this->session->data['success'] = $this->language->get('text_success');
 
 			$this->response->redirect($this->url->link('marketplace/extension', 'user_token=' . $this->session->data['user_token'] . '&type=module'));
 		}
 
-		foreach (array('warning', 'name', 'topic_title', 'category_name') as $key) {
+		foreach (array('warning', 'name', 'topic_title', 'category_name', 'seo_keyword') as $key) {
 			$data['error_' . $key] = isset($this->error[$key]) ? $this->error[$key] : '';
 		}
 
@@ -63,7 +73,7 @@ class ControllerExtensionModuleCollect extends Controller {
 			$module_info = $this->model_setting_module->getModule($this->request->get['module_id']);
 		}
 
-		$fields = array('name' => '', 'display_name' => 0, 'seo_title' => '', 'seo_description' => '', 'seo_keywords' => '', 'topics' => array(), 'categories' => array(), 'status' => 0);
+		$fields = array('name' => '', 'display_name' => 0, 'seo_keyword' => '', 'seo_title' => '', 'seo_description' => '', 'seo_keywords' => '', 'topics' => array(), 'categories' => array(), 'status' => 0);
 
 		foreach ($fields as $field => $default) {
 			if (isset($this->request->post[$field])) {
@@ -85,6 +95,7 @@ class ControllerExtensionModuleCollect extends Controller {
 		foreach ($data['categories'] as $key => $category) {
 			$data['categories'][$key]['thumb_list'] = !empty($category['image_list']) ? $this->model_tool_image->resize($category['image_list'], 100, 100) : $data['placeholder'];
 			$data['categories'][$key]['thumb_detail'] = !empty($category['image_detail']) ? $this->model_tool_image->resize($category['image_detail'], 100, 100) : $data['placeholder'];
+			$data['categories'][$key]['seo_keyword'] = isset($category['seo_keyword']) ? $category['seo_keyword'] : '';
 
 			$data['categories'][$key]['product_list'] = array();
 
@@ -159,6 +170,7 @@ class ControllerExtensionModuleCollect extends Controller {
 	 * 为提交的数据补全主题/类别 ID，并清理商品数据
 	 */
 	private function prepareData($post) {
+		$post['seo_keyword'] = $this->sanitizeKeyword(isset($post['seo_keyword']) ? $post['seo_keyword'] : '');
 		$post['topics'] = (isset($post['topics']) && is_array($post['topics'])) ? array_values($post['topics']) : array();
 		$post['categories'] = (isset($post['categories']) && is_array($post['categories'])) ? array_values($post['categories']) : array();
 
@@ -226,6 +238,7 @@ class ControllerExtensionModuleCollect extends Controller {
 				'category_id'      => $category_id,
 				'topic_index'      => isset($post['topics'][$topic_index]) ? $topic_index : 0,
 				'name'             => isset($category['name']) ? trim($category['name']) : '',
+				'seo_keyword'      => $this->sanitizeKeyword(isset($category['seo_keyword']) ? $category['seo_keyword'] : ''),
 				'description'      => isset($category['description']) ? $category['description'] : '',
 				'image_list'       => isset($category['image_list']) ? $category['image_list'] : '',
 				'image_detail'     => isset($category['image_detail']) ? $category['image_detail'] : '',
@@ -239,6 +252,70 @@ class ControllerExtensionModuleCollect extends Controller {
 		}
 
 		return $post;
+	}
+
+	/**
+	 * 伪静态关键字只保留字母、数字、日文等文字及 - _
+	 */
+	private function sanitizeKeyword($keyword) {
+		$keyword = trim((string)$keyword);
+
+		if ($keyword === '') {
+			return '';
+		}
+
+		$keyword = preg_replace('/[\s\/]+/u', '-', $keyword);
+		$keyword = preg_replace('/[^\p{L}\p{N}_\-]+/u', '', $keyword);
+
+		return trim($keyword, '-');
+	}
+
+	/**
+	 * 汇总模块内所有伪静态规则：query => keyword
+	 */
+	private function getSeoQueries($module_id, $data) {
+		$queries = array();
+
+		if (!empty($data['seo_keyword'])) {
+			$queries['route=collect/index&module_id=' . (int)$module_id] = $data['seo_keyword'];
+		}
+
+		if (!empty($data['categories']) && is_array($data['categories'])) {
+			foreach ($data['categories'] as $category) {
+				if (!empty($category['seo_keyword']) && !empty($category['category_id'])) {
+					$queries['route=collect/category&category_id=' . (int)$category['category_id'] . '&module_id=' . (int)$module_id] = $category['seo_keyword'];
+				}
+			}
+		}
+
+		return $queries;
+	}
+
+	/**
+	 * 把专题列表页与类别页的伪静态写入 seo_url 表
+	 */
+	private function saveSeoUrls($module_id, $data, $old_data) {
+		$store_id = (int)$this->config->get('config_store_id');
+		$language_id = (int)$this->config->get('config_language_id');
+
+		$old_queries = $this->getSeoQueries($module_id, $old_data);
+		$new_queries = $this->getSeoQueries($module_id, $data);
+
+		$delete = array_unique(array_merge(array_keys($old_queries), array_keys($new_queries)));
+
+		if ($delete) {
+			$escaped = array();
+
+			foreach ($delete as $query) {
+				$escaped[] = "'" . $this->db->escape($query) . "'";
+			}
+
+			$this->db->query("DELETE FROM `" . DB_PREFIX . "seo_url` WHERE store_id = '" . $store_id . "' AND language_id = '" . $language_id . "' AND `query` IN (" . implode(',', $escaped) . ")");
+		}
+
+		foreach ($new_queries as $query => $keyword) {
+			$this->db->query("INSERT INTO `" . DB_PREFIX . "seo_url` SET store_id = '" . $store_id . "', language_id = '" . $language_id . "', `query` = '" . $this->db->escape($query) . "', keyword = '" . $this->db->escape($keyword) . "'");
+		}
 	}
 
 	protected function validate() {
@@ -263,6 +340,44 @@ class ControllerExtensionModuleCollect extends Controller {
 			foreach ($this->request->post['categories'] as $category) {
 				if (!isset($category['name']) || trim($category['name']) === '') {
 					$this->error['category_name'] = $this->language->get('error_category_name');
+					break;
+				}
+			}
+		}
+
+		// 伪静态关键字不能重复，也不能与其他页面已有关键字冲突
+		$keywords = array();
+
+		if (!empty($this->request->post['seo_keyword'])) {
+			$keywords[] = $this->request->post['seo_keyword'];
+		}
+
+		if (!empty($this->request->post['categories']) && is_array($this->request->post['categories'])) {
+			foreach ($this->request->post['categories'] as $category) {
+				if (!empty($category['seo_keyword'])) {
+					$keywords[] = $category['seo_keyword'];
+				}
+			}
+		}
+
+		if (count($keywords) != count(array_unique($keywords))) {
+			$this->error['seo_keyword'] = $this->language->get('error_seo_keyword');
+		} elseif ($keywords) {
+			$module_id = isset($this->request->get['module_id']) ? (int)$this->request->get['module_id'] : 0;
+			$own_queries = array_keys($this->getSeoQueries($module_id, $this->request->post));
+
+			$escaped = array();
+
+			foreach (array_unique($keywords) as $keyword) {
+				$escaped[] = "'" . $this->db->escape($keyword) . "'";
+			}
+
+			$query = $this->db->query("SELECT `query` FROM `" . DB_PREFIX . "seo_url` WHERE store_id = '" . (int)$this->config->get('config_store_id') . "' AND language_id = '" . (int)$this->config->get('config_language_id') . "' AND keyword IN (" . implode(',', $escaped) . ")");
+
+			foreach ($query->rows as $row) {
+				if (!in_array($row['query'], $own_queries)) {
+					$this->error['seo_keyword'] = $this->language->get('error_seo_keyword');
+
 					break;
 				}
 			}

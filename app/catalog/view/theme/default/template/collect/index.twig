@@ -11,8 +11,9 @@
           {% for category in topic.categories %}
           <li>
             <a href="{{ category.href }}">
-              <span class="collect-grid-thumb"><img src="{{ category.image }}" alt="{{ category.name|e }}" loading="lazy" /></span>
-              <span class="collect-grid-name">{{ category.name }}</span>
+              <div class="collect-grid-thumb"><img src="{{ category.image }}" alt="{{ category.name|e }}" loading="lazy" /></div>
+              <p class="collect-grid-name">{{ category.name }}</p>
+              {% if category.description %}<div class="collect-grid-desc">{{ category.description }}</div>{% endif %}
             </a>
           </li>
           {% endfor %}

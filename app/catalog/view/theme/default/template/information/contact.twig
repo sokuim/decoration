@@ -14,7 +14,7 @@
       <div class="form-card contact-card">
         <h4>{{ text_location }}</h4>
         <div class="contact-store-grid">
-          {% if image %}<div class="csi-img"><img src="{{ image }}" alt="{{ store }}" title="{{ store }}" /></div>{% endif %}
+          {% if image %}<div class="csi-img"><img src="{{ image }}" alt="{{ store }}" title="{{ store }}" loading="lazy" /></div>{% endif %}
           <div class="csi-info">
             <div class="csi-name">{{ store }}</div>
             {% if address %}<div class="csi-addr">{{ address }}</div>{% endif %}

@@ -26,7 +26,7 @@
         <tr>
           <th>{{ text_image }}</th>
           {% for product in products %}
-          <td class="compare-image">{% if product.thumb %}<img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" />{% endif %}</td>
+          <td class="compare-image">{% if product.thumb %}<img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" loading="lazy" />{% endif %}</td>
           {% endfor %}
         </tr>
         <tr>

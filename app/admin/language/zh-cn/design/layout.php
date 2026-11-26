@@ -23,6 +23,7 @@ $_['text_content_top']    = '内容顶部';
 $_['text_content_bottom'] = '内容底部';
 $_['text_column_left']    = '左侧列';
 $_['text_column_right']   = '右侧列';
+$_['text_drag']           = '按住拖动排序';
 
 // Column
 $_['column_name']         = '布局名称';

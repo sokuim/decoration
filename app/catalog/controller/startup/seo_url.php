@@ -19,6 +19,19 @@ class ControllerStartupSeoUrl extends Controller {
 				$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "seo_url WHERE keyword = '" . $this->db->escape($part) . "' AND store_id = '" . (int)$this->config->get('config_store_id') . "'");
 
 				if ($query->num_rows) {
+					// 支持 route=xxxx&参数 形式（如专题 collect/index、collect/category）
+					if (strpos($query->row['query'], 'route=') === 0) {
+						$params = array();
+
+						parse_str($query->row['query'], $params);
+
+						foreach ($params as $param_key => $param_value) {
+							$this->request->get[$param_key] = $param_value;
+						}
+
+						continue;
+					}
+
 					$url = explode('=', $query->row['query']);
 
 					if ($url[0] == 'product_id') {
@@ -119,10 +132,57 @@ class ControllerStartupSeoUrl extends Controller {
 
 					unset($data[$key]);
 				} elseif ($key == 'route') {
-					$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "seo_url WHERE `query` = '" . $this->db->escape($value) . "' AND store_id = '" . (int)$this->config->get('config_store_id') . "' AND language_id = '" . (int)$this->config->get('config_language_id') . "'");
+					// 先按「route + 其他参数」精确匹配（如专题列表页 / 类别页）
+					$params = $data;
 
-					if ($query->num_rows && $query->row['keyword']) {
-						$url .= '/' . $query->row['keyword'];
+					unset($params['route']);
+
+					ksort($params);
+
+					$full_query = 'route=' . $value;
+					$has_array = false;
+
+					foreach ($params as $param_key => $param_value) {
+						if (is_array($param_value)) {
+							$has_array = true;
+
+							break;
+						}
+
+						$full_query .= '&' . $param_key . '=' . $param_value;
+					}
+
+					$matched = false;
+
+					if (!$has_array) {
+						$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "seo_url WHERE `query` = '" . $this->db->escape($full_query) . "' AND store_id = '" . (int)$this->config->get('config_store_id') . "' AND language_id = '" . (int)$this->config->get('config_language_id') . "'");
+
+						if ($query->num_rows && $query->row['keyword']) {
+							// 专题类别页：拼到专题列表页关键字之后，体现层级 /列表关键字/类别关键字
+							if ($value == 'collect/category' && !empty($params['module_id'])) {
+								$parent_query = $this->db->query("SELECT * FROM " . DB_PREFIX . "seo_url WHERE `query` = 'route=collect/index&module_id=" . (int)$params['module_id'] . "' AND store_id = '" . (int)$this->config->get('config_store_id') . "' AND language_id = '" . (int)$this->config->get('config_language_id') . "'");
+
+								if ($parent_query->num_rows && $parent_query->row['keyword']) {
+									$url .= '/' . $parent_query->row['keyword'];
+								}
+							}
+
+							$url .= '/' . $query->row['keyword'];
+
+							foreach ($params as $param_key => $param_value) {
+								unset($data[$param_key]);
+							}
+
+							$matched = true;
+						}
+					}
+
+					if (!$matched) {
+						$query = $this->db->query("SELECT * FROM " . DB_PREFIX . "seo_url WHERE `query` = '" . $this->db->escape($value) . "' AND store_id = '" . (int)$this->config->get('config_store_id') . "' AND language_id = '" . (int)$this->config->get('config_language_id') . "'");
+
+						if ($query->num_rows && $query->row['keyword']) {
+							$url .= '/' . $query->row['keyword'];
+						}
 					}
 				}
 			}

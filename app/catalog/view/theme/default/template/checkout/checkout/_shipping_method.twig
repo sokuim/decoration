@@ -19,7 +19,7 @@
               {% else %}
                 <input type="radio" name="shipping_method" value="{{ quote.code }}" />
               {% endif %}
-              {% if quote.logo %}<img src="{{ quote.logo }}"/>{% endif %}
+              {% if quote.logo %}<img src="{{ quote.logo }}" loading="lazy"/>{% endif %}
               {{ quote.title }} - {{ quote.text }}</label>
           </div>
           {% endfor %}

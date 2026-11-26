@@ -35,6 +35,9 @@
 {% endfor %}
 
 <script type="text/javascript">
+  var redirectButtonText = '';
+  var redirectButtonLocation = '';
+
   var showAlert = function(type, content) {
     if (type == 'cart') {
       redirectButtonText = '{{ button_checkout }}';
@@ -58,6 +61,79 @@
       }
     });
   }
+</script>
+<script type="text/javascript">
+// 懒加载图片：占位效果作用于图片容器，不修改 img 自身属性
+(function() {
+  var containers = '.image, .collect-grid-thumb, .collect-product-thumb, .collect-categories a, .article-cat-thumb, .article-cat-media, .cart-panel-thumb, .collect-cat-image, .image-additional, .csi-img, .compare-image';
+  var images = document.querySelectorAll('img[loading="lazy"]');
+
+  for (var i = 0; i < images.length; i++) {
+    (function(image) {
+      var box = image.closest ? image.closest(containers) : null;
+
+      if (!box) {
+        return;
+      }
+
+      if (image.complete && image.naturalWidth > 0) {
+        return;
+      }
+
+      box.classList.add('lazy-loading');
+
+      var loaded = function() {
+        box.classList.remove('lazy-loading');
+      };
+
+      image.addEventListener('load', loaded);
+      image.addEventListener('error', loaded);
+
+      // 防止加载完成发生在绑定事件之前
+      if (image.complete) {
+        loaded();
+      }
+    })(images[i]);
+  }
+})();
+
+// 超链接悬停/聚焦时保持原有文字颜色
+function collectLinkColor(link) {
+  link.style.setProperty('--link-color', window.getComputedStyle(link).color);
+}
+
+function collectLinkColors(root) {
+  var links = (root || document).querySelectorAll('a');
+
+  for (var i = 0; i < links.length; i++) {
+    collectLinkColor(links[i]);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  collectLinkColors(document);
+});
+
+// 覆盖后续动态插入的链接（弹层、购物车刷新等）
+if (window.MutationObserver) {
+  new MutationObserver(function(mutations) {
+    for (var i = 0; i < mutations.length; i++) {
+      var nodes = mutations[i].addedNodes;
+
+      for (var j = 0; j < nodes.length; j++) {
+        if (nodes[j].nodeType !== 1) {
+          continue;
+        }
+
+        if (nodes[j].tagName === 'A') {
+          collectLinkColor(nodes[j]);
+        }
+
+        collectLinkColors(nodes[j]);
+      }
+    }
+  }).observe(document.documentElement, {childList: true, subtree: true});
+}
 </script>
 {{ helper.debug_bar.render }}
 </body></html>

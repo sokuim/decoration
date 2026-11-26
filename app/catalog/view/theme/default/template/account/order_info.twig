@@ -69,7 +69,7 @@
           <tbody>
           {% for product in products %}
           <tr>
-            <td class="text-center order-product-image">{% if product.thumb %}<img src="{{ product.thumb }}" alt="{{ product.name }}" class="order-product-thumb" />{% endif %}</td>
+            <td class="text-center order-product-image">{% if product.thumb %}<img src="{{ product.thumb }}" alt="{{ product.name }}" class="order-product-thumb" loading="lazy" />{% endif %}</td>
             <td class="text-left">{{ product.name }}
               {% for option in product.option %} <br />
               &nbsp;<small> - {{ option.name }}: {{ option.value }}</small> {% endfor %}</td>
