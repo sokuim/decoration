@@ -12,7 +12,7 @@
           <div class="swiper-wrapper">
             {% for product in products %}
             <div class="swiper-slide">
-              {{ include(helper.template('_partial/product/product_card'), {hide_compare: true, hide_wishlist_alert: true, wishlist_state: true, hide_cart: true}) }}
+              {{ include(helper.template('_partial/product/product_card'), {hide_compare: true, hide_wishlist_alert: true, wishlist_state: show_wishlist, hide_wishlist: not show_wishlist, hide_cart: true}) }}
             </div>
             {% endfor %}
           </div>

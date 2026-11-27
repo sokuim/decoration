@@ -6,6 +6,15 @@ class ControllerExtensionModuleRecentlyViewed extends Controller
     {
         static $module = 0;
 
+        // 个人中心（account/*）展示时隐藏收藏图标
+        $route = isset($this->request->get['route']) ? (string)$this->request->get['route'] : '';
+        $show_wishlist = strpos($route, 'account/') !== 0;
+
+        // 个人中心仅对已登录用户显示
+        if (!$show_wishlist && !$this->customer->isLogged()) {
+            return '';
+        }
+
         $this->document->addStyle('catalog/view/javascript/jquery/swiper/css/swiper.min.css');
         $this->document->addScript('catalog/view/javascript/jquery/swiper/js/swiper.min.js');
 
@@ -53,18 +62,21 @@ class ControllerExtensionModuleRecentlyViewed extends Controller
         // 已登录读取收藏商品；游客读取会话中的收藏，用于区分实心/空心
         $wishlist_ids = array();
 
-        if ($this->customer->isLogged()) {
-            $this->load->model('account/wishlist');
+        if ($show_wishlist) {
+            if ($this->customer->isLogged()) {
+                $this->load->model('account/wishlist');
 
-            foreach ($this->model_account_wishlist->getWishlist() as $wishlist) {
-                $wishlist_ids[] = (int)$wishlist['product_id'];
+                foreach ($this->model_account_wishlist->getWishlist() as $wishlist) {
+                    $wishlist_ids[] = (int)$wishlist['product_id'];
+                }
+            } elseif (isset($this->session->data['wishlist']) && is_array($this->session->data['wishlist'])) {
+                $wishlist_ids = array_map('intval', $this->session->data['wishlist']);
             }
-        } elseif (isset($this->session->data['wishlist']) && is_array($this->session->data['wishlist'])) {
-            $wishlist_ids = array_map('intval', $this->session->data['wishlist']);
         }
 
         $data['heading_title'] = $heading;
         $data['module'] = $module++;
+        $data['show_wishlist'] = $show_wishlist;
         $data['products'] = array();
 
         foreach ($results as $result) {
