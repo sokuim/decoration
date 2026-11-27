@@ -38,6 +38,7 @@ $_['text_sama'] = '様';
 $_['text_menu'] = 'メニュー';
 $_['text_close'] = '閉じる';
 $_['text_postcode_required'] = '郵便番号を入力してください';
+$_['text_tax_included'] = '税込';
 $_['text_pilibaba_cn'] = '中国用户请点击Pilibaba按钮跳转至中文页面付款';
 $_['text_pilibaba_en'] = 'Chinese customers please click Pilibaba button to complete checkout';
 

@@ -14,6 +14,7 @@ $_['text_edit']          = 'プロフィールの変更';
 $_['text_password']      = 'パスワードの変更';
 $_['text_address']       = 'アドレス帳';
 $_['text_wishlist']      = 'お気に入り';
+$_['text_viewed']        = '最近見たアイテム';
 $_['text_order']         = '注文履歴';
 $_['text_download']      = 'ダウンロード';
 $_['text_reward']        = 'ポイント照会';

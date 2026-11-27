@@ -43,6 +43,7 @@ $_['column_action']              = '管理';
 // Entry
 $_['entry_name']                 = '商品名称';
 $_['entry_description']          = '商品描述';
+$_['entry_intro']                = '商品简介';
 $_['entry_meta_title']           = 'Meta Tag 标题';
 $_['entry_meta_keyword']         = 'Meta Tag 关键字';
 $_['entry_meta_description']     = 'Meta Tag 描述';

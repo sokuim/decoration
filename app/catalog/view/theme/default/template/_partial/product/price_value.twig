@@ -1,0 +1,1 @@
+{% set parts = helper.price_parts(formatted) %}{% if parts.left %}<span class="price-currency price-currency-left">{{ parts.left }}</span>{% endif %}<span class="price-amount">{{ parts.amount }}</span>{% if parts.right %}<span class="price-currency price-currency-right">{{ parts.right }}</span>{% endif %}

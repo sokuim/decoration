@@ -2,14 +2,23 @@
   <div class="container-inner">
     <div class="section-header">
       <h2 id="heading-featured">{{ heading_title }}</h2>
-      <a href="{{ more_href }}" class="more-link">{{ more_text }}</a>
     </div>
     <ul class="product-grid">
       {% for product in products %}
-      <li class="product-layout col-lg-3 col-md-3 col-sm-4 col-xs-6">
-        {{ include(helper.template('_partial/product/product_card')) }}
+      <li class="featured-item">
+        <article class="product-card product-thumb featured-product">
+          <div class="image">
+            <a href="{{ product.href }}"><img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-responsive" loading="lazy" decoding="async" /></a>
+          </div>
+          <div class="caption">
+            <h3 class="featured-product-name"><a href="{{ product.href }}" title="{{ product.name }}">{{ product.name }}</a></h3>
+            <p class="featured-product-intro">{{ product.intro|e|nl2br }}</p>
+            <div class="featured-product-link"><a href="{{ product.href }}">{{ text_detail }}<svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></a></div>
+          </div>
+        </article>
       </li>
       {% endfor %}
     </ul>
+    <div class="featured-more"><a href="{{ more_href }}">{{ more_text }}<svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></a></div>
   </div>
 </section>

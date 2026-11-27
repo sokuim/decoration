@@ -778,7 +778,7 @@ footer a:hover{color:#fff!important}
 .list-grid .product-thumb .product-name a{color:var(--ink);text-decoration:none}
 .list-grid .product-thumb .product-name a:hover{color:var(--ink)}
 .list-grid .product-thumb .price{margin:0 0 10px;font-size:15px;font-weight:700;color:var(--verm)}
-.list-grid .product-thumb .price .price-old{font-size:12px;font-weight:500;color:var(--slate);text-decoration:line-through;margin-left:4px}
+.list-grid .product-thumb .price .price-old{font-size:12px;font-weight:500;color:var(--slate);text-decoration:line-through;margin-left:8px}
 .list-grid .product-thumb .price .price-tax{display:block;font-size:11px;font-weight:400;color:var(--slate)}
 .list-grid .product-thumb .cart-wrapper{position:static;opacity:1}
 .list-grid .product-thumb .cart-wrapper .btn{width:100%;height:38px;margin:0;padding:0 12px;border:0;border-radius:10px;background:var(--verm);color:#fff;font-size:13px;font-weight:700;box-shadow:none;display:flex;align-items:center;justify-content:center;gap:6px}
@@ -843,9 +843,9 @@ footer a:hover{color:#fff!important}
 #product-product .pd-review-count{font-size:13px;color:var(--slate);text-decoration:none}
 #product-product .pd-review-count i{margin-right:5px;color:#A39B91}
 #product-product .pd-review-count:hover{color:var(--verm)}
-#product-product .pd-price{display:flex;align-items:baseline;gap:12px;margin:0 0 22px}
+#product-product .pd-price{display:flex;align-items:baseline;margin:0 0 22px}
 #product-product .pd-price .now{font-size:32px;font-weight:700;color:var(--ink)}
-#product-product .pd-price .old{font-size:15px;font-weight:500;color:var(--slate);text-decoration:line-through}
+#product-product .pd-price .old{font-size:15px;font-weight:500;color:var(--slate);text-decoration:line-through;margin-left:8px}
 #product-product .pd-price .points{font-size:12px;color:var(--slate)}
 #product-product .pd-attrs{list-style:none;margin:0;padding:14px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 #product-product .pd-attrs li{display:flex;align-items:flex-start;gap:12px;padding:6px 0;font-size:14px;line-height:1.7;color:var(--ink)}
@@ -928,9 +928,89 @@ footer a:hover{color:#fff!important}
 /* ===== 首页商品模块（section-header / more-link / product-grid） ===== */
 /* 推荐商品：与顶部 header 同色背景横向通栏，内容用 .container-inner 居中 */
 #common-home .featured-section{background:#f2ebeb;margin-left:-15px;margin-right:-15px;padding:24px 0}
+/* 推荐商品：列表链接放在右下角，样式与专题一致 */
+.featured-more{margin-top:20px;text-align:right}
+.featured-more a{display:inline-flex;align-items:center;gap:6px;font-size:14px;color:var(--ink);text-decoration:none}
+.featured-more a svg{width:14px;height:14px;stroke:currentColor}
+.featured-more a:hover{opacity:.7}
+/* 推荐商品卡片：图片、名称、简介、右下角商品链接 */
+#common-home .featured-section ul.product-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:0}
+/* grid 布局下取消 clearfix 伪元素，避免其占用网格项 */
+#common-home .featured-section ul.product-grid:before,#common-home .featured-section ul.product-grid:after{display:none;content:none}
+#common-home .featured-item{min-width:0}
+#common-home .featured-item .product-thumb{margin-bottom:0;background:#fff;border:1px solid #EAE4DA;border-radius:12px;overflow:hidden;box-shadow:none;transition:box-shadow .2s ease}
+#common-home .featured-item .product-thumb:hover{box-shadow:0 8px 24px rgba(33,29,24,.10)}
+#common-home .featured-product .image{overflow:hidden}
+#common-home .featured-product .image img{display:block;width:100%;height:auto}
+#common-home .featured-product .caption{padding:20px 22px 18px}
+#common-home .featured-product-name{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;height:3.2em;margin:0;font-size:16px;font-weight:600;line-height:1.6;color:var(--ink);text-align:left}
+#common-home .featured-product-name a{color:var(--ink);text-decoration:none}
+#common-home .featured-product-intro{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;height:5.7em;margin:12px 0 0;font-size:14px;line-height:1.9;color:var(--ink);text-align:left}
+#common-home .featured-product-link{margin-top:14px;text-align:right}
+#common-home .featured-product-link a{display:inline-flex;align-items:center;gap:6px;font-size:14px;color:var(--slate);text-decoration:none}
+#common-home .featured-product-link a svg{width:14px;height:14px;stroke:currentColor}
+#common-home .featured-product-link a:hover{opacity:.7}
+@media(max-width:991px){#common-home .featured-section ul.product-grid{grid-template-columns:repeat(2,1fr)}}
+/* 最近浏览：一行显示 5 个，左右箭头位于商品行两侧，不遮挡商品（样式同特集模块） */
+.recently-viewed-slider{display:flex;align-items:center;gap:10px}
+.recently-viewed-arrow{flex:0 0 40px;display:flex;align-items:center;justify-content:center;width:40px;height:40px;padding:0;border:0;border-radius:0;background:transparent;color:#9A948B;cursor:pointer}
+.recently-viewed-arrow svg{width:22px;height:22px;stroke:currentColor}
+.recently-viewed-arrow:hover{color:var(--ink);opacity:.7}
+.recently-viewed-arrow.swiper-button-disabled{opacity:.3;cursor:default}
+.recently-viewed-viewport{flex:1;min-width:0}
+.recently-viewed-slider .swiper-container{overflow:hidden}
+.recently-viewed-slider .swiper-wrapper{align-items:stretch}
+.recently-viewed-slider .swiper-slide{height:auto}
+.recently-viewed-slider .swiper-slide .product-thumb{height:100%;margin-bottom:0}
+/* 最近浏览：收藏按钮常驻显示，位于图片右上角；实心=已收藏，空心=未收藏 */
+.recently-viewed-section .product-thumb .image .button-group{opacity:1;top:10px;left:auto;right:10px;width:auto;margin-top:0;text-align:right}
+.recently-viewed-section .product-thumb .image .button-group .wishlist-toggle .fa-heart{color:var(--btn-red)}
+.recently-viewed-section .product-thumb .image .button-group .wishlist-toggle .fa-heart-o{color:var(--ink)}
+/* 收藏图标撑满 25x25 按钮 */
+.recently-viewed-section .product-thumb .image .button-group .wishlist-toggle{display:flex;align-items:center;justify-content:center;width:25px;height:25px;padding:0}
+.recently-viewed-section .product-thumb .image .button-group .wishlist-toggle .fa{font-size:25px;line-height:1;width:auto;height:auto}
+/* 最近浏览：悬停时价格保持显示 */
+.recently-viewed-section .product-thumb:hover .price{opacity:1}
+/* 最近浏览：不显示商品卡片边框 */
+.recently-viewed-section .product-thumb{border:0}
+/* 最近浏览：图片与商品名间距 10px */
+.recently-viewed-section .product-thumb .caption{padding-top:10px}
+/* 最近浏览：商品名最多 3 行，超出省略 */
+.recently-viewed-section .product-thumb .product-name{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;white-space:normal;height:auto;text-overflow:clip;text-align:left}
+/* 最近浏览：价格靠左显示 */
+.recently-viewed-section .product-thumb .price{text-align:left}
+/* 最近浏览：不显示商品评分 */
+.recently-viewed-section .product-thumb .caption .rating{display:none}
+/* 收藏按钮：无边框、无背景，悬停/点击不改变样式 */
+.recently-viewed-section .product-thumb .image .button-group .wishlist-toggle,
+.recently-viewed-section .product-thumb .image .button-group .wishlist-toggle:hover,
+.recently-viewed-section .product-thumb .image .button-group .wishlist-toggle:focus,
+.recently-viewed-section .product-thumb .image .button-group .wishlist-toggle:active{background:transparent!important;border:0!important;box-shadow:none!important;outline:none!important}
 /* 首页各模块统一顶部间距 30px */
 #common-home #content > *{margin-top:30px}
 .section-header{display:flex;align-items:center;justify-content:space-between;margin:0 0 18px}
+/* 商品价格统一显示 税込 标志 */
+.price-included{margin-right:8px;font-size:12px;font-weight:400;color:var(--slate);white-space:nowrap}
+.pd-price .price-included{font-size:12px;margin-right:8px}
+/* 价格金额、货币与标签颜色一致；货币字号同标签，金额 16px；标签到金额 8px，金额到货币 5px */
+.price-amount,.price-currency{color:var(--slate)}
+.price-currency{font-size:12px}
+.price-currency-left{margin-right:5px}
+.price-currency-right{margin-left:5px}
+.price-amount{font-size:16px}
+/* 特价金额与货币使用红色 */
+.price-new .price-amount,.price-new .price-currency,
+#product-product .pd-price .now.is-special .price-amount,#product-product .pd-price .now.is-special .price-currency{color:#B70000}
+/* 原价金额与货币 12px，并与特价保持 8px 间距；原价金额与货币间距 3px */
+.price .price-old{margin-left:8px}
+.price-old .price-amount,.price-old .price-currency,
+#product-product .pd-price .old .price-amount,#product-product .pd-price .old .price-currency{font-size:12px}
+.price-old .price-currency-left{margin-right:3px}
+.price-old .price-currency-right{margin-left:3px}
+#product-product .pd-price .old .price-currency-left{margin-right:3px}
+#product-product .pd-price .old .price-currency-right{margin-left:3px}
+/* 详情页积分与价格间距 */
+#product-product .pd-price .points{margin-left:12px}
 .section-header h2{margin:0;font-size:22px;font-weight:700;line-height:1.3;color:var(--ink)}
 .more-link{flex-shrink:0;margin-left:16px;font-size:13px;font-weight:600;line-height:1.3;color:var(--ink);text-decoration:none;white-space:nowrap}
 .more-link:hover{color:var(--ink);text-decoration:underline}

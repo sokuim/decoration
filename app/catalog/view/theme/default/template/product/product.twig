@@ -38,17 +38,7 @@
             <a class="pd-review-count" href="javascript:void(0);"><i class="fa fa-comment"></i> {{ reviews }}</a>
           </div>
           {% endif %}
-          <div class="pd-price">
-            {% if not special %}
-            <span class="now">{{ price }}</span>
-            {% else %}
-            <span class="now">{{ special }}</span>
-            <span class="old">{{ price }}</span>
-            {% endif %}
-            {% if points %}
-            <span class="points">{{ text_points }} {{ points }}</span>
-            {% endif %}
-          </div>
+          <div class="pd-price"><span class="price-included">{{ text_tax_included }}</span>{% if not special %}<span class="now">{{ include(helper.template('_partial/product/price_value'), {formatted: price}) }}</span>{% else %}<span class="now{% if special %} is-special{% endif %}">{{ include(helper.template('_partial/product/price_value'), {formatted: special}) }}</span><span class="old">{{ include(helper.template('_partial/product/price_value'), {formatted: price}) }}</span>{% endif %}{% if points %}<span class="points">{{ text_points }} {{ points }}</span>{% endif %}</div>
           <ul class="list-unstyled pd-attrs">
             {% if manufacturer %}
             <li><span class="pd-attr-label">{{ text_manufacturer }}</span><span class="pd-attr-value"><a href="{{ manufacturers }}">{{ manufacturer }}</a></span></li>

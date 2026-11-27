@@ -28,6 +28,9 @@ class ControllerAccountRegister extends Controller {
 
 			$this->customer->login($customer_id, $this->request->post['password']);
 
+			// Recently viewed
+			recently_viewed_merge($this->customer->getId());
+
 			// Log the IP info
 			$this->model_account_customer->addLogin($this->customer->getId(), $this->request->server['REMOTE_ADDR']);
 

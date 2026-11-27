@@ -218,7 +218,11 @@ var voucher = {
 }
 
 var wishlist = {
-  'add': function(product_id) {
+  'add': function(product_id, show_alert) {
+    if (typeof show_alert === 'undefined') {
+      show_alert = true;
+    }
+
     $.ajax({
       url: 'index.php?route=account/wishlist/add',
       type: 'post',
@@ -231,7 +235,33 @@ var wishlist = {
           location = json['redirect'];
         }
 
-        if (json['success']) {
+        if (json['success'] && show_alert) {
+          showAlert('wishlist', json['success']);
+        }
+
+        $('#wishlist-total span').html(json['total']);
+        $('#wishlist-total').attr('title', json['total']);
+      }
+    });
+  },
+  'remove': function(product_id, show_alert) {
+    if (typeof show_alert === 'undefined') {
+      show_alert = true;
+    }
+
+    $.ajax({
+      url: 'index.php?route=account/wishlist/remove',
+      type: 'post',
+      data: 'product_id=' + product_id,
+      dataType: 'json',
+      success: function(json) {
+        $('.alert-dismissible').remove();
+
+        if (json['redirect']) {
+          location = json['redirect'];
+        }
+
+        if (json['success'] && show_alert) {
           showAlert('wishlist', json['success']);
         }
 

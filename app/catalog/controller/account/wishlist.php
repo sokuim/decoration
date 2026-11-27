@@ -152,4 +152,37 @@ class ControllerAccountWishList extends Controller {
 		$this->response->addHeader('Content-Type: application/json');
 		$this->response->setOutput(json_encode($json));
 	}
+
+	public function remove() {
+		$this->load->language('account/wishlist');
+
+		$json = array();
+
+		if (isset($this->request->post['product_id'])) {
+			$product_id = (int)$this->request->post['product_id'];
+		} else {
+			$product_id = 0;
+		}
+
+		if ($product_id) {
+			if ($this->customer->isLogged()) {
+				$this->load->model('account/wishlist');
+
+				$this->model_account_wishlist->deleteWishlist($product_id);
+
+				$json['success'] = $this->language->get('text_remove');
+				$json['total'] = $this->model_account_wishlist->getTotalWishlist();
+			} else {
+				if (isset($this->session->data['wishlist']) && is_array($this->session->data['wishlist'])) {
+					$this->session->data['wishlist'] = array_values(array_diff($this->session->data['wishlist'], array($product_id)));
+				}
+
+				$json['success'] = $this->language->get('text_remove');
+				$json['total'] = isset($this->session->data['wishlist']) ? count($this->session->data['wishlist']) : 0;
+			}
+		}
+
+		$this->response->addHeader('Content-Type: application/json');
+		$this->response->setOutput(json_encode($json));
+	}
 }

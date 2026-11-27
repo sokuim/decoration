@@ -195,6 +195,9 @@ class ControllerAccountSocial extends Controller
                 $this->model_account_customer->addLoginAttempt($customer_id);
             } else {
                 $this->model_account_customer->deleteLoginAttempts($customer_id);
+
+                // Recently viewed
+                recently_viewed_merge($customer_id);
             }
         }
         $this->logInfo("Validation Error:", $this->error);

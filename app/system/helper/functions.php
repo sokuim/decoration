@@ -1019,3 +1019,190 @@ if (!function_exists('seo_fill')) {
         return trim($template);
     }
 }
+
+if (!function_exists('price_parts')) {
+    /**
+     * 拆分格式化后的价格，返回货币符号与金额，便于模板分别用 span 包裹
+     *
+     * @param string $formatted
+     * @return array
+     */
+    function price_parts($formatted)
+    {
+        $formatted = (string)$formatted;
+        $parts = array('left' => '', 'amount' => $formatted, 'right' => '');
+
+        try {
+            $currency = registry('currency');
+            $session = session();
+            $code = isset($session->data['currency']) ? $session->data['currency'] : config('config_currency');
+            $left = (string)$currency->getSymbolLeft($code);
+            $right = (string)$currency->getSymbolRight($code);
+        } catch (\Exception $e) {
+            return $parts;
+        }
+
+        if ($left !== '' && strpos($formatted, $left) === 0) {
+            $parts['left'] = $left;
+            $formatted = substr($formatted, strlen($left));
+        }
+
+        if ($right !== '' && substr($formatted, -strlen($right)) === $right) {
+            $parts['right'] = $right;
+            $formatted = substr($formatted, 0, -strlen($right));
+        }
+
+        $parts['amount'] = $formatted;
+
+        return $parts;
+    }
+}
+
+if (!function_exists('recently_viewed_get_ids')) {
+    /**
+     * 读取访客浏览历史（cookie），最近浏览的排在最前
+     *
+     * @return array
+     */
+    function recently_viewed_get_ids()
+    {
+        if (empty($_COOKIE['recently_viewed'])) {
+            return array();
+        }
+
+        $ids = array();
+
+        foreach (explode('.', (string)$_COOKIE['recently_viewed']) as $value) {
+            $value = trim($value);
+
+            if ($value === '' || !ctype_digit($value)) {
+                continue;
+            }
+
+            $product_id = (int)$value;
+
+            if ($product_id <= 0 || in_array($product_id, $ids, true)) {
+                continue;
+            }
+
+            $ids[] = $product_id;
+
+            if (count($ids) >= 30) {
+                break;
+            }
+        }
+
+        return $ids;
+    }
+}
+
+if (!function_exists('recently_viewed_set_ids')) {
+    /**
+     * 写入访客浏览历史（cookie），最多保留 30 个，默认 30 天
+     *
+     * @param array $ids
+     * @param int $expire
+     */
+    function recently_viewed_set_ids(array $ids, $expire = 2592000)
+    {
+        $unique = array();
+
+        foreach ($ids as $product_id) {
+            $product_id = (int)$product_id;
+
+            if ($product_id <= 0 || in_array($product_id, $unique, true)) {
+                continue;
+            }
+
+            $unique[] = $product_id;
+
+            if (count($unique) >= 30) {
+                break;
+            }
+        }
+
+        $value = implode('.', $unique);
+
+        if (!headers_sent()) {
+            if ($value === '') {
+                setcookie('recently_viewed', '', time() - 3600, '/');
+            } else {
+                setcookie('recently_viewed', $value, time() + (int)$expire, '/');
+            }
+        }
+
+        if ($value === '') {
+            unset($_COOKIE['recently_viewed']);
+        } else {
+            $_COOKIE['recently_viewed'] = $value;
+        }
+    }
+}
+
+if (!function_exists('recently_viewed_add_id')) {
+    /**
+     * 记录一次访客浏览
+     *
+     * @param int $product_id
+     */
+    function recently_viewed_add_id($product_id)
+    {
+        $product_id = (int)$product_id;
+
+        if ($product_id <= 0) {
+            return;
+        }
+
+        $ids = recently_viewed_get_ids();
+        $ids = array_values(array_diff($ids, array($product_id)));
+        array_unshift($ids, $product_id);
+
+        recently_viewed_set_ids($ids);
+    }
+}
+
+if (!function_exists('recently_viewed_clear')) {
+    /**
+     * 清空访客浏览历史 cookie
+     */
+    function recently_viewed_clear()
+    {
+        if (!headers_sent()) {
+            setcookie('recently_viewed', '', time() - 3600, '/');
+        }
+
+        unset($_COOKIE['recently_viewed']);
+    }
+}
+
+if (!function_exists('recently_viewed_merge')) {
+    /**
+     * 登录后将访客浏览历史并入账号历史，并清空 cookie
+     *
+     * @param int $customer_id
+     */
+    function recently_viewed_merge($customer_id)
+    {
+        $customer_id = (int)$customer_id;
+
+        if ($customer_id <= 0) {
+            return;
+        }
+
+        $ids = recently_viewed_get_ids();
+
+        if (!$ids) {
+            return;
+        }
+
+        $model = model('account/product_viewed');
+
+        if (!$model) {
+            return;
+        }
+
+        $model->merge($customer_id, $ids);
+
+        recently_viewed_clear();
+    }
+}

@@ -686,6 +686,14 @@ class ControllerProductProduct extends Controller {
 
 			$data['recurrings'] = $this->model_catalog_product->getProfiles($this->request->get['product_id']);
 
+			$this->load->model('account/product_viewed');
+
+			if ($this->customer->isLogged()) {
+				$this->model_account_product_viewed->addView($this->customer->getId(), $this->request->get['product_id']);
+			} else {
+				recently_viewed_add_id($this->request->get['product_id']);
+			}
+
 			$this->model_catalog_product->updateViewed($this->request->get['product_id']);
 
 			$data['column_left'] = $this->load->controller('common/column_left');

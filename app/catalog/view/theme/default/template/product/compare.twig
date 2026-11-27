@@ -33,16 +33,7 @@
           <th>{{ text_price }}</th>
           {% for product in products %}
           <td>
-            <div class="compare-price">
-              {% if product.price %}
-                {% if not product.special %}
-                {{ product.price }}
-                {% else %}
-                <span class="price-new">{{ product.special }}</span>
-                <span class="price-old"><strike>{{ product.price }}</strike></span>
-                {% endif %}
-              {% endif %}
-            </div>
+            <div class="compare-price"><span class="price-included">{{ text_tax_included }}</span>{% if product.price %}{% if not product.special %}{{ include(helper.template('_partial/product/price_value'), {formatted: product.price}) }}{% else %}<span class="price-new">{{ include(helper.template('_partial/product/price_value'), {formatted: product.special}) }}</span><span class="price-old"><strike>{{ include(helper.template('_partial/product/price_value'), {formatted: product.price}) }}</strike></span>{% endif %}{% endif %}</div>
           </td>
           {% endfor %}
         </tr>

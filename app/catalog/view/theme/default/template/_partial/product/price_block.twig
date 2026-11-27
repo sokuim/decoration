@@ -1,12 +1,3 @@
 {% if product.price %}
-<p class="price">
-  {% if not product.special %}
-  {{ product.price }}
-  {% else %}
-  <span class="price-new">{{ product.special }}</span> <span class="price-old">{{ product.price }}</span>
-  {% endif %}
-  {% if product.tax %}
-  <span class="price-tax">{{ text_tax }} {{ product.tax }}</span>
-  {% endif %}
-</p>
+<p class="price"><span class="price-included">{{ text_tax_included }}</span>{% if not product.special %}{{ include(helper.template('_partial/product/price_value'), {formatted: product.price}) }}{% else %}<span class="price-new">{{ include(helper.template('_partial/product/price_value'), {formatted: product.special}) }}</span><span class="price-old">{{ include(helper.template('_partial/product/price_value'), {formatted: product.price}) }}</span>{% endif %}{% if product.tax %}<span class="price-tax">{{ text_tax }} {{ product.tax }}</span>{% endif %}</p>
 {% endif %}

@@ -57,6 +57,7 @@ class ControllerAccountAccount extends Controller {
 		}
 		
 		$data['wishlist'] = $this->url->link('account/wishlist');
+		$data['viewed'] = $this->url->link('account/product_viewed');
 		$data['order'] = $this->url->link('account/order');
 		$data['download'] = $this->url->link('account/download');
 		

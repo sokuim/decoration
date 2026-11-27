@@ -1,0 +1,54 @@
+<section class="product-section recently-viewed-section">
+  <div class="container-inner">
+    <div class="section-header">
+      <h2>{{ heading_title }}</h2>
+    </div>
+    <div class="recently-viewed-slider">
+      {% if products|length > 5 %}
+      <button type="button" class="recently-viewed-arrow rv-prev-{{ module }}" aria-label="前へ"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+      {% endif %}
+      <div class="recently-viewed-viewport">
+        <div id="recently-viewed{{ module }}" class="swiper-container">
+          <div class="swiper-wrapper">
+            {% for product in products %}
+            <div class="swiper-slide">
+              {{ include(helper.template('_partial/product/product_card'), {hide_compare: true, hide_wishlist_alert: true, wishlist_state: true, hide_cart: true}) }}
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% if products|length > 5 %}
+      <button type="button" class="recently-viewed-arrow rv-next-{{ module }}" aria-label="次へ"><svg viewBox="0 0 24 24" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+      {% endif %}
+    </div>
+  </div>
+</section>
+<script type="text/javascript"><!--
+jQuery(document).ready(function($) {
+  new Swiper('#recently-viewed{{ module }}', {
+    slidesPerView: 5,
+    slidesPerGroup: 1,
+    spaceBetween: 10,
+    watchOverflow: true,
+    navigation: {
+      nextEl: '.rv-next-{{ module }}',
+      prevEl: '.rv-prev-{{ module }}'
+    }
+  });
+
+  // 收藏/取消收藏切换
+  $('#recently-viewed{{ module }}').on('click', '.wishlist-toggle', function() {
+    var $btn = $(this);
+    var product_id = $btn.attr('data-product-id');
+
+    if ($btn.hasClass('is-active')) {
+      wishlist.remove(product_id, false);
+      $btn.removeClass('is-active').find('i').removeClass('fa-heart').addClass('fa-heart-o');
+    } else {
+      wishlist.add(product_id, false);
+      $btn.addClass('is-active').find('i').removeClass('fa-heart-o').addClass('fa-heart');
+    }
+  });
+});
+--></script>

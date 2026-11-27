@@ -1,9 +1,17 @@
 <article class="product-card product-thumb">
+  {% set wishlist_state_enabled = wishlist_state is defined and wishlist_state %}
+  {% set is_wishlisted = product.in_wishlist is defined and product.in_wishlist %}
   <div class="image">
   	<a href="{{ product.href }}"><img src="{{ product.thumb }}" alt="{{ product.name }}" title="{{ product.name }}" class="img-responsive" loading="lazy" decoding="async" /></a>
   	<div class="button-group">
-	  	<button type="button" class="btn btn-default" data-toggle="tooltip" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}');"><i class="fa fa-heart"></i></button>
+	  	{% if wishlist_state_enabled %}
+	  	<button type="button" class="btn btn-default wishlist-toggle{% if is_wishlisted %} is-active{% endif %}" data-product-id="{{ product.product_id }}" data-toggle="tooltip" title="{{ button_wishlist }}">{% if is_wishlisted %}<i class="fa fa-heart"></i>{% else %}<i class="fa fa-heart-o"></i>{% endif %}</button>
+	  	{% else %}
+	  	<button type="button" class="btn btn-default" data-toggle="tooltip" title="{{ button_wishlist }}" onclick="wishlist.add('{{ product.product_id }}'{% if hide_wishlist_alert is defined and hide_wishlist_alert %}, false{% endif %});"><i class="fa fa-heart"></i></button>
+	  	{% endif %}
+	  	{% if hide_compare is not defined or not hide_compare %}
 	  	<button type="button" class="btn btn-default" data-toggle="tooltip" title="{{ button_compare }}" onclick="compare.add('{{ product.product_id }}');"><i class="fa fa-exchange"></i></button>
+	  	{% endif %}
   	</div>
   </div>
   <div class="caption">
@@ -11,6 +19,8 @@
     <h3 class="product-name"><a href="{{ product.href }}" title="{{ product.name }}">{{ product.name }}</a></h3>
     <p class="product-description hidden-xs">{{ product.description }}</p>
     {{ include(helper.template('_partial/product/price_block')) }}
+	  {% if hide_cart is not defined or not hide_cart %}
 	  {{ include(helper.template('_partial/product/product_button_block')) }}
+	  {% endif %}
   </div>
 </article>
